@@ -12,14 +12,14 @@
   "------ header page": "-------",
   "HEADER": {
     "CURRENT_PAGE": {
-      "MAIN_LONG": "Main Feature long name",
-      "MAIN_SHORT": "Main Feature",
+      "MAIN_LONG": "z-control Text Recognition",
+      "MAIN_SHORT": "Text Recognition",
       "SETTINGS": "Settings"
     },
     "TOOLTIP": {
       "OPEN_FEEDBACK": "Open feedback page",
       "OPEN_HELP": "Open help page",
-      "GOTO_MAIN": "Go to main feature page",
+      "GOTO_MAIN": "Go to text recognition page",
       "GOTO_SETTINGS": "Go to settings page"
     }
   },
@@ -32,7 +32,7 @@
   },
   "------ tabs page": "-------",
   "TABS": {
-    "MAIN": "Main Feature",
+    "MAIN": "Text Recognition",
     "SETTINGS": "Settings"
   },
 

@@ -1,4 +1,4 @@
-# z-control-ionic-setup
+# z-control-image-to-text
 
 A reusable Ionic + Angular starter template for z-control apps, featuring a prebuilt settings page with all standard accordions and configuration patterns.
 
@@ -22,7 +22,7 @@ Suppose you want to create a new app called `z-control-image-to-text`:
 ### 1. Clone the Starter
 
 ```bash
-git clone https://github.com/zoechbauer/z-control-ionic-setup.git z-control-image-to-text
+git clone https://github.com/zoechbauer/z-control-image-to-text.git z-control-image-to-text
 cd z-control-image-to-text
 ```
 
@@ -52,11 +52,11 @@ Before building the Android app, update the native Android files that are part o
 
 If the app installs but does not open, analyze the startup crash in **Android Studio Logcat**. Search for `FATAL EXCEPTION`, `Caused by:`, or your package name to find the real error.
 
-| Path | Values to change |
-|---|---|
-| `android/app/build.gradle` | `applicationId` and `namespace` |
-| `android/app/src/main/res/values/strings.xml` | `app_name` and, if needed, `title_activity_main` |
-| `android/app/src/main/java/at/zcontrol/zoe/ionic_setup/MainActivity.java` | package name and folder structure |
+| Path                                                                      | Values to change                                 |
+| ------------------------------------------------------------------------- | ------------------------------------------------ |
+| `android/app/build.gradle`                                                | `applicationId` and `namespace`                  |
+| `android/app/src/main/res/values/strings.xml`                             | `app_name` and, if needed, `title_activity_main` |
+| `android/app/src/main/java/at/zcontrol/zoe/ionic_setup/MainActivity.java` | package name and folder structure                |
 
 ### 6. Create a New GitHub Repository
 

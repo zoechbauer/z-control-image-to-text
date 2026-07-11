@@ -17,8 +17,8 @@ export class AppConstants {
 // src/app/shared/app.constants.ts
 
 export class FireStoreConstants {
-  static readonly COLLECTION_NAME = 'ZC_ionic_setup';
-  static readonly APP_ID = 'ionic_setup';
+  static readonly COLLECTION_NAME = 'ZC_image_to_text_statistics';
+  static readonly APP_ID = 'image_to_text';
 
   static readonly getUserMappingUsersCollectionPath = () => {
     return `${FireStoreConstants.COLLECTION_NAME}/userMapping/users`;

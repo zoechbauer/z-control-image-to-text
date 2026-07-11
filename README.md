@@ -1,4 +1,10 @@
-# z-control IONIC Setup
+# z-control Image to Text
+
+## TODOs
+
+Update the following items in the project to reflect the new app's purpose and branding:
+
+## Template Text
 
 The z-control IONIC Setup app is a starter template and utility for building Ionic applications within the z-control ecosystem. It provides a structured foundation with built-in features like quota management, tab-based navigation, and comprehensive documentation to help developers quickly create and deploy their own Ionic apps.
 

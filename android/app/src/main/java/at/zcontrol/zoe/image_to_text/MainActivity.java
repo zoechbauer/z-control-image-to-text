@@ -1,4 +1,4 @@
-package at.zcontrol.zoe.ionicsetup;
+package at.zcontrol.zoe.image_to_text;
 
 import com.getcapacitor.BridgeActivity;
 

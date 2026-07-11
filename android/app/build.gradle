@@ -7,10 +7,10 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "at.zcontrol.zoe.ionicsetup"
+    namespace = "at.zcontrol.zoe.image_to_text"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "at.zcontrol.zoe.ionicsetup"
+        applicationId "at.zcontrol.zoe.image_to_text"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 16

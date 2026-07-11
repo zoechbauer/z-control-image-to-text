@@ -23,7 +23,7 @@ import { DeviceUtils } from './device-utils.service';
 
 describe('FirebaseFirestoreService', () => {
   let service: FirebaseFirestoreService;
-  const appId = 'ionic_setup';
+  const appId = 'image_to_text';
 
   const userStub: angularFireAuth.User = {
     uid: 'anonymous-uid',

@@ -9,7 +9,7 @@ import { ToastService } from './toast.service';
 
 describe('FeatureService', () => {
   let service: FeatureService;
-  const appId = 'ionic_setup';
+  const appId = 'image_to_text';
 
   beforeEach(() => {
     const translateServiceSpy = jasmine.createSpyObj('TranslateService', [

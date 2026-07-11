@@ -75,5 +75,5 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.9.0"
   },
-  "description": "A starter Ionic and Capacitor app with Firebase integration, including a main page and a settings page."
+  "description": "An Ionic and Capacitor app with Firebase integration, that extracts text from images, including a main page and a settings page."
 }
