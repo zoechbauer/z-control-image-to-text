@@ -10,6 +10,12 @@ This project uses a simplified major.minor versioning scheme:
 - Minor versions indicate new features, improvements, and bug fixes.
 - Patch numbers are intentionally omitted; all changes are released as major or minor versions.
 
+## [0.3] - 2026-06-11
+
+### 🚀 Internal
+
+- Renamed FeatureExampleComponent to FeatureComponent to better reflect its purpose in the app. We use a generic name for the component to allow for future expansion of features without needing to rename it again.
+
 ## [0.2] - 2026-06-11
 
 ### ✨ New Features

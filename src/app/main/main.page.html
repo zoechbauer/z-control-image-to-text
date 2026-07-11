@@ -4,9 +4,8 @@
 
 <h6 class="ion-text-center">{{ appName }}</h6>
 <ion-content #content [class.landscape]="!utilsService.isPortrait">
-
   <!-- TODO - replace with actual feature -->
-  <app-feature-example></app-feature-example>
+  <app-feature></app-feature>
 
   <ion-accordion-group
     (ionValueChange)="onAccordionGroupChange($event, content)"

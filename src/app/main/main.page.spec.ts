@@ -18,11 +18,11 @@ import { createTranslateServiceMock } from '../testing/translate-service.mock';
 })
 class MockHeaderComponent {}
 @Component({
-  selector: 'app-feature-example',
+  selector: 'app-feature',
   template: '',
   standalone: true,
 })
-class MockFeatureExampleComponent {}
+class MockFeatureComponent {}
 @Component({
   selector: 'app-user-statistic',
   template: '',
@@ -46,11 +46,7 @@ describe('MainPage', () => {
       ['isContingentExceeded', 'requestStatisticsRefresh'],
     );
     TestBed.configureTestingModule({
-      imports: [
-        MainPage,
-        MockFeatureExampleComponent,
-        MockUserStatisticComponent,
-      ],
+      imports: [MainPage, MockFeatureComponent, MockUserStatisticComponent],
       providers: [
         { provide: TranslateService, useValue: createTranslateServiceMock() },
         {
@@ -187,9 +183,8 @@ describe('MainPage', () => {
 
     it('should show header, feature and user statistic components', () => {
       const headerComponent = fixture.nativeElement.querySelector('app-header');
-      const featureComponent = fixture.nativeElement.querySelector(
-        'app-feature-example',
-      );
+      const featureComponent =
+        fixture.nativeElement.querySelector('app-feature');
       const userStatisticComponent =
         fixture.nativeElement.querySelector('app-user-statistic');
 

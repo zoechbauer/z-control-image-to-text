@@ -24,8 +24,8 @@ import { FeatureService } from '../services/feature.service';
 import { SpinnerComponent } from '../ui/components/spinner/spinner.component';
 
 @Component({
-  selector: 'app-feature-example',
-  templateUrl: './feature-example.component.html',
+  selector: 'app-feature',
+  templateUrl: './feature.component.html',
   imports: [
     IonListHeader,
     IonCardSubtitle,
@@ -44,12 +44,14 @@ import { SpinnerComponent } from '../ui/components/spinner/spinner.component';
     SpinnerComponent,
   ],
 })
-export class FeatureExampleComponent implements OnInit {
+export class FeatureComponent implements OnInit {
   translate = inject(TranslateService);
   localStorage = inject(LocalStorageService);
   readonly utilsService = inject(UtilsService);
   private readonly toastService = inject(ToastService);
-  private readonly firestoreUtilsService = inject(FirebaseFirestoreUtilsService);
+  private readonly firestoreUtilsService = inject(
+    FirebaseFirestoreUtilsService,
+  );
   private readonly featureService = inject(FeatureService);
 
   featureInput: string = '';

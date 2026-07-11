@@ -13,7 +13,7 @@ import { ToastAnchor } from '../shared/enums';
 import { createTranslateServiceMock } from '../testing/translate-service.mock';
 import { UserStatisticComponent } from '../ui/components/user-statistic/user-statistic.component';
 import { SpinnerComponent } from '../ui/components/spinner/spinner.component';
-import { FeatureExampleComponent } from './feature-example.component';
+import { FeatureComponent } from './feature.component';
 import { FeatureService } from '../services/feature.service';
 
 @Component({
@@ -30,9 +30,9 @@ class MockUserStatisticComponent {}
 })
 class MockSpinnerComponent {}
 
-describe('FeatureExampleComponent', () => {
-  let component: FeatureExampleComponent;
-  let fixture: ComponentFixture<FeatureExampleComponent>;
+describe('FeatureComponent', () => {
+  let component: FeatureComponent;
+  let fixture: ComponentFixture<FeatureComponent>;
   let utilsServiceSpy: jasmine.SpyObj<UtilsService>;
   let firestoreUtilsServiceSpy: jasmine.SpyObj<FirebaseFirestoreUtilsService>;
   let toastServiceSpy: jasmine.SpyObj<ToastService>;
@@ -56,7 +56,7 @@ describe('FeatureExampleComponent', () => {
         IonicModule.forRoot(),
         MockUserStatisticComponent,
         MockSpinnerComponent,
-        FeatureExampleComponent,
+        FeatureComponent,
       ],
       providers: [
         {
@@ -83,7 +83,7 @@ describe('FeatureExampleComponent', () => {
         { provide: FeatureService, useValue: featureServiceSpy },
       ],
     })
-      .overrideComponent(FeatureExampleComponent, {
+      .overrideComponent(FeatureComponent, {
         remove: {
           imports: [UserStatisticComponent, SpinnerComponent],
         },
@@ -93,7 +93,7 @@ describe('FeatureExampleComponent', () => {
       })
       .compileComponents();
 
-    fixture = TestBed.createComponent(FeatureExampleComponent);
+    fixture = TestBed.createComponent(FeatureComponent);
     component = fixture.componentInstance;
   });
 
@@ -108,7 +108,7 @@ describe('FeatureExampleComponent', () => {
         component.clear();
         expect(initFormControlsSpy).toHaveBeenCalled();
       });
-      
+
       it('should init form controls if initFormControls() is called', () => {
         component.featureInput = 'Some text';
         component.relatedWords = ['word1', 'word2'];
