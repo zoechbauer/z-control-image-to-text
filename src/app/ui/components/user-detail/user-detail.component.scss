@@ -1,0 +1,78 @@
+ion-content {
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+}
+
+h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 4px 0;
+  color: var(--ion-text-color);
+}
+
+.section-header {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--ion-border-color, var(--ion-color-step-150));
+}
+
+.data-row {
+  border-bottom: 1px solid var(--ion-border-color, var(--ion-color-step-100));
+  align-items: center;
+
+  .label {
+    font-size: 0.8rem;
+    color: var(--ion-color-step-600);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.label {
+  font-weight: 500;
+  color: var(--ion-color-step-600);
+  word-break: break-word;
+}
+
+.value {
+  color: var(--ion-text-color);
+  word-break: break-word;
+
+  &.monospace {
+    font-family: "Courier New", monospace;
+    font-size: 0.9rem;
+    word-break: break-all;
+  }
+}
+
+.user-agent {
+  font-size: 1rem;
+  color: var(--ion-text-color);
+  font-family: "Courier New", monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background-color: var(--ion-color-step-50);
+  padding: 8px;
+  border-radius: 4px;
+  margin: 0;
+}
+
+ion-toolbar {
+  --background: var(--ion-color-light);
+}
+
+ion-title {
+  font-weight: 600;
+  color: var(--ion-text-color);
+}
+
+ion-icon {
+  font-size: 1.5rem;
+  color: var(--ion-color-step-600);
+  margin-top: -5px;
+  margin-left: -5px;
+}

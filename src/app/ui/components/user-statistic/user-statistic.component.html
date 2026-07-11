@@ -1,0 +1,75 @@
+<ion-card class="translation-contingent-card" color="light">
+  <ion-card-header>
+    <ion-card-title>
+      {{ "MAIN_STATISTICS.CARD.TITLE" | translate: { yearMonth: yearMonth } }}
+    </ion-card-title>
+    <ion-card-subtitle>
+      {{ "MAIN_STATISTICS.CARD.SUBTITLE" | translate }}
+    </ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content>
+    @if (isContingentExceeded) {
+      <div class="contingent-exceeded">
+        <p class="margin-bottom">
+          {{ "MAIN_STATISTICS.CARD.CONTINGENT_EXCEEDED_1" | translate }}
+        </p>
+        <p class="margin-bottom">
+          {{ "MAIN_STATISTICS.CARD.CONTINGENT_EXCEEDED_2" | translate }}
+        </p>
+        <p>
+          <strong>{{
+            "MAIN_STATISTICS.CARD.CONTINGENT_EXCEEDED_3" | translate
+          }}</strong>
+        </p>
+      </div>
+    } @else {
+      <div class="statistics-info">
+        <ion-grid>
+          <ion-row class="header-row">
+            <ion-col>{{
+              "MAIN_STATISTICS.CARD.GRID.USER" | translate
+            }}</ion-col>
+            <ion-col>{{
+              "MAIN_STATISTICS.CARD.GRID.USED" | translate
+            }}</ion-col>
+            <ion-col>{{
+              "MAIN_STATISTICS.CARD.GRID.LIMIT" | translate
+            }}</ion-col>
+            <ion-col>{{
+              "MAIN_STATISTICS.CARD.GRID.AVAILABLE" | translate
+            }}</ion-col>
+          </ion-row>
+          <ion-row
+            class="detail-row"
+            *ngFor="let contingentData of displayedContingentData"
+          >
+            <ion-col>{{ contingentData.userNameKey | translate }}</ion-col>
+            <ion-col>{{
+              contingentData.consumedFeatureCharCountCurrentMonth
+                | number
+                  : "1.0-0"
+                  : (translate.currentLang === "de" ? "de-DE" : "en-US")
+            }}</ion-col>
+            <ion-col>{{
+              contingentData.freeFeatureCharsPerMonth
+                | number
+                  : "1.0-0"
+                  : (translate.currentLang === "de" ? "de-DE" : "en-US")
+            }}</ion-col>
+            <ion-col>{{
+              contingentData.availableFeatureCharCountCurrentMonth
+                | number
+                  : "1.0-0"
+                  : (translate.currentLang === "de" ? "de-DE" : "en-US")
+            }}</ion-col>
+          </ion-row>
+          <ion-row class="info-row">
+            <ion-col>
+              {{ "MAIN_STATISTICS.CARD.GRID.INFO" | translate }}</ion-col
+            >
+          </ion-row>
+        </ion-grid>
+      </div>
+    }
+  </ion-card-content>
+</ion-card>

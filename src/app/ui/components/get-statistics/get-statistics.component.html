@@ -1,0 +1,380 @@
+<app-logo [type]="LogoType.Copyright"></app-logo>
+
+<div class="statistics-container">
+  <app-spinner *ngIf="isLoading"></app-spinner>
+
+  <ng-container *ngIf="!isLoading">
+    <!-- filter section -->
+    <div class="stat-section filter-section" *ngIf="isProgrammerDevice">
+      <h3>
+        {{ "SETTINGS.STATISTICS.FILTER.LABEL.FILTER_HEADER" | translate }}
+      </h3>
+      <!-- Select month filter or choose all months -->
+      <ion-select
+        class="filter-month"
+        label="{{
+          'SETTINGS.STATISTICS.FILTER.LABEL.FILTER_MONTH_DATA' | translate
+        }}"
+        label-placement="stacked"
+        [(ngModel)]="filterSelectedMonth"
+        interface="popover"
+        title="{{
+          'SETTINGS.STATISTICS.FILTER.TOOLTIP.FILTER_MONTH_DATA' | translate
+        }}"
+      >
+        <ion-select-option
+          *ngFor="let month of allFilterMonthValues"
+          [value]="month"
+          >{{
+            month.length === 7 ? month : (month | translate)
+          }}</ion-select-option
+        >
+      </ion-select>
+      <!-- Select display mode: user-mode or programmer-mode -->
+      <ion-radio-group [(ngModel)]="selectedDisplayMode" class="display-mode">
+        <ion-radio
+          [value]="DisplayMode.Programmer"
+          title="{{
+            'SETTINGS.STATISTICS.FILTER.TOOLTIP.DISPLAY_MODE_PROGRAMMER'
+              | translate
+          }}"
+        >
+          {{
+            "SETTINGS.STATISTICS.FILTER.LABEL.DISPLAY_MODE_PROGRAMMER"
+              | translate
+          }}
+        </ion-radio>
+        <ion-radio
+          [value]="DisplayMode.User"
+          title="{{
+            'SETTINGS.STATISTICS.FILTER.TOOLTIP.DISPLAY_MODE_USER' | translate
+          }}"
+        >
+          {{ "SETTINGS.STATISTICS.FILTER.LABEL.DISPLAY_MODE_USER" | translate }}
+        </ion-radio>
+      </ion-radio-group>
+      <ion-button
+        class="filter-data-btn"
+        size="block"
+        (click)="onFilterData()"
+        (keydown.enter)="onFilterData()"
+        title="{{ 'SETTINGS.STATISTICS.FILTER.TOOLTIP.FILTER_DATA' | translate }}"
+      >
+        {{ "SETTINGS.STATISTICS.FILTER.LABEL.FILTER_DATA" | translate }}
+      </ion-button>
+    </div>
+
+    <!-- Section: Global Stop Flag -->
+    <div class="stat-section global-stop-section" *ngIf="!isAllMonthsSelected">
+      <h3>
+        {{
+          getSectionHeader("SETTINGS.STATISTICS.LABEL.GLOBAL_FEATURE_STATUS")
+        }}
+      </h3>
+      <p [class.stopped]="isStopped" class="global-stop-flag">
+        {{
+          isStopped
+            ? ("SETTINGS.STATISTICS.LABEL.GLOBAL_FEATURE_STOPPED" | translate)
+            : ("SETTINGS.STATISTICS.LABEL.GLOBAL_FEATURE_ACTIVE" | translate)
+        }}
+      </p>
+    </div>
+
+    <!-- Section: Total Contingent -->
+    <div class="stat-section">
+      <h3>
+        {{
+          getSectionHeader("SETTINGS.STATISTICS.LABEL.TOTAL_FEATURE_CONTINGENT")
+        }}
+      </h3>
+      <div *ngIf="!isAllMonthsSelected" class="total-contingent-monthly">
+        <p
+          *ngIf="allUsersCharCount !== totalCharCount"
+          class="total-all-users-difference"
+        >
+          {{ "SETTINGS.STATISTICS.LABEL.CHECKSUM_ALL_USERS" | translate }}:
+          {{
+            allUsersCharCount
+              | number: "1.0-0" : (lang === "de" ? "de-DE" : "en-US")
+          }}
+          {{ "SETTINGS.STATISTICS.LABEL.CHARS" | translate }}
+        </p>
+        <p>
+          <strong>{{ "SETTINGS.STATISTICS.LABEL.USED" | translate }}:</strong>
+          {{
+            totalCharCount
+              | number: "1.0-0" : (lang === "de" ? "de-DE" : "en-US")
+          }}
+          /
+          {{
+            totalLimit | number: "1.0-0" : (lang === "de" ? "de-DE" : "en-US")
+          }}
+          {{ "SETTINGS.STATISTICS.LABEL.CHARS" | translate }}
+        </p>
+        <p>
+          <strong>{{ "SETTINGS.STATISTICS.LABEL.BUFFER" | translate }}:</strong>
+          {{
+            totalBuffer | number: "1.0-0" : (lang === "de" ? "de-DE" : "en-US")
+          }}
+          {{ "SETTINGS.STATISTICS.LABEL.CHARS" | translate }}
+        </p>
+        <p>
+          <strong
+            >{{ "SETTINGS.STATISTICS.LABEL.AVAILABLE" | translate }}:
+          </strong>
+          <span [class.exceeded]="totalRemaining === 0">{{
+            totalRemaining
+              | number: "1.0-0" : (lang === "de" ? "de-DE" : "en-US")
+          }}</span>
+          {{ "SETTINGS.STATISTICS.LABEL.CHARS" | translate }}
+        </p>
+      </div>
+      <div *ngIf="isAllMonthsSelected" class="total-contingent-all-months">
+        <p>
+          {{ "SETTINGS.STATISTICS.LABEL.CHECKSUM_ALL_USERS" | translate }}:
+          {{
+            allUsersCharCount
+              | number: "1.0-0" : (lang === "de" ? "de-DE" : "en-US")
+          }}
+          {{ "SETTINGS.STATISTICS.LABEL.CHARS" | translate }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Section: User Statistics Overview -->
+    <div
+      class="stat-section"
+      *ngIf="isProgrammerDevice && displayMode === DisplayMode.Programmer"
+    >
+      <h3>
+        {{
+          getSectionHeader("SETTINGS.STATISTICS.LABEL.USER_STATISTICS_OVERVIEW")
+        }}
+      </h3>
+      <ion-grid class="user-statistics-overview">
+        <ion-row class="header-row">
+          <ion-col size="3">Art</ion-col>
+          <ion-col size="5">Name</ion-col>
+          <ion-col size="2" class="ion-text-right"
+            ><ion-icon size="small" name="language-outline"></ion-icon
+          ></ion-col>
+          <ion-col size="2" class="ion-text-right"
+            ><ion-icon size="small" name="log-in-outline"></ion-icon
+          ></ion-col>
+        </ion-row>
+        <ion-row
+          class="detail-row"
+          *ngFor="let userStat of userStatisticsSummaryData"
+        >
+          <ion-col size="3" class="smaller-font">{{
+            userStat.category
+          }}</ion-col>
+          <ion-col size="5">{{ userStat.name }}</ion-col>
+          <ion-col size="2" class="ion-text-right">{{
+            userStat.countFeatureUsage
+          }}</ion-col>
+          <ion-col size="2" class="ion-text-right">{{
+            userStat.countRegistrations
+          }}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <!-- Section: User Statistics Details-->
+    <div class="stat-section user-stat-details">
+      <h3>
+        {{ getSectionHeader("SETTINGS.STATISTICS.GRID.USER_CONTINGENT") }}
+      </h3>
+      <div class="info-note">
+        {{ "SETTINGS.STATISTICS.LABEL.GRID_INFO_NOTE" | translate }}
+      </div>
+      <div *ngIf="isProgrammerDevice && displayMode === DisplayMode.Programmer">
+        <ion-searchbar
+          [value]="searchTerm"
+          (ionInput)="onSearchTermChange($any($event.detail).value)"
+        >
+        </ion-searchbar>
+        <div class="searchbar-info">
+          {{ "SETTINGS.STATISTICS.LABEL.GRID_SEARCH_INFO" | translate }}
+        </div>
+      </div>
+      <ion-grid>
+        <ion-row class="header-row ion-align-items-end">
+          <ion-col>{{ "SETTINGS.STATISTICS.GRID.USER" | translate }}</ion-col>
+          <ion-col class="used-chars">{{
+            "SETTINGS.STATISTICS.GRID.USED"
+              | translate
+                : {
+                    limit:
+                      (userLimit
+                      | number: "1.0-0" : (lang === "de" ? "de-DE" : "en-US")),
+                  }
+          }}</ion-col>
+          <ion-col>{{
+            "SETTINGS.STATISTICS.GRID.PLATFORM" | translate
+          }}</ion-col>
+          <ion-col *ngIf="!hideColumn">{{
+            "SETTINGS.STATISTICS.GRID.LAST_FEATURE_USAGE" | translate
+          }}</ion-col>
+          <ion-col size="1"></ion-col>
+        </ion-row>
+        <ion-row
+          class="detail-row"
+          *ngFor="let userStat of filteredUserStatsRows; trackBy: trackByUserId"
+          [class.user-contingent-exceeded]="
+            userStat.consumedFeatureCharCount >= userLimit
+          "
+          [class.my-device]="userStat.isCurrentUser"
+        >
+          <ion-col>{{ userStat.userName }}</ion-col>
+          <ion-col class="used-chars">{{
+            userStat.consumedFeatureCharCount
+              | number: "1.0-0" : (lang === "de" ? "de-DE" : "en-US")
+          }}</ion-col>
+          <ion-col class="platform-info"
+            >{{ userStat.displayedPlatform
+            }}<span
+              class="model-info"
+              *ngIf="
+                isProgrammerDevice && displayMode === DisplayMode.Programmer
+              "
+              class="model-info"
+              ><br />{{ userStat.displayedModel }}</span
+            >
+          </ion-col>
+          <ion-col *ngIf="!hideColumn" class="feature-date">{{
+            userStat.formattedLastActivityDate
+          }}</ion-col>
+          <ion-col size="1">
+            <ion-button
+              class="info-btn"
+              fill="clear"
+              size="medium"
+              (click)="showDetailInfos(lang, userStat)"
+              (keydown.enter)="showDetailInfos(lang, userStat)"
+            >
+              <ion-icon class="info-icon" name="information-circle"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <!-- Section: Raw Data Debug -->
+    <div
+      class="debug-section"
+      *ngIf="isProgrammerDevice && displayMode === DisplayMode.Programmer"
+    >
+      <hr />
+      <details #rawDebugRoot (toggle)="showRawDebugDetails = rawDebugRoot.open">
+        <summary>
+          {{ getSectionHeader("SETTINGS.STATISTICS.LABEL.JSON_DATA") }}
+        </summary>
+
+        <details
+          #displayedValuesDetail
+          (toggle)="showDisplayedValuesDetail = displayedValuesDetail.open"
+        >
+          <summary>Displayed values</summary>
+          <pre *ngIf="showDisplayedValuesDetail">{{
+            statisticsData?.displayedUserStatistics | json
+          }}</pre>
+        </details>
+
+        <details
+          #translationStatsDetail
+          (toggle)="
+            showTranslationStatisticsDetail = translationStatsDetail.open
+          "
+        >
+          <summary>Feature Statistics</summary>
+          <pre *ngIf="showTranslationStatisticsDetail">{{
+            statisticsData?.userFeatureStatistics | json
+          }}</pre>
+        </details>
+
+        <details
+          #userMappingDetail
+          (toggle)="showUserMappingDetail = userMappingDetail.open"
+        >
+          <summary>User Mapping</summary>
+          <pre *ngIf="showUserMappingDetail">{{
+            statisticsData?.users | json
+          }}</pre>
+        </details>
+
+        <details
+          #programmerDevicesDetail
+          (toggle)="showProgrammerDevicesDetail = programmerDevicesDetail.open"
+        >
+          <summary>Programmer Devices</summary>
+          <pre *ngIf="showProgrammerDevicesDetail">{{
+            statisticsData?.programmerDeviceUIDs | json
+          }}</pre>
+        </details>
+      </details>
+      <hr />
+    </div>
+  </ng-container>
+</div>
+
+<ng-container *ngIf="lang === 'de'; else englishTemplate">
+  <ng-container *ngTemplateOutlet="germanTemplate"></ng-container>
+</ng-container>
+
+<!-- E N G L I S H   T E M P L A T E -->
+
+<ng-template #englishTemplate>
+  <div class="additional-margin-right">
+    <p>Google Firebase/Firestore stores the following data:</p>
+    <ul>
+      <li>Device information</li>
+      <li>Number of processed characters</li>
+      <li>Date of last feature usage</li>
+      <li>Anonymized user ID</li>
+    </ul>
+    <p>
+      This data allows us to manage each user’s monthly usage quota. Once a user
+      reaches their monthly limit, no further feature requests are processed for
+      the remainder of the month. At the beginning of the next month, the quota
+      resets automatically and the user can resume normal feature usage.
+      z-control allows the application to retrieve device information to
+      determine the platform (native app, web desktop, or web mobile) from which
+      feature requests are sent.
+    </p>
+    <p class="small-text">
+      <i>z-control</i> allows the application to retrieve device information to
+      determine the platform (native app, web desktop, or web mobile) from which
+      feature requests are sent.
+    </p>
+  </div>
+  <app-spinner *ngIf="isLoading && isNative"></app-spinner>
+</ng-template>
+
+<!-- G E R M A N   T E M P L A T E -->
+
+<ng-template #germanTemplate>
+  <div class="additional-margin-right">
+    <p>Google Firebase/Firestore speichert folgende Daten:</p>
+    <ul>
+      <li>Geräte-Informationen</li>
+      <li>Anzahl der verarbeiteten Zeichen</li>
+      <li>Datum der letzten Featurenutzung</li>
+      <li>Anonymisierte Benutzer-ID</li>
+    </ul>
+    <p>
+      Diese Daten helfen uns, das monatliche Nutzungskontingent pro Benutzer zu
+      verwalten. Sobald ein Benutzer sein monatliches Kontingent erreicht hat,
+      werden für den restlichen Monat keine weiteren Featureanfragen
+      verarbeitet. Zu Beginn des nächsten Monats wird das Kontingent automatisch
+      zurückgesetzt und der Benutzer kann wieder regulär Featureanfragen
+      stellen.
+    </p>
+    <p class="small-text">
+      <i>z-control</i> ermöglicht es der Anwendung, Geräteinformationen
+      auszulesen, um die Plattform zu erkennen (native App, Web-Desktop oder
+      Web-Mobile), von der aus Featureanfragen gesendet werden.
+    </p>
+  </div>
+  <app-spinner *ngIf="isLoading && isNative"></app-spinner>
+</ng-template>

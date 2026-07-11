@@ -1,0 +1,34 @@
+import { Component, Input } from '@angular/core';
+import { IonIcon, IonButton } from '@ionic/angular/standalone';
+import { DecimalPipe, NgIf, NgTemplateOutlet } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+
+import { LogoComponent } from '../logo/logo.component';
+import { LogoType } from '@app/shared/enums';
+import { AppConstants } from '@app/shared/app.constants';
+@Component({
+  selector: 'app-get-mobile-app',
+  templateUrl: './get-mobile-app.component.html',
+  styleUrls: ['./get-mobile-app.component.scss'],
+  standalone: true,
+  imports: [
+    IonIcon,
+    LogoComponent,
+    IonButton,
+    NgIf,
+    NgTemplateOutlet,
+    TranslateModule,
+    DecimalPipe,
+  ],
+})
+export class GetMobileAppComponent {
+  @Input() lang!: string;
+  @Input() appName!: string;
+  LogoType = LogoType;
+
+  constructor() {}
+
+  get maxFeatureCharsLengthPerMonth(): number {
+    return AppConstants.maxFreeFeatureCharsPerMonth;
+  }
+}

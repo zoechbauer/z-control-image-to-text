@@ -1,0 +1,130 @@
+.statistics-container {
+  margin: 0;
+  padding: 0;
+  border-radius: 8px;
+
+  .filter-section {
+      display: flex;
+      flex-direction: column;
+  }
+
+  .display-mode {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .filter-data-btn {
+    margin-top: 1.5rem;
+  }
+
+  .stat-section,
+  .debug-section {
+    margin-bottom: 0.5rem;
+    padding: 1rem;
+    border-radius: 6px;
+  }
+  .stat-section h3 {
+    margin-top: 0;
+    font-size: 1.1rem;
+  }
+  .stopped {
+    color: #d32f2f;
+    font-weight: bold;
+  }
+  .exceeded {
+    color: #d32f2f;
+    font-weight: bold;
+  }
+  .stat-section p {
+    margin: 0.3rem 0;
+  }
+
+  .total-all-users-difference {
+    color: red;
+  }
+
+  hr {
+    margin: 1rem 0;
+    border: none;
+    border-top: 1px solid #ccc;
+  }
+  hr:last-child {
+    margin-bottom: 0;
+  }
+
+  .searchbar-info {
+    font-size: 0.7rem;
+    color: #666;
+    text-align: center;
+  }
+
+  ion-grid {
+    display: grid;
+
+    .header-row {
+      font-weight: bold;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #ccc;
+      align-items: center;
+
+      .used-chars {
+        text-align: center;
+      }
+    }
+
+    .detail-row {
+      align-items: center;
+
+      .smaller-font {
+        font-size: 0.8rem;
+      }
+
+      .info-button {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+      }
+
+      .info-icon {
+        font-size: 2rem;
+        color: #666;
+      }
+
+      &.user-contingent-exceeded {
+        color: red;
+      }
+
+      &.my-device {
+        border-top: 2px solid #bcc8d4;
+        border-bottom: 2px solid #bcc8d4;
+      }
+
+      &.my-device.user-contingent-exceeded {
+        border-top: 2px solid red;
+        border-bottom: 2px solid red;
+      }
+
+      .used-chars {
+        text-align: center;
+      }
+
+      .feature-date,
+      .model-info {
+        font-size: smaller;
+      }
+    }
+
+    .info-note {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: #666;
+      text-align: center;
+    }
+
+    h3 {
+      text-align: center;
+    }
+  }
+}

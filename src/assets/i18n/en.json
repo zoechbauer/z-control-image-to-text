@@ -1,0 +1,229 @@
+{
+  "------ global": "-------",
+  "APP": {
+    "LOADING_DATA": "Loading data...",
+    "UNDER_CONSTRUCTION": "This feature is under construction.",
+    "MAIN": {
+      "TOAST": {
+        "ERROR_CALLING_FEATURE": "Error calling the main feature. Please try again later or use another word."
+      }
+    }
+  },
+  "------ header page": "-------",
+  "HEADER": {
+    "CURRENT_PAGE": {
+      "MAIN_LONG": "Main Feature long name",
+      "MAIN_SHORT": "Main Feature",
+      "SETTINGS": "Settings"
+    },
+    "TOOLTIP": {
+      "OPEN_FEEDBACK": "Open feedback page",
+      "OPEN_HELP": "Open help page",
+      "GOTO_MAIN": "Go to main feature page",
+      "GOTO_SETTINGS": "Go to settings page"
+    }
+  },
+  "------ footer page": "-------",
+  "FOOTER": {
+    "COUNTRY": "Austria",
+    "TOOLTIP": {
+      "CONTACT_SUPPORT": "Contact z-control support via email"
+    }
+  },
+  "------ tabs page": "-------",
+  "TABS": {
+    "MAIN": "Main Feature",
+    "SETTINGS": "Settings"
+  },
+
+  "------ main page": "-------",
+  "MAIN": {
+    "CARD": {
+      "TITLE": "Main Feature Example"
+    }
+  },
+  "FEATURE": {
+    "CARD": {
+      "TITLE": "Search related words",
+      "SUBTITLE": "Enter a word and find related words",
+      "INFO-1": "offers many features.",
+      "INFO-2": "We only show the search for related words here so you can test the quota management in this setup.",
+      "BUTTON": {
+        "SEARCH": "Search",
+        "CLEAR": "Clear"
+      },
+      "LABEL": {
+        "RELATED_WORDS": "Related words:"
+      },
+      "PLACEHOLDER": {
+        "INPUT": "Enter a word..."
+      }
+    },
+    "TOAST": {
+      "QUOTA_REDUCED": "The monthly quota has been reduced.",
+      "CONTINGENT_EXCEEDED": "Feature quota exceeded. Please try again next month.",
+      "ERROR_CALLING_FEATURE": "Error calling the main feature. Please try again later or use another word.",
+      "ERROR_CREATING_MISSING_CONTINGENT_DATA": "Error creating missing contingent data."
+    }
+  },
+
+  "------ main page - statistics infos": "-------",
+  "MAIN_STATISTICS": {
+    "ACCORDION": {
+      "TITLE": "Monthly Quota"
+    },
+    "CARD": {
+      "TITLE": "Available Quota for {{yearMonth}}",
+      "SUBTITLE": "Number of used characters",
+      "GRID": {
+        "USER": "User",
+        "USER_NAME_YOU": "You",
+        "USER_NAME_ALL": "All Users",
+        "USED": "Used",
+        "LIMIT": "Limit",
+        "AVAILABLE": "Available",
+        "INFO": "The feature will be suspended until next month once either you or all users have reached the limit."
+      },
+      "CONTINGENT_EXCEEDED_1": "Your monthly quota has been used up.",
+      "CONTINGENT_EXCEEDED_2": "The feature will be suspended until next month. All other functions can still be used.",
+      "CONTINGENT_EXCEEDED_3": "Starting next month, your full quota will be available again."
+    }
+  },
+
+  "------ settings page": "-------",
+  "SETTINGS": {
+    "TITLE": "Settings",
+    "INFORMATIONS": "Informations",
+    "BUTTON": {
+      "CLOSE": "Back to Settings"
+    },
+    "TOOLTIPS": {
+      "OPEN_ACCORDION": "Open settings",
+      "CLOSE_ACCORDION": "Close settings"
+    },
+    "LANGUAGE": {
+      "ACCORDION": "Change Language",
+      "LABEL": {
+        "LANG": "Language"
+      },
+      "SELECT": {
+        "EN": "English",
+        "DE": "German"
+      },
+      "TOOLTIPS": {
+        "CHANGE_LANGUAGE": "Change the language"
+      }
+    },
+    "FEEDBACK": {
+      "ACCORDION": "Send feedback to z-control",
+      "SEPARATOR": "Feedback"
+    },
+    "PRIVACY": {
+      "ACCORDION": "Privacy Policy",
+      "TOOLTIPS": {
+        "OPEN_POLICY": "Open privacy policy in a new tab"
+      }
+    },
+    "RELEASE-NOTES": {
+      "ACCORDION": "App Version {{versionInfo}} - Release Notes",
+      "TOOLTIPS": {
+        "OPEN_RELEASE_NOTES": "Open release notes (changelog) — grouped by categories and showing the newest entries first."
+      }
+    },
+    "MOBILE-APP": {
+      "ACCORDION": "Install Mobile App",
+      "TOOLTIPS": {
+        "DOWNLOAD": "Download the native Android app from the Google Play Store"
+      }
+    },
+    "SOURCE": {
+      "ACCORDION": "Get Source Code",
+      "TOOLTIPS": {
+        "DOWNLOAD": "Open GitHub repository in a new tab — view source code, license, changelog, and documentation."
+      }
+    },
+    "STATISTICS": {
+      "ACCORDION": "Get Statistics for {{yearMonth}}",
+      "LABEL": {
+        "GLOBAL_FEATURE_STATUS": "Feature Status",
+        "GLOBAL_FEATURE_STOPPED": "Feature stopped for all users",
+        "GLOBAL_FEATURE_ACTIVE": "Feature active for all users",
+        "TOTAL_FEATURE_CONTINGENT": "Total Feature Contingent",
+        "USED": "Used",
+        "BUFFER": "Buffer",
+        "AVAILABLE": "Available",
+        "CHECKSUM_ALL_USERS": "Used by all users",
+        "CHARS": "Characters",
+        "GRID_INFO_NOTE": "Sorted in descending order by the date of the last feature usage",
+        "GRID_SEARCH_INFO": "Text for User & Platform; Used Characters: >|<",
+        "USER_STATISTICS_OVERVIEW": "User Statistics Overview",
+        "JSON_DATA": "Raw Data (JSON) - Debug Only"
+      },
+      "FILTER": {
+        "LABEL": {
+          "FILTER_HEADER": "Filter and Display Mode",
+          "FILTER_MONTH_DATA": "Filter Month Data",
+          "FILTER_MONTH_DATA_ALL": "All Months",
+          "FILTER_DATA": "Filter Data",
+          "DISPLAY_MODE_USER": "User",
+          "DISPLAY_MODE_PROGRAMMER": "Programmer"
+        },
+        "TOOLTIP": {
+          "FILTER_MONTH_DATA": "Show data for the selected month or all data",
+          "FILTER_DATA": "Reload data with the selected month and display mode",
+          "DISPLAY_MODE_USER": "Show statistics as a user",
+          "DISPLAY_MODE_PROGRAMMER": "Show statistics as a programmer"
+        }
+      },
+      "GRID": {
+        "USER_CONTINGENT": "User Feature Contingent",
+        "USER": "User",
+        "USED": "Used of {{limit}}",
+        "PLATFORM": "Platform",
+        "LAST_FEATURE_USAGE": "Last Feature Usage"
+      },
+      "USER_DETAIL": {
+        "TITLE": "User Feature Information",
+        "USER_INFORMATION": {
+          "TITLE": "User Information",
+          "LABEL": {
+            "USER_ID": "User ID",
+            "USER_NAME": "Username",
+            "USER_CREATED": "Created At",
+            "USER_UPDATED": "Updated At",
+            "USER_TYPE": "Type",
+            "USER_TYPE_USER": "User Device",
+            "USER_TYPE_PROGRAMMER": "Programmer Device"
+          }
+        },
+        "DEVICE_INFORMATION": {
+          "TITLE": "Device Information",
+          "LABEL": {
+            "PLATFORM": "Platform",
+            "DEVICE_PLATFORM": "Device Platform",
+            "NATIVE": "Mobile/Tablet",
+            "DEVICE": "Device",
+            "MODEL": "Model"
+          }
+        },
+        "FEATURE_STATISTICS": {
+          "TITLE": "Feature Statistics",
+          "LABEL": {
+            "CONSUMED_CHARS": "Consumed Characters",
+            "LANGUAGE": "Language",
+            "LAST_FEATURE_USAGE": "Last Feature Usage"
+          }
+        },
+        "USER_AGENT": {
+          "TITLE": "User Agent"
+        },
+        "APP_VERSION": {
+          "TITLE": "App Version",
+          "LABEL": {
+            "VERSION": "Version (Date)"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+<div id="toast-anchor-main">
+  <app-header [currentTab]="Tab.MainFeature"></app-header>
+</div>
+
+<h6 class="ion-text-center">{{ appName }}</h6>
+<ion-content #content [class.landscape]="!utilsService.isPortrait">
+
+  <!-- TODO - replace with actual feature -->
+  <app-feature-example></app-feature-example>
+
+  <ion-accordion-group
+    (ionValueChange)="onAccordionGroupChange($event, content)"
+  >
+    <ion-accordion value="user-contingent" class="monthly-quota-accordion">
+      <ion-item slot="header">
+        <ion-label
+          >{{ 'MAIN_STATISTICS.ACCORDION.TITLE' | translate }}</ion-label
+        >
+      </ion-item>
+      <div slot="content">
+        <app-user-statistic></app-user-statistic>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+</ion-content>

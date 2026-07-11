@@ -1,0 +1,87 @@
+<app-logo [type]="LogoType.Copyright"></app-logo>
+
+<ng-container *ngIf="lang === 'de'; else englishTemplate">
+  <ng-container *ngTemplateOutlet="germanTemplate"></ng-container>
+</ng-container>
+
+<!-- E N G L I S H   T E M P L A T E -->
+
+<ng-template #englishTemplate>
+  <div class="additional-margin-right">
+    <i>Note: Adapt this text to your feature.</i>
+    <p>
+      The `search related words` feature is done via the
+      <i>Datamuse API</i> in the cloud. The related words are neither
+      stored nor shared.
+    </p>
+    <p>
+      We store the following anonymous data in <i>Google Firebase/Firestore</i>:
+      <ul>
+        <li>Device information (platform type)</li>
+        <li>Number of consumed characters</li>
+        <li>Date of last feature usage</li>
+        <li>Anonymized user ID</li>
+      </ul>
+      This data is used solely to manage monthly usage quotas and prevent unexpected costs. No personal or sensitive data is stored.
+    <p>
+      You can find the complete privacy policy on the z-control website
+      <a
+        class="external-link"
+        href="https://z-control-4070.web.app/privacy/multi-language-translator/en"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="{{ 'SETTINGS.PRIVACY.TOOLTIPS.OPEN_POLICY' | translate }}"
+        >Privacy Policy
+        <ion-icon name="open-outline"></ion-icon>
+      </a>
+    </p>
+    <p>TODO: Exchange this license example with your own privacy policy.</p>
+    <p class="small-text">
+      <i
+        >Note: The link will open in your browser – afterwards, please return to
+        the z-control QR Code Generator app.</i
+      >
+    </p>
+  </div>
+</ng-template>
+
+<!-- G E R M A N   T E M P L A T E -->
+
+<ng-template #germanTemplate>
+  <div class="additional-margin-right">
+        <i>Hinweis: Passen Sie diesen Text an Ihr Feature an.</i>
+    <p>
+      Die Funktion `verwandte Wörter suchen` wird über die
+      <i>Datamuse API</i> in der Cloud durchgeführt. Die verwandten Wörter werden weder
+      gespeichert noch weitergegeben.
+    </p>
+    <p>
+      Wir speichern folgende anonyme Daten in <i>Google Firebase/Firestore</i>:
+      <ul>
+        <li>Geräte-Informationen (Plattformtyp)</li>
+        <li>Anzahl der verbrauchten Zeichen</li>
+        <li>Datum der letzten Nutzung der Funktion</li>
+        <li>Anonymisierte Benutzer-ID</li>
+      </ul>
+      Diese Daten dienen ausschließlich der Verwaltung des monatlichen Nutzungskontingents und zur Vermeidung unerwarteter Kosten. Es werden keine persönlichen oder sensiblen Daten gespeichert.
+    <p>
+      Die vollständige Datenschutzerklärung finden Sie auf der z-control-Website
+      <a
+        class="external-link"
+        href="https://z-control-4070.web.app/privacy/multi-language-translator/de"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="{{ 'SETTINGS.PRIVACY.TOOLTIPS.OPEN_POLICY' | translate }}"
+        >Datenschutzerklärung 
+        <ion-icon name="open-outline"></ion-icon>
+      </a>
+    </p>
+    <p>TODO: Tauschen Sie dieses Lizenz-Beispiel durch Ihre eigene Datenschutzerklärung aus.</p>
+    <p class="small-text">
+      <i
+        >Hinweis: Der Link öffnet sich in Ihrem Browser – wechseln Sie
+        anschließend zurück zur z-control QR-Code-Generator-App.</i
+      >
+    </p>
+  </div>
+</ng-template>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">z-control Ionic Setup</string>
+    <string name="title_activity_main">z-control Ionic Setup</string>
+    <string name="package_name">at.zcontrol.zoe.ionicsetup</string>
+    <string name="custom_url_scheme">at.zcontrol.zoe.ionicsetup</string>
+</resources>

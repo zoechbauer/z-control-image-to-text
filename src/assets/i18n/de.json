@@ -1,0 +1,229 @@
+{
+  "------ global": "-------",
+  "APP": {
+    "LOADING_DATA": "Daten werden geladen...",
+    "UNDER_CONSTRUCTION": "Diese Funktion ist in Arbeit.",
+    "MAIN": {
+      "TOAST": {
+        "ERROR_CALLING_FEATURE": "Fehler beim Aufruf der Hauptfunktion. Bitte versuchen Sie es später erneut oder verwenden Sie ein anderes Wort."
+      }
+    }
+  },
+  "------ header page": "-------",
+  "HEADER": {
+    "CURRENT_PAGE": {
+      "MAIN_LONG": "Hauptfunktion langer Name",
+      "MAIN_SHORT": "Hauptfunktion",
+      "SETTINGS": "Einstellungen "
+    },
+    "TOOLTIP": {
+      "OPEN_FEEDBACK": "Feedback-Seite öffnen",
+      "OPEN_HELP": "Hilfeseite öffnen",
+      "GOTO_MAIN": "Zur Hauptfunktionsseite wechseln",
+      "GOTO_SETTINGS": "Zur Einstellungsseite wechseln"
+    }
+  },
+  "------ footer page": "-------",
+  "FOOTER": {
+    "COUNTRY": "Österreich",
+    "TOOLTIP": {
+      "CONTACT_SUPPORT": "Kontaktieren Sie den Support von z-control per Mail"
+    }
+  },
+  "------ tabs page": "-------",
+  "TABS": {
+    "MAIN": "Hauptfunktion",
+    "SETTINGS": "Einstellungen"
+  },
+
+  "------ main page": "-------",
+  "MAIN": {
+    "CARD": {
+      "TITLE": "Beispiel der Hauptfunktion"
+    }
+  },
+  "FEATURE": {
+    "CARD": {
+      "TITLE": "Verwandte Wörter suchen",
+      "SUBTITLE": "Geben Sie ein Wort ein und finden Sie verwandte Wörter",
+      "INFO-1": "bietet viele Funktionen.",
+      "INFO-2": "Wir zeigen hier nur die Suche nach verwandten Wörtern, damit Sie die Kontingent-Verwaltung in diesem Setup testen können.",
+      "BUTTON": {
+        "SEARCH": "Suchen",
+        "CLEAR": "Löschen"
+      },
+      "LABEL": {
+        "RELATED_WORDS": "Verwandte Wörter:"
+      },
+      "PLACEHOLDER": {
+        "INPUT": "Geben Sie ein Wort ein..."
+      }
+    },
+    "TOAST": {
+      "QUOTA_REDUCED": "Das monatliche Kontingent wurde reduziert.",
+      "CONTINGENT_EXCEEDED": "Feature-Kontingent überschritten. Bitte versuchen Sie es nächsten Monat erneut.",
+      "ERROR_CALLING_FEATURE": "Fehler beim Aufruf der Hauptfunktion. Bitte versuchen Sie es später erneut oder verwenden Sie ein anderes Wort.",
+      "ERROR_CREATING_MISSING_CONTINGENT_DATA": "Fehler beim Erstellen fehlender Kontingentdaten."
+    }
+  },
+
+  "------ main page - statistics infos": "-------",
+  "MAIN_STATISTICS": {
+    "ACCORDION": {
+      "TITLE": "Monatliches Kontingent"
+    },
+    "CARD": {
+      "TITLE": "Verfügbares Kontingent für {{yearMonth}}",
+      "SUBTITLE": "Anzahl der verbrauchten Zeichen",
+      "GRID": {
+        "USER": "Benutzer",
+        "USER_NAME_YOU": "Sie",
+        "USER_NAME_ALL": "Alle Benutzer",
+        "USED": "Verbraucht",
+        "LIMIT": "Limit",
+        "AVAILABLE": "Verfügbar",
+        "INFO": "Das Feature wird bis zum nächsten Monat ausgesetzt sobald entweder Sie oder alle Benutzer das Limit erreicht haben."
+      },
+      "CONTINGENT_EXCEEDED_1": "Ihr monatliches Kontingent wurde aufgebraucht.",
+      "CONTINGENT_EXCEEDED_2": "Das Feature wird bis zum nächsten Monat ausgesetzt. Alle anderen Funktionen können weiterhin genutzt werden.",
+      "CONTINGENT_EXCEEDED_3": "Ab dem nächsten Monat steht Ihnen wieder das volle Kontingent zur Verfügung."
+    }
+  },
+
+  "------ settings page": "-------",
+  "SETTINGS": {
+    "TITLE": "Einstellungen",
+    "INFORMATIONS": "Informationen",
+    "BUTTON": {
+      "CLOSE": "Zurück zu Einstellungen"
+    },
+    "TOOLTIPS": {
+      "OPEN_ACCORDION": "Einstellungen öffnen",
+      "CLOSE_ACCORDION": "Einstellungen schließen"
+    },
+    "LANGUAGE": {
+      "ACCORDION": "Sprache ändern",
+      "LABEL": {
+        "LANG": "Sprache"
+      },
+      "SELECT": {
+        "EN": "Englisch",
+        "DE": "Deutsch"
+      },
+      "TOOLTIPS": {
+        "CHANGE_LANGUAGE": "Sprache ändern"
+      }
+    },
+    "FEEDBACK": {
+      "ACCORDION": "Feedback an z-control senden",
+      "SEPARATOR": "Feedback"
+    },
+    "PRIVACY": {
+      "ACCORDION": "Datenschutz-Bestimmungen",
+      "TOOLTIPS": {
+        "OPEN_POLICY": "Datenschutzrichtlinie in einem neuen Tab öffnen"
+      }
+    },
+    "RELEASE-NOTES": {
+      "ACCORDION": "App Version {{versionInfo}} - Versionshinweise",
+      "TOOLTIPS": {
+        "OPEN_RELEASE_NOTES": "Release-Notes (Changelog) öffnen — nach Kategorien gruppiert und es werden zuerst die neuesten Einträge angezeigt."
+      }
+    },
+    "MOBILE-APP": {
+      "ACCORDION": "Mobile App installieren",
+      "TOOLTIPS": {
+        "DOWNLOAD": "Download der nativen Android-App aus dem Google Play Store"
+      }
+    },
+    "SOURCE": {
+      "ACCORDION": "Quellcode abrufen",
+      "TOOLTIPS": {
+        "DOWNLOAD": "GitHub-Repository in einem neuen Tab öffnen — Quellcode, Lizenz, Release Notes und Dokumentationen anzeigen."
+      }
+    },
+    "STATISTICS": {
+      "ACCORDION": "Statistik für {{yearMonth}} abrufen",
+      "LABEL": {
+        "GLOBAL_FEATURE_STATUS": "Feature-Status",
+        "GLOBAL_FEATURE_STOPPED": "Feature gestoppt für alle Benutzer",
+        "GLOBAL_FEATURE_ACTIVE": "Feature aktiv für alle Benutzer",
+        "TOTAL_FEATURE_CONTINGENT": "Gesamtes Feature-Kontingent",
+        "USED": "Verbrauchte Summe",
+        "BUFFER": "Puffer",
+        "AVAILABLE": "Noch verfügbar",
+        "CHECKSUM_ALL_USERS": "Verbraucht von allen Benutzern",
+        "CHARS": "Zeichen",
+        "GRID_INFO_NOTE": "Absteigend sortiert nach Datum der letzten Feature-Nutzung",
+        "GRID_SEARCH_INFO": "Text für Benutzer|Plattform; Verbrauchte Zeichen: >|<",
+        "USER_STATISTICS_OVERVIEW": "Benutzer-Statistik Übersicht",
+        "JSON_DATA": "Rohdaten (JSON) - nur für Debug"
+      },
+      "FILTER": {
+        "LABEL": {
+          "FILTER_HEADER": "Filter und Anzeigemodus",
+          "FILTER_MONTH_DATA": "Monatsdaten filtern",
+          "FILTER_MONTH_DATA_ALL": "Alle Monate",
+          "FILTER_DATA": "Daten filtern",
+          "DISPLAY_MODE_USER": "Benutzer",
+          "DISPLAY_MODE_PROGRAMMER": "Programmierer"
+        },
+        "TOOLTIP": {
+          "FILTER_MONTH_DATA": "Daten des ausgewählten Monats anzeigen oder alle Daten anzeigen",
+          "FILTER_DATA": "Daten mit ausgewähltem Monat und Anzeigemodus neu laden",
+          "DISPLAY_MODE_USER": "Statistik als Benutzer anzeigen",
+          "DISPLAY_MODE_PROGRAMMER": "Statistik als Programmierer anzeigen"
+        }
+      },
+      "GRID": {
+        "USER_CONTINGENT": "Benutzer-Feature-Kontingent",
+        "USER": "Benutzer",
+        "USED": "Verbraucht von {{limit}}",
+        "PLATFORM": "Plattform",
+        "LAST_FEATURE_USAGE": "Letzte Feature-Nutzung"
+      },
+      "USER_DETAIL": {
+        "TITLE": "Benutzer-Feature-Informationen",
+        "USER_INFORMATION": {
+          "TITLE": "Benutzerinformationen",
+          "LABEL": {
+            "USER_ID": "Benutzer-ID",
+            "USER_NAME": "Benutzer-Name",
+            "USER_CREATED": "Erstellt am",
+            "USER_UPDATED": "Aktualisiert am",
+            "USER_TYPE": "Typ",
+            "USER_TYPE_USER": "Benutzer-Gerät",
+            "USER_TYPE_PROGRAMMER": "Programmierer-Gerät"
+          }
+        },
+        "DEVICE_INFORMATION": {
+          "TITLE": "Geräteinformationen",
+          "LABEL": {
+            "PLATFORM": "Plattform",
+            "DEVICE_PLATFORM": "Geräte-Plattform",
+            "NATIVE": "Handy/Tablet",
+            "DEVICE": "Gerät",
+            "MODEL": "Modell"
+          }
+        },
+        "FEATURE_STATISTICS": {
+          "TITLE": "Feature-Statistik",
+          "LABEL": {
+            "CONSUMED_CHARS": "Verbrauchte Zeichen",
+            "LANGUAGE": "Sprache",
+            "LAST_FEATURE_USAGE": "Letzte Feature-Nutzung"
+          }
+        },
+        "USER_AGENT": {
+          "TITLE": "User-Agent"
+        },
+        "APP_VERSION": {
+          "TITLE": "App-Version",
+          "LABEL": {
+            "VERSION": "Version (Datum)"
+          }
+        }
+      }
+    }
+  }
+}

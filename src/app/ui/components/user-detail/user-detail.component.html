@@ -1,0 +1,216 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{
+      "SETTINGS.STATISTICS.USER_DETAIL.TITLE" | translate
+    }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <!-- User Info Section -->
+    <ion-row class="section-header">
+      <ion-col>
+        <h2>
+          {{
+            "SETTINGS.STATISTICS.USER_DETAIL.USER_INFORMATION.TITLE" | translate
+          }}
+        </h2>
+      </ion-col>
+    </ion-row>
+    <ion-row class="data-row">
+      <ion-col size="4" class="label"
+        >{{
+          "SETTINGS.STATISTICS.USER_DETAIL.USER_INFORMATION.LABEL.USER_NAME"
+            | translate
+        }}:</ion-col
+      >
+      <ion-col size="8" class="value">{{ userStatistic.userName }}</ion-col>
+    </ion-row>
+    <ion-row class="data-row">
+      <ion-col size="4" class="label"
+        >{{
+          "SETTINGS.STATISTICS.USER_DETAIL.USER_INFORMATION.LABEL.USER_TYPE"
+            | translate
+        }}:</ion-col
+      >
+      <ion-col size="8" class="value user-type">{{
+        userStatistic.userType === "U"
+          ? ("SETTINGS.STATISTICS.USER_DETAIL.USER_INFORMATION.LABEL.USER_TYPE_USER"
+            | translate)
+          : ("SETTINGS.STATISTICS.USER_DETAIL.USER_INFORMATION.LABEL.USER_TYPE_PROGRAMMER"
+            | translate)
+      }}</ion-col>
+    </ion-row>
+    @if (displayMode === DisplayMode.Programmer) {
+    <ion-row class="data-row user-id-row">
+      <ion-col size="4" class="label"
+        >{{
+          "SETTINGS.STATISTICS.USER_DETAIL.USER_INFORMATION.LABEL.USER_ID"
+            | translate
+        }}:</ion-col
+      >
+      <ion-col size="8" class="value monospace">{{
+        userStatistic.userId
+      }}</ion-col>
+    </ion-row>
+    <ion-row class="data-row user-created-row">
+      <ion-col size="4" class="label"
+        >{{
+          "SETTINGS.STATISTICS.USER_DETAIL.USER_INFORMATION.LABEL.USER_CREATED"
+            | translate
+        }}:</ion-col
+      >
+      <ion-col size="8">{{
+        getFormatDateTime(userStatistic.userCreatedAt)
+      }}</ion-col>
+    </ion-row>
+    <ion-row class="data-row user-updated-row">
+      <ion-col size="4" class="label"
+        >{{
+          "SETTINGS.STATISTICS.USER_DETAIL.USER_INFORMATION.LABEL.USER_UPDATED"
+            | translate
+        }}:</ion-col
+      >
+      <ion-col size="8">{{
+        getFormatDateTime(userStatistic.userLastUpdated)
+      }}</ion-col>
+    </ion-row>
+    }
+    <!-- Device Info Section -->
+    <ion-row class="section-header">
+      <ion-col>
+        <h2>
+          {{
+            "SETTINGS.STATISTICS.USER_DETAIL.DEVICE_INFORMATION.TITLE"
+              | translate
+          }}
+        </h2>
+      </ion-col>
+    </ion-row>
+    <ion-row class="data-row">
+      <ion-col size="4" class="label"
+        >{{
+          "SETTINGS.STATISTICS.USER_DETAIL.DEVICE_INFORMATION.LABEL.PLATFORM"
+            | translate
+        }}:</ion-col
+      >
+      <ion-col size="8" class="value displayed-platform">{{ getDisplayedPlatform() }} </ion-col>
+    </ion-row>
+    <ion-row class="data-row">
+      <ion-col size="4" class="label"
+        >{{
+          "SETTINGS.STATISTICS.USER_DETAIL.DEVICE_INFORMATION.LABEL.DEVICE_PLATFORM"
+            | translate
+        }}:</ion-col
+      >
+      <ion-col size="8" class="value">{{
+        userStatistic.deviceInfo.platform
+      }}</ion-col>
+    </ion-row>
+    @if (displayMode === DisplayMode.Programmer) {
+    <ion-row class="data-row device-row" *ngIf="userStatistic.device !== 'unknown'">
+      <ion-col size="4" class="label"
+        >{{
+          "SETTINGS.STATISTICS.USER_DETAIL.DEVICE_INFORMATION.LABEL.DEVICE"
+            | translate
+        }}:</ion-col
+      >
+      <ion-col size="8" class="value">{{ userStatistic.device }}</ion-col>
+    </ion-row>
+    <ion-row class="data-row">
+      <ion-col size="4" class="label"
+        >{{
+          "SETTINGS.STATISTICS.USER_DETAIL.DEVICE_INFORMATION.LABEL.MODEL"
+            | translate
+        }}:</ion-col
+      >
+      <ion-col size="8" class="value">{{
+        userStatistic.displayedModel
+      }}</ion-col>
+    </ion-row>
+    }
+
+    <!-- Feature Stats Section -->
+    <ion-row class="section-header">
+      <ion-col>
+        <h2>
+          {{
+            "SETTINGS.STATISTICS.USER_DETAIL.FEATURE_STATISTICS.TITLE"
+              | translate
+          }}
+        </h2>
+      </ion-col>
+    </ion-row>
+    <ion-row class="data-row">
+      <ion-col size="4" class="label"
+        >{{
+          "SETTINGS.STATISTICS.USER_DETAIL.FEATURE_STATISTICS.LABEL.CONSUMED_CHARS"
+            | translate
+        }}:</ion-col
+      >
+      <ion-col size="8" class="value">{{
+        userStatistic.consumedFeatureCharCount
+      }}</ion-col>
+    </ion-row>
+    <ion-row class="data-row">
+      <ion-col size="4" class="label"
+        >{{
+          "SETTINGS.STATISTICS.USER_DETAIL.FEATURE_STATISTICS.LABEL.LANGUAGE"
+            | translate
+        }}:</ion-col
+      >
+      <ion-col size="8" class="value">{{
+        userStatistic.deviceInfo.language
+      }}</ion-col>
+    </ion-row>
+    <ion-row class="data-row">
+      <ion-col size="4" class="label"
+        >{{
+          "SETTINGS.STATISTICS.USER_DETAIL.FEATURE_STATISTICS.LABEL.LAST_FEATURE_USAGE"
+            | translate
+        }}:</ion-col
+      >
+      <ion-col size="8" class="value">{{
+        getFormatDateTime(userStatistic.lastFeatureUsageDate)
+      }}</ion-col>
+    </ion-row>
+
+    <!-- User Agent Section -->
+    <ion-row class="section-header">
+      <ion-col>
+        <h2>
+          {{ "SETTINGS.STATISTICS.USER_DETAIL.USER_AGENT.TITLE" | translate }}
+        </h2>
+      </ion-col>
+    </ion-row>
+    <ion-row class="data-row">
+      <ion-col size="12">
+        <p class="user-agent">{{ userStatistic.deviceInfo.userAgent }}</p>
+      </ion-col>
+    </ion-row>
+
+    <!-- App Version Section -->
+    <ion-row class="section-header">
+      <ion-col>
+        <h2>
+          {{ "SETTINGS.STATISTICS.USER_DETAIL.APP_VERSION.TITLE" | translate }}
+        </h2>
+      </ion-col>
+    </ion-row>
+    <ion-row class="data-row">
+      <ion-col size="4" class="label"
+        >{{
+          "SETTINGS.STATISTICS.USER_DETAIL.APP_VERSION.LABEL.VERSION"
+            | translate
+        }}:</ion-col
+      >
+      <ion-col size="8" class="value">{{ getAppVersion() }}</ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

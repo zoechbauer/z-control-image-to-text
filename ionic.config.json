@@ -1,0 +1,7 @@
+{
+  "name": "z-control-ionic-setup",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

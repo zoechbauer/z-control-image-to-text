@@ -1,0 +1,241 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import "@ionic/angular/css/palettes/dark.system.css";
+
+
+.web-app-width {
+  ion-router-outlet {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+
+.native-app-height-hide-tabs-bar {
+  ion-router-outlet {
+    height: calc(100vh - 44px);
+  }
+}
+
+ion-app {
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 0 16px;
+}
+
+body.native-app {
+  --ion-safe-area-top: env(safe-area-inset-top);
+  --ion-safe-area-bottom: env(safe-area-inset-bottom);
+}
+
+#toast-anchor-main,
+#toast-anchor-settings {
+  margin: 0;
+  padding: 0;
+}
+
+.web-app ion-header ion-toolbar {
+  padding-top: 0 !important;
+}
+
+ion-header {
+  margin-right: 0;
+  padding-right: 0;
+
+  ion-toolbar {
+    --background: var(--ion-color-primary) !important;
+    --color: #fff !important;
+    padding-right: 0;
+
+    ion-title,
+    ion-button,
+    ion-icon {
+      color: #fff !important;
+    }
+  }
+}
+
+ion-tab-bar {
+  padding-bottom: var(--safe-area-bottom-fix, 44px);
+  display: flex;
+
+  &.hide-ion-tab-bar {
+    display: none;
+  }
+}
+
+// Compatibility styles for legacy Android versions (e.g., Android 11)
+ion-header ion-toolbar:first-of-type {
+  padding-top: var(--safe-area-top-fix, 24px);
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #000000 !important; /* dark splash color for mobile */
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: #ffffff !important; /* light splash color for mobile */
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  ion-toolbar {
+    --background: #ffffff !important;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  // exclude tablets
+  .native-app {
+    .buttons-last-slot {
+      margin-right: 36px;
+    }
+
+    .notes,
+    .additional-margin-right {
+      margin-right: 24px;
+    }
+  }
+}
+
+.app-header,
+.translation-content,
+.settings-content {
+  &.landscape {
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+    // content ends horizontally before navigation bar in landscape mode
+    max-width: calc(100vw - var(--safe-area-right-fix, 65px));
+    overflow-x: auto !important;
+  }
+}
+
+.change-log-modal,
+.manual-instructions-modal,
+.user-detail-modal {
+  // Modal ends vertically above navigation bar in portrait mode
+  max-height: calc(100vh - var(--safe-area-bottom-fix, 44px)) !important;
+  overflow-y: auto !important;
+
+  &.landscape {
+    // Modal ends horizontally before navigation bar in landscape mode
+    max-width: calc(100vw - var(--safe-area-right-fix, 65px));
+    overflow-x: auto !important;
+    max-height: 100vh !important;
+    margin-right: 24px;
+  }
+
+  &:has(app-help-modal) {
+    --border-width: 0;
+  }
+
+  // height of help page & release notes in web app
+  &.desktop {
+    --height: 90vh;
+    --max-height: 90vh;
+  }
+}
+
+// alert border styling - must be global like modal
+.copy-success-alert .alert-wrapper,
+.show-mobile-web-email-options .alert-wrapper {
+  border: 2px solid var(--ion-color-medium);
+  border-radius: 10px;
+}
+
+ion-title {
+  text-align: center;
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  font-size: 1.1rem;
+}
+
+.settings-content {
+  .settings-section-title {
+    color: var(--ion-color-primary);
+    font-size: 0.8em;
+  }
+
+  .accordion-margin-top {
+    padding-top: 10px;
+  }
+
+  .version-info {
+    .version {
+      font-size: 0.8em;
+      margin: 0px;
+    }
+  }
+
+  .button-wrapper {
+    text-align: center;
+    margin: 5px 0;
+
+    ion-button {
+      margin: 0 auto;
+    }
+  }
+
+  .accordion-close-button {
+    opacity: 0.8;
+  }
+
+  .small-text {
+    font-size: 0.8em;
+  }
+
+  .notes {
+    font-size: 0.8em;
+    margin-top: 32px;
+    text-align: left;
+  }
+
+  .input-item-count-margin-top {
+    margin-top: -16px;
+    z-index: 1;
+    background: transparent;
+  }
+
+  .additional-right-margin {
+    margin-right: 36px;
+  }
+}
