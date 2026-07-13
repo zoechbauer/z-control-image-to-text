@@ -2,51 +2,100 @@
   <ion-card-header class="ion-text-center">
     <ion-card-title>{{ "FEATURE.CARD.TITLE" | translate }}</ion-card-title>
     <ion-card-subtitle>
-      {{ "FEATURE.CARD.SUBTITLE" | translate }}
+      {{ "FEATURE.WORKFLOW_STEPS." + workflowStep | translate }}
     </ion-card-subtitle>
   </ion-card-header>
   <ion-card-content>
     <p class="ion-padding">
-      <a href="https://www.datamuse.com/api/" target="_blank">Datamuse API</a>
-      {{ "FEATURE.CARD.INFO-1" | translate }}
+      {{ "FEATURE.CARD.INFO" | translate }}
     </p>
-    <p class="ion-padding">{{ "FEATURE.CARD.INFO-2" | translate }}</p>
-    <ion-item>
-      <ion-input
-        placeholder="{{ 'FEATURE.CARD.PLACEHOLDER.INPUT' | translate }}"
-        [(ngModel)]="featureInput"
-        (ionInput)="enableButtons()"
-      ></ion-input>
-    </ion-item>
-    <ion-list lines="none" *ngIf="relatedWords.length">
-      <ion-list-header>
-        {{ "FEATURE.CARD.LABEL.RELATED_WORDS" | translate }}
-      </ion-list-header>
-
-      <div
-        class="ion-padding-start"
-        style="font-weight: 700; font-size: 16px"
-        *ngFor="let word of relatedWords"
-      >
-        {{ word }}
-      </div>
-    </ion-list>
   </ion-card-content>
   <app-spinner *ngIf="isLoading"></app-spinner>
   <div class="ion-text-center">
-    <ion-button
-      fill="clear"
-      (click)="search()"
-      (keydown.enter)="search()"
-      [disabled]="searchBtnDisabled"
-      >{{ "FEATURE.CARD.BUTTON.SEARCH" | translate }}</ion-button
+    <ng-container *ngIf="workflowStep === WorkflowStep.SelectPhoto">
+      <ion-button
+        fill="clear"
+        (click)="makePhoto()"
+        (keydown.enter)="makePhoto()"
+        ><ion-icon name="camera-outline" slot="start"></ion-icon>
+        {{ "FEATURE.CARD.BUTTON.CAMERA" | translate }}</ion-button
+      >
+      <ion-button
+        fill="clear"
+        (click)="selectPhotoFromGalery()"
+        (keydown.enter)="selectPhotoFromGalery()"
+        ><ion-icon name="images-outline" slot="start"></ion-icon>
+        {{ "FEATURE.CARD.BUTTON.GALLERY" | translate }}</ion-button
+      >
+      <ion-button
+        name="load-data"
+        fill="clear"
+        (click)="selectResultsFromStorage($event)"
+        (keydown.enter)="selectResultsFromStorage($event)"
+        ><ion-icon name="images-outline" slot="start"></ion-icon>
+        {{ "FEATURE.CARD.BUTTON.LOAD_DATA" | translate }}</ion-button
+      >
+    </ng-container>
+
+    <ng-container *ngIf="workflowStep === WorkflowStep.ExtractText">
+      <ion-button
+        name="extract-text"
+        fill="clear"
+        (click)="extractTextFromPhoto()"
+        (keydown.enter)="extractTextFromPhoto()"
+        ><ion-icon name="list-outline" slot="start"></ion-icon>
+        {{ "FEATURE.CARD.BUTTON.EXTRACT_TEXT" | translate }}</ion-button
+      >
+      <ion-button name="clear" fill="clear" (click)="clear($event)" (keydown.enter)="clear($event)"
+        ><ion-icon name="images-outline" slot="start"></ion-icon>
+        {{ "FEATURE.CARD.BUTTON.CLEAR" | translate }}</ion-button
+      >
+    </ng-container>
+
+    <ng-container *ngIf="workflowStep === WorkflowStep.DisplayExtractedText">
+      <ion-button
+        fill="clear"
+        (click)="saveTextAndPhoto()"
+        (keydown.enter)="saveTextAndPhoto()"
+        ><ion-icon name="list-outline" slot="start"></ion-icon>
+        {{ "FEATURE.CARD.BUTTON.SAVE_DATA" | translate }}</ion-button
+      >
+      <ion-button
+        name="send-extracted-text"
+        fill="clear"
+        (click)="sendMail($event)"
+        (keydown.enter)="sendMail($event)"
+        ><ion-icon name="list-outline" slot="start"></ion-icon>
+        {{ "FEATURE.CARD.BUTTON.SEND_MAIL" | translate }}</ion-button
+      >
+      <ion-button name="clear" fill="clear" (click)="clear($event)" (keydown.enter)="clear($event)"
+        ><ion-icon name="images-outline" slot="start"></ion-icon>
+        {{ "FEATURE.CARD.BUTTON.CLEAR" | translate }}</ion-button
+      >
+    </ng-container>
+
+    <ng-container
+      *ngIf="workflowStep === WorkflowStep.DisplayResultsFromStorage"
     >
-    <ion-button
-      fill="clear"
-      (click)="clear()"
-      [disabled]="clearBtnDisabled"
-      (keydown.enter)="clear()"
-      >{{ "FEATURE.CARD.BUTTON.CLEAR" | translate }}</ion-button
-    >
+      <ion-button
+        name="send-from-storage"
+        fill="clear"
+        (click)="sendMail($event)"
+        (keydown.enter)="sendMail($event)"
+        ><ion-icon name="list-outline" slot="start"></ion-icon>
+        {{ "FEATURE.CARD.BUTTON.SEND_MAIL" | translate }}</ion-button
+      >
+      <ion-button
+        fill="clear"
+        (click)="deleteTextAndPhoto()"
+        (keydown.enter)="deleteTextAndPhoto()"
+        ><ion-icon name="list-outline" slot="start"></ion-icon>
+        {{ "FEATURE.CARD.BUTTON.DELETE_DATA" | translate }}</ion-button
+      >
+      <ion-button name="clear" fill="clear" (click)="clear($event)" (keydown.enter)="clear($event)"
+        ><ion-icon name="images-outline" slot="start"></ion-icon>
+        {{ "FEATURE.CARD.BUTTON.CLEAR" | translate }}</ion-button
+      >
+    </ng-container>
   </div>
 </ion-card>

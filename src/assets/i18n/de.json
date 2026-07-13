@@ -44,19 +44,17 @@
   },
   "FEATURE": {
     "CARD": {
-      "TITLE": "Verwandte Wörter suchen",
-      "SUBTITLE": "Geben Sie ein Wort ein und finden Sie verwandte Wörter",
-      "INFO-1": "bietet viele Funktionen.",
-      "INFO-2": "Wir zeigen hier nur die Suche nach verwandten Wörtern, damit Sie die Kontingent-Verwaltung in diesem Setup testen können.",
+      "TITLE": "Text aus Bild extrahieren",
+      "INFO": "Bitte wählen Sie aus, ob Sie ein Bild aufnehmen oder ein Bild aus der Galerie auswählen möchten. Anschließend wird der Text aus dem Bild extrahiert und angezeigt.",
       "BUTTON": {
-        "SEARCH": "Suchen",
-        "CLEAR": "Löschen"
-      },
-      "LABEL": {
-        "RELATED_WORDS": "Verwandte Wörter:"
-      },
-      "PLACEHOLDER": {
-        "INPUT": "Geben Sie ein Wort ein..."
+        "CAMERA": "Kamera",
+        "GALLERY": "Galerie",
+        "EXTRACT_TEXT": "Text extrahieren",
+        "SEND_MAIL": "Mail senden",
+        "SAVE_DATA": "Daten speichern",
+        "LOAD_DATA": "Daten laden",
+        "DELETE_DATA": "Daten löschen",
+        "CLEAR": "Zurücksetzen"
       }
     },
     "TOAST": {
@@ -64,6 +62,12 @@
       "CONTINGENT_EXCEEDED": "Feature-Kontingent überschritten. Bitte versuchen Sie es nächsten Monat erneut.",
       "ERROR_CALLING_FEATURE": "Fehler beim Aufruf der Hauptfunktion. Bitte versuchen Sie es später erneut oder verwenden Sie ein anderes Wort.",
       "ERROR_CREATING_MISSING_CONTINGENT_DATA": "Fehler beim Erstellen fehlender Kontingentdaten."
+    },
+    "WORKFLOW_STEPS": {
+      "SELECT_PHOTO": "Nächster Schritt: Wählen Sie ein Bild aus.",
+      "EXTRACT_TEXT": "Nächster Schritt: Texte aus dem Bild extrahieren.",
+      "DISPLAY_EXTRACTED_TEXT": "Nächster Schritt: Bild und Text speichern und per Mail versenden.",
+      "DISPLAY_RESULTS_FROM_STORAGE": "Nächster Schritt: Gespeicherte Daten anzeigen und per Mail versenden oder löschen."
     }
   },
 

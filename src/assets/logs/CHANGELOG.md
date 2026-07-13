@@ -10,6 +10,16 @@ This project uses a simplified major.minor versioning scheme:
 - Minor versions indicate new features, improvements, and bug fixes.
 - Patch numbers are intentionally omitted; all changes are released as major or minor versions.
 
+## [0.4] – 2026-06-13
+
+### 🚀 Improvements
+
+- Refactor FeatureComponent to present a clear, step-by-step workflow with context-aware action buttons that guide users through each stage.
+- Add toast notifications for simulation actions to provide immediate, contextual user feedback.
+- Update translations and UI copy to match the new workflow step labels and improve clarity.
+- Improved Typescript configuration by adding an exclude array, preventing unnecessary type checking and improving build performance.
+- Improved Tools/Readme.md documentation for clarity and better guidance on using the backup and environment generation scripts.
+
 ## [0.3] - 2026-06-11
 
 ### 🚀 Internal

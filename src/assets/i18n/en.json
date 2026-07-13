@@ -46,17 +46,16 @@
     "CARD": {
       "TITLE": "Search related words",
       "SUBTITLE": "Enter a word and find related words",
-      "INFO-1": "offers many features.",
-      "INFO-2": "We only show the search for related words here so you can test the quota management in this setup.",
+      "INFO": "Please choose whether to take a photo or select an image from the gallery. The text will then be extracted from the image and displayed.",
       "BUTTON": {
-        "SEARCH": "Search",
+        "CAMERA": "Camera",
+        "GALLERY": "Gallery",
+        "EXTRACT_TEXT": "Extract Text",
+        "SEND_MAIL": "Send Mail",
+        "SAVE_DATA": "Save Data",
+        "LOAD_DATA": "Load Data",
+        "DELETE_DATA": "Delete Data",
         "CLEAR": "Clear"
-      },
-      "LABEL": {
-        "RELATED_WORDS": "Related words:"
-      },
-      "PLACEHOLDER": {
-        "INPUT": "Enter a word..."
       }
     },
     "TOAST": {
@@ -64,6 +63,12 @@
       "CONTINGENT_EXCEEDED": "Feature quota exceeded. Please try again next month.",
       "ERROR_CALLING_FEATURE": "Error calling the main feature. Please try again later or use another word.",
       "ERROR_CREATING_MISSING_CONTINGENT_DATA": "Error creating missing contingent data."
+    },
+    "WORKFLOW_STEPS": {
+      "SELECT_PHOTO": "Next step: Select a photo.",
+      "EXTRACT_TEXT": "Next step: Extract text from the image.",
+      "DISPLAY_EXTRACTED_TEXT": "Next step: Save the image and text and send via email.",
+      "DISPLAY_RESULTS_FROM_STORAGE": "Next step: Display stored data and send via email or delete."
     }
   },
 
