@@ -2,12 +2,7 @@
   "------ global": "-------",
   "APP": {
     "LOADING_DATA": "Daten werden geladen...",
-    "UNDER_CONSTRUCTION": "Diese Funktion ist in Arbeit.",
-    "MAIN": {
-      "TOAST": {
-        "ERROR_CALLING_FEATURE": "Fehler beim Aufruf der Hauptfunktion. Bitte versuchen Sie es später erneut oder verwenden Sie ein anderes Wort."
-      }
-    }
+    "UNDER_CONSTRUCTION": "Diese Funktion ist in Arbeit."
   },
   "------ header page": "-------",
   "HEADER": {
@@ -46,6 +41,9 @@
     "CARD": {
       "TITLE": "Text aus Bild extrahieren",
       "INFO": "Bitte wählen Sie aus, ob Sie ein Bild aufnehmen oder ein Bild aus der Galerie auswählen möchten. Anschließend wird der Text aus dem Bild extrahiert und angezeigt.",
+      "LABEL": {
+        "EXTRACTED_TEXT": "Extrahierter Text"
+      },
       "BUTTON": {
         "CAMERA": "Kamera",
         "GALLERY": "Galerie",
@@ -54,14 +52,21 @@
         "SAVE_DATA": "Daten speichern",
         "LOAD_DATA": "Daten laden",
         "DELETE_DATA": "Daten löschen",
+        "DELETE_ALL": "Alle Daten löschen",
         "CLEAR": "Zurücksetzen"
       }
     },
     "TOAST": {
       "QUOTA_REDUCED": "Das monatliche Kontingent wurde reduziert.",
-      "CONTINGENT_EXCEEDED": "Feature-Kontingent überschritten. Bitte versuchen Sie es nächsten Monat erneut.",
-      "ERROR_CALLING_FEATURE": "Fehler beim Aufruf der Hauptfunktion. Bitte versuchen Sie es später erneut oder verwenden Sie ein anderes Wort.",
-      "ERROR_CREATING_MISSING_CONTINGENT_DATA": "Fehler beim Erstellen fehlender Kontingentdaten."
+      "CONTINGENT_EXCEEDED": "Texterkennungs-Kontingent überschritten. Bitte versuchen Sie es nächsten Monat erneut.",
+      "ERROR_CALLING_FEATURE": "Fehler beim Aufruf der Texterkennung mittels Google Cloud Vision.",
+      "ERROR_CREATING_MISSING_CONTINGENT_DATA": "Fehler beim Erstellen fehlender Kontingentdaten.",
+      "ERROR_ADDING_USER": "Fehler beim Hinzufügen des Benutzers. Bitte versuchen Sie es erneut.",
+      "ERROR_LOADING_USERS": "Fehler beim Laden der Benutzer. Bitte versuchen Sie es erneut.",
+      "ERROR_UPDATING_PROGRAMMER_DEVICES": "Fehler beim Aktualisieren der Programmiergeräte. Bitte versuchen Sie es erneut.",
+      "ERROR_GETTING_PROGRAMMER_DEVICES": "Fehler beim Abrufen der Programmierer-Geräte. Bitte versuchen Sie es erneut.",
+      "ERROR_GETTING_PROGRAMMER_DEVICE_STATUS": "Fehler beim Abrufen des Status des Programmierer-Geräts. Bitte versuchen Sie es erneut.",
+      "ERROR__MISSING_DOWNLOAD_URL": "URL für Download nicht verfügbar."
     },
     "WORKFLOW_STEPS": {
       "SELECT_PHOTO": "Nächster Schritt: Wählen Sie ein Bild aus.",
@@ -78,7 +83,6 @@
     },
     "CARD": {
       "TITLE": "Verfügbares Kontingent für {{yearMonth}}",
-      "SUBTITLE": "Anzahl der verbrauchten Zeichen",
       "GRID": {
         "USER": "Benutzer",
         "USER_NAME_YOU": "Sie",
@@ -157,9 +161,9 @@
         "BUFFER": "Puffer",
         "AVAILABLE": "Noch verfügbar",
         "CHECKSUM_ALL_USERS": "Verbraucht von allen Benutzern",
-        "CHARS": "Zeichen",
+        "CHARS": "Bilder",
         "GRID_INFO_NOTE": "Absteigend sortiert nach Datum der letzten Feature-Nutzung",
-        "GRID_SEARCH_INFO": "Text für Benutzer|Plattform; Verbrauchte Zeichen: >|<",
+        "GRID_SEARCH_INFO": "Text für Benutzer|Plattform; Gescannte Bilder: >|<",
         "USER_STATISTICS_OVERVIEW": "Benutzer-Statistik Übersicht",
         "JSON_DATA": "Rohdaten (JSON) - nur für Debug"
       },
@@ -213,7 +217,7 @@
         "FEATURE_STATISTICS": {
           "TITLE": "Feature-Statistik",
           "LABEL": {
-            "CONSUMED_CHARS": "Verbrauchte Zeichen",
+            "CONSUMED_CHARS": "Gescannte Bilder",
             "LANGUAGE": "Sprache",
             "LAST_FEATURE_USAGE": "Letzte Feature-Nutzung"
           }

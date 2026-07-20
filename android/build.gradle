@@ -29,12 +29,12 @@ task clean(type: Delete) {
 }
 
 // Force Java 17 for all subprojects (including generated ones)
-subprojects {
-    afterEvaluate { project ->
-        if (project.hasProperty("android")) {
-            project.android.compileOptions.sourceCompatibility = JavaVersion.VERSION_17
-            project.android.compileOptions.targetCompatibility = JavaVersion.VERSION_17
-        }
-    }
-}
+// subprojects {
+//     afterEvaluate { project ->
+//         if (project.hasProperty("android")) {
+//             project.android.compileOptions.sourceCompatibility = JavaVersion.VERSION_17
+//             project.android.compileOptions.targetCompatibility = JavaVersion.VERSION_17
+//         }
+//     }
+// }
 

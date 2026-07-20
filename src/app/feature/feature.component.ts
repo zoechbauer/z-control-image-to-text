@@ -9,22 +9,34 @@ import {
   IonButton,
   IonCardSubtitle,
   IonIcon,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonImg,
+  IonLabel,
+  IonItem,
 } from '@ionic/angular/standalone';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { Photo } from '@capacitor/camera';
 
 import { UtilsService } from '../services/utils.service';
 import { LocalStorageService } from '../services/local-storage.service';
 import { ToastService } from '../services/toast.service';
 import { ToastAnchor, WorkflowStep } from '../shared/enums';
 import { FirebaseFirestoreUtilsService } from '../services/firebase-firestore-utils.service';
-import { FeatureService } from '../services/feature.service';
 import { SpinnerComponent } from '../ui/components/spinner/spinner.component';
 import { WorkflowService } from '../services/workflow-service';
+import { UserPhoto } from '../shared/app.interfaces';
+import { PhotoService } from '../services/photo.service';
+import type { TextStatistics } from '../shared/app.interfaces';
+import { FileUtilsService } from '../services/file-utils.service';
 
 @Component({
   selector: 'app-feature',
   templateUrl: './feature.component.html',
   imports: [
+    IonItem,
+    IonLabel,
     IonIcon,
     IonCardSubtitle,
     IonButton,
@@ -32,6 +44,10 @@ import { WorkflowService } from '../services/workflow-service';
     IonCardHeader,
     IonCardTitle,
     IonCardContent,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonImg,
     CommonModule,
     FormsModule,
     TranslatePipe,
@@ -41,24 +57,34 @@ import { WorkflowService } from '../services/workflow-service';
 export class FeatureComponent implements OnInit {
   translate = inject(TranslateService);
   localStorage = inject(LocalStorageService);
+  readonly photoService = inject(PhotoService);
+  readonly fileUtilsService = inject(FileUtilsService);
   readonly utilsService = inject(UtilsService);
   private readonly toastService = inject(ToastService);
   private readonly firestoreUtilsService = inject(
     FirebaseFirestoreUtilsService,
   );
-  private readonly featureService = inject(FeatureService);
   private readonly workflowService = inject(WorkflowService);
 
-  featureInput: string = ''; // TODO replace with photo
+  selectedPhoto?: UserPhoto;
+  extractedText: string = '';
+  extractedTextItems: string[] = [];
   WorkflowStep = WorkflowStep;
   workflowStep = WorkflowStep.SelectPhoto;
   isLoading = false;
   isContingentExceeded: boolean = false;
+  textStatistics: TextStatistics = {
+    wordCount: 0,
+    lineCount: 0,
+    characterCount: 0,
+  };
 
   ngOnInit() {
     this.updateIsContingentExceeded().then(() => {
       this.initFormControls();
-      this.isLoading = false;
+      this.fileUtilsService.loadSavedPhotos().then(() => {
+        this.isLoading = false;
+      });
     });
   }
 
@@ -70,32 +96,29 @@ export class FeatureComponent implements OnInit {
       await this.firestoreUtilsService.isContingentExceeded();
   }
 
-  makePhoto() {
-    this.toastService.showToast(
-      'makePhoto is not implemented yet',
-      ToastAnchor.MainPage,
-    );
+  async makePhoto() {
+    await this.photoService.makePhoto();
+    this.selectedPhoto = this.photoService.getLastPhoto() as UserPhoto;
 
     this.workflowStep = this.workflowService.getNextWorkflowStep(
       this.workflowStep,
     );
   }
 
-  selectPhotoFromGalery() {
-    this.toastService.showToast(
-      'selectPhoto is not implemented yet',
-      ToastAnchor.MainPage,
-    );
+  async selectPhotoFromGallery() {
+    await this.photoService.selectPhoto();
+    this.selectedPhoto = this.photoService.getLastPhoto() as UserPhoto;
 
     this.workflowStep = this.workflowService.getNextWorkflowStep(
       this.workflowStep,
     );
   }
 
-  selectResultsFromStorage(event: any) {
-    this.toastService.showToast(
-      'selectResultsFromStorage is not implemented yet',
-      ToastAnchor.MainPage,
+  async selectResultsFromStorage(event: any) {
+    await this.fileUtilsService.getPhotosFromCache();
+    console.log(
+      'selectResultsFromStorage - loaded photos:',
+      this.fileUtilsService.photos$,
     );
 
     this.workflowStep = this.workflowService.getNextWorkflowStep(
@@ -104,7 +127,28 @@ export class FeatureComponent implements OnInit {
     );
   }
 
-  extractTextFromPhoto() {
+  async extractTextFromPhoto() {
+    this.isLoading = true;
+
+    if (!this.selectedPhoto) {
+      this.toastService.showToast(
+        'No photo selected. Please select a photo first.',
+        ToastAnchor.MainPage,
+      );
+      this.isLoading = false;
+      return;
+    }
+
+    await this.updateIsContingentExceeded();
+    if (this.isContingentExceeded) {
+      this.toastService.showToast(
+        this.translate.instant('FEATURE.TOAST.CONTINGENT_EXCEEDED'),
+        ToastAnchor.MainPage,
+      );
+      this.isLoading = false;
+      return;
+    }
+
     this.toastService.showToast(
       'extractTextFromPhoto is not implemented yet',
       ToastAnchor.MainPage,
@@ -113,6 +157,7 @@ export class FeatureComponent implements OnInit {
     this.workflowStep = this.workflowService.getNextWorkflowStep(
       this.workflowStep,
     );
+    this.isLoading = false;
   }
 
   deleteTextAndPhoto() {
@@ -124,6 +169,10 @@ export class FeatureComponent implements OnInit {
     this.workflowStep = this.workflowService.getNextWorkflowStep(
       this.workflowStep,
     );
+  }
+
+  deleteAll() {
+    this.photoService.deleteAllPhotos();
   }
 
   sendMail(event: any) {
@@ -151,68 +200,14 @@ export class FeatureComponent implements OnInit {
 
   clear(event: any): void {
     this.initFormControls();
-    
+
     this.workflowStep = this.workflowService.getNextWorkflowStep(
       this.workflowStep,
       event,
     );
   }
 
-  private displayFeatureResults(featureResults: any): void {
-    console.warn('TODO displayFeatureResults ....');
-  }
-
   private initFormControls(): void {
-    console.warn('TODO initFormControls...');
+    this.selectedPhoto = undefined;
   }
-
-  // /**
-  //  * Searches for features based on the user input.
-  //  * Processes the feature input and returns the results.
-  //  */
-  // async search() {
-  //   this.isLoading = true;
-  //   await this.updateIsContingentExceeded();
-
-  //   if (this.isContingentExceeded) {
-  //     this.toastService.showToast(
-  //       this.translate.instant('FEATURE.TOAST.CONTINGENT_EXCEEDED'),
-  //       ToastAnchor.MainPage,
-  //     );
-  //     this.isLoading = false;
-  //     return;
-  //   }
-
-  //   try {
-  //     const featureResults =
-  //       await this.featureService.secureFeatureCloudFunction({
-  //         text: this.featureInput,
-  //       });
-  //     if (!featureResults) {
-  //       this.isLoading = false;
-  //       return;
-  //     }
-  //     this.displayFeatureResults(featureResults);
-  //     this.firestoreUtilsService.requestStatisticsRefresh();
-  //     this.toastService.showToast(
-  //       this.translate.instant('FEATURE.TOAST.QUOTA_REDUCED'),
-  //       ToastAnchor.MainPage,
-  //     );
-  //   } catch (error: any) {
-  //     if (error?.message?.includes('contingent')) {
-  //       this.toastService.showToast(
-  //         this.translate.instant('FEATURE.TOAST.CONTINGENT_EXCEEDED'),
-  //         ToastAnchor.MainPage,
-  //       );
-  //     } else {
-  //       console.error('Feature error:', error);
-  //       this.toastService.showToast(
-  //         this.translate.instant('FEATURE.TOAST.ERROR_CALLING_FEATURE'),
-  //         ToastAnchor.MainPage,
-  //       );
-  //     }
-  //   } finally {
-  //     this.isLoading = false;
-  //   }
-  // }
 }

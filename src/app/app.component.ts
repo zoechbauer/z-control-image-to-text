@@ -9,6 +9,7 @@ import { FirebaseFirestoreService } from './services/firebase-firestore.service'
 import { SystemBarsService } from './services/system-bars.service';
 import { SafeAreaInsetsService } from './services/safe-area-insets.service';
 import { CapacitorPlatformService } from './services/capacitor-platform.service';
+import { FileUtilsService } from './services/file-utils.service';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,7 @@ export class AppComponent implements OnInit {
   private readonly renderer = inject(Renderer2);
   private readonly firestoreService = inject(FirebaseFirestoreService);
   private readonly localStorageService = inject(LocalStorageService);
+  private readonly fileUtilsService = inject(FileUtilsService);
   private readonly safeAreaInsets = inject(SafeAreaInsetsService);
   private readonly systemBars = inject(SystemBarsService);
   private readonly capacitorPlatformService = inject(CapacitorPlatformService);
@@ -49,6 +51,7 @@ export class AppComponent implements OnInit {
     }
 
     await this.localStorageService.initializeServicesAsync(this.translate);
+    await this.fileUtilsService.initStorage();
     await this.firestoreService.init();
   }
 }

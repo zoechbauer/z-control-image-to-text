@@ -11,15 +11,7 @@ export class WorkflowService {
     const target = event?.target as HTMLElement | null;
     const buttonName = target?.getAttribute('name') ?? null;
 
-    console.log('Start: ', currentStep, 'buttonName:', buttonName);
-
-    if (!buttonName) {
-      console.warn('Button name is not defined in the event target.');
-    }
-
     if (buttonName === 'clear') {
-      console.log('End: ', WorkflowStep.SelectPhoto, 'buttonName:', buttonName);
-
       return WorkflowStep.SelectPhoto;
     }
 
@@ -51,7 +43,6 @@ export class WorkflowService {
         nextStep = WorkflowStep.SelectPhoto;
     }
 
-    console.log('End: ', nextStep, 'buttonName:', buttonName);
     return nextStep;
   }
 }

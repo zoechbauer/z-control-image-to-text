@@ -2,12 +2,7 @@
   "------ global": "-------",
   "APP": {
     "LOADING_DATA": "Loading data...",
-    "UNDER_CONSTRUCTION": "This feature is under construction.",
-    "MAIN": {
-      "TOAST": {
-        "ERROR_CALLING_FEATURE": "Error calling the main feature. Please try again later or use another word."
-      }
-    }
+    "UNDER_CONSTRUCTION": "This feature is under construction."
   },
   "------ header page": "-------",
   "HEADER": {
@@ -44,9 +39,11 @@
   },
   "FEATURE": {
     "CARD": {
-      "TITLE": "Search related words",
-      "SUBTITLE": "Enter a word and find related words",
+      "TITLE": "Extract Text from Image",
       "INFO": "Please choose whether to take a photo or select an image from the gallery. The text will then be extracted from the image and displayed.",
+      "LABEL": {
+        "EXTRACTED_TEXT": "Extracted Text"
+      },
       "BUTTON": {
         "CAMERA": "Camera",
         "GALLERY": "Gallery",
@@ -55,14 +52,21 @@
         "SAVE_DATA": "Save Data",
         "LOAD_DATA": "Load Data",
         "DELETE_DATA": "Delete Data",
+        "DELETE_ALL": "Delete All Data",
         "CLEAR": "Clear"
       }
     },
     "TOAST": {
       "QUOTA_REDUCED": "The monthly quota has been reduced.",
-      "CONTINGENT_EXCEEDED": "Feature quota exceeded. Please try again next month.",
-      "ERROR_CALLING_FEATURE": "Error calling the main feature. Please try again later or use another word.",
-      "ERROR_CREATING_MISSING_CONTINGENT_DATA": "Error creating missing contingent data."
+      "CONTINGENT_EXCEEDED": "Text recognition quota exceeded. Please try again next month.",
+      "ERROR_CALLING_FEATURE": "Error calling text recognition via Google Cloud Vision.",
+      "ERROR_CREATING_MISSING_CONTINGENT_DATA": "Error creating missing contingent data.",
+      "ERROR_ADDING_USER": "Error adding user. Please try again.",
+      "ERROR_LOADING_USERS": "Error loading users. Please try http://127.0.0.1:4000/  again.",
+      "ERROR_UPDATING_PROGRAMMER_DEVICES": "Error updating programmer devices. Please try again.",
+      "ERROR_GETTING_PROGRAMMER_DEVICES": "Error getting programmer devices. Please try again.",
+      "ERROR_GETTING_PROGRAMMER_DEVICE_STATUS": "Error getting programmer device status. Please try again.",
+      "ERROR__MISSING_DOWNLOAD_URL": "Download URL not available."
     },
     "WORKFLOW_STEPS": {
       "SELECT_PHOTO": "Next step: Select a photo.",
@@ -158,9 +162,9 @@
         "BUFFER": "Buffer",
         "AVAILABLE": "Available",
         "CHECKSUM_ALL_USERS": "Used by all users",
-        "CHARS": "Characters",
+        "CHARS": "Images",
         "GRID_INFO_NOTE": "Sorted in descending order by the date of the last feature usage",
-        "GRID_SEARCH_INFO": "Text for User & Platform; Used Characters: >|<",
+        "GRID_SEARCH_INFO": "Text for User & Platform; Scanned Images: >|<",
         "USER_STATISTICS_OVERVIEW": "User Statistics Overview",
         "JSON_DATA": "Raw Data (JSON) - Debug Only"
       },
@@ -214,7 +218,7 @@
         "FEATURE_STATISTICS": {
           "TITLE": "Feature Statistics",
           "LABEL": {
-            "CONSUMED_CHARS": "Consumed Characters",
+            "CONSUMED_CHARS": "Scanned Images",
             "LANGUAGE": "Language",
             "LAST_FEATURE_USAGE": "Last Feature Usage"
           }

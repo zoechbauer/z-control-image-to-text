@@ -10,6 +10,29 @@ This project uses a simplified major.minor versioning scheme:
 - Minor versions indicate new features, improvements, and bug fixes.
 - Patch numbers are intentionally omitted; all changes are released as major or minor versions.
 
+## [0.5] – 2026-06-20
+
+### ✨ New Features
+
+- Added FileUtilsService to manage file operations (save/read photos and files), with unit tests for FILESYSTEM.
+- Added PhotoService to capture, select, normalize and prepare images for processing.
+- Added PhotoInfoModalComponent for viewing and editing photo metadata and user input.
+- Added AlertService to handle confirming user actions like deleting photos.
+
+### 🚀 Improvements
+
+- Updated translation keys and UI copy for clarity and consistency (renamed translation prefix TRANSLATE → FEATURE).
+- Refactored FirebaseFirestoreService to use the updated translation keys for error messages and consistent handling.
+
+### 🐛 Fixes
+
+- Added missing translations; fixed typos and prefix inconsistencies across localization files.
+
+### 🔧 Internal
+
+- Upgraded Java to 21 and Gradle to 9.2.0 to support @angular/camera and newer Android camera APIs.
+- Refactored app.config.ts: separated Firebase provider wiring into functions for better organization and maintainability.
+
 ## [0.4] – 2026-06-13
 
 ### 🚀 Improvements
@@ -22,7 +45,7 @@ This project uses a simplified major.minor versioning scheme:
 
 ## [0.3] - 2026-06-11
 
-### 🚀 Internal
+### 🔧 Internal
 
 - Renamed FeatureExampleComponent to FeatureComponent to better reflect its purpose in the app. We use a generic name for the component to allow for future expansion of features without needing to rename it again.
 
@@ -35,7 +58,7 @@ This project uses a simplified major.minor versioning scheme:
 - Verified the app on both Android and Web, confirming that the new Firestore collection stores Test feature quota usage correctly.
 - All unit tests passed successfully, confirming that the app is functioning as expected with the new Firestore collection and updated configurations.
 
-### 🚀 Internal
+### 🔧 Internal
 
 - Updated the app name and ID in `capacitor.config.ts` to `z-control Image to Text` and `at.zcontrol.zoe.image_to_text`.
 - Updated the project name in `package.json`, `package-lock.json` and `.env.local` to `z-control-image-to-text`.

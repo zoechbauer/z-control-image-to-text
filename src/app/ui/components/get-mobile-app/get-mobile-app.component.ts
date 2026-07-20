@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { IonIcon, IonButton } from '@ionic/angular/standalone';
-import { DecimalPipe, NgIf, NgTemplateOutlet } from '@angular/common';
+import { DecimalPipe, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { LogoComponent } from '../logo/logo.component';
@@ -16,6 +16,7 @@ import { AppConstants } from '@app/shared/app.constants';
     LogoComponent,
     IonButton,
     NgIf,
+    NgFor,
     NgTemplateOutlet,
     TranslateModule,
     DecimalPipe,

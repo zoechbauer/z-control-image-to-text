@@ -1,5 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { registerLocaleData } from '@angular/common';
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import localeDe from '@angular/common/locales/de';
 import { addIcons } from 'ionicons';
 import {
@@ -67,6 +68,9 @@ addIcons({
   'trash-outline': trashOutline,
   'volume-high-outline': volumeHighOutline,
 });
+
+// Register PWA Components like Camera, File, etc. for use in the application on Web
+defineCustomElements(window);
 
 // Register German locale data for number/date pipes
 registerLocaleData(localeDe);
