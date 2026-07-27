@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
   FormBuilder,
   FormGroup,
@@ -18,6 +19,8 @@ import {
   IonImg,
   IonCol,
   IonRow,
+  IonTextarea,
+  IonInput,
 } from '@ionic/angular/standalone';
 
 import { PhotoInfo, UserPhoto } from 'src/app/shared/app.interfaces';
@@ -40,27 +43,32 @@ import { PhotoInfo, UserPhoto } from 'src/app/shared/app.interfaces';
     IonButton,
     IonRow,
     IonCol,
+    IonInput,
+    IonTextarea,
     ReactiveFormsModule,
+    TranslatePipe,
   ],
 })
 export class PhotoInfoModalComponent implements OnInit {
   @Input() photo!: UserPhoto;
 
+  translate = inject(TranslateService);
+  private readonly fb = inject(FormBuilder);
+  private readonly modalCtrl = inject(ModalController);
+
   photoForm!: FormGroup;
-  info: string | undefined;
+  title: string | undefined;
+  description: string | undefined;
   extractedText: string | undefined;
 
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly modalCtrl: ModalController,
-  ) {}
-
   ngOnInit() {
-    this.info = this.photo.photoInfo?.info;
+    this.title = this.photo.photoInfo?.title;
+    this.description = this.photo.photoInfo?.description;
     this.extractedText = this.photo.photoInfo?.extractedText;
 
     this.photoForm = this.fb.group({
-      info: [this.info || ''],
+      title: [this.title || '', Validators.required],
+      description: [this.description || ''],
     });
   }
 

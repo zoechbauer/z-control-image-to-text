@@ -5,6 +5,13 @@ import { WorkflowStep } from '../shared/enums';
   providedIn: 'root',
 })
 export class WorkflowService {
+
+  /**
+   * Determines the next workflow step based on the current step and an optional event.
+   * @param currentStep The current workflow step.
+   * @param event An optional event of a button click.
+   * @returns The next workflow step.
+   */
   getNextWorkflowStep(currentStep: WorkflowStep, event?: any): WorkflowStep {
     let nextStep: WorkflowStep;
 

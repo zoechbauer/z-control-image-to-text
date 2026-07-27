@@ -6,163 +6,181 @@
     </ion-card-subtitle>
   </ion-card-header>
   <ion-card-content>
-    <p class="ion-padding">
-      {{ "FEATURE.CARD.INFO" | translate }}
-    </p>
-  </ion-card-content>
-  <app-spinner *ngIf="isLoading"></app-spinner>
-  <div class="ion-text-center">
     <ng-container *ngIf="workflowStep === WorkflowStep.SelectPhoto">
-      <ion-button
-        fill="clear"
-        (click)="makePhoto()"
-        (keydown.enter)="makePhoto()"
-        ><ion-icon name="camera-outline" slot="start"></ion-icon>
-        {{ "FEATURE.CARD.BUTTON.CAMERA" | translate }}</ion-button
-      >
-      <ion-button
-        fill="clear"
-        (click)="selectPhotoFromGallery()"
-        (keydown.enter)="selectPhotoFromGallery()"
-        ><ion-icon name="images-outline" slot="start"></ion-icon>
-        {{ "FEATURE.CARD.BUTTON.GALLERY" | translate }}</ion-button
-      >
-      <ion-button
-        name="load-data"
-        fill="clear"
-        (click)="selectResultsFromStorage($event)"
-        (keydown.enter)="selectResultsFromStorage($event)"
-        ><ion-icon name="images-outline" slot="start"></ion-icon>
-        {{ "FEATURE.CARD.BUTTON.LOAD_DATA" | translate }}</ion-button
-      >
+      <p class="ion-padding">
+        {{ "FEATURE.CARD.INFO" | translate }}
+      </p>
+      <p class="ion-padding">
+        {{ "FEATURE.CARD.INFO-2" | translate }}
+      </p>
+      <p class="ion-padding">
+        {{ "FEATURE.CARD.INFO-3" | translate }}
+      </p>
     </ng-container>
-
-    <ng-container *ngIf="workflowStep === WorkflowStep.ExtractText">
-      <img
-        [src]="selectedPhoto?.webviewPath"
-        class="selected-photo"
-        alt="extract text from displayed image"
-      />
-      <ion-button
-        name="extract-text"
-        fill="clear"
-        (click)="extractTextFromPhoto()"
-        (keydown.enter)="extractTextFromPhoto()"
-        ><ion-icon name="list-outline" slot="start"></ion-icon>
-        {{ "FEATURE.CARD.BUTTON.EXTRACT_TEXT" | translate }}</ion-button
-      >
-      <ion-button
-        name="clear"
-        fill="clear"
-        (click)="clear($event)"
-        (keydown.enter)="clear($event)"
-        ><ion-icon name="images-outline" slot="start"></ion-icon>
-        {{ "FEATURE.CARD.BUTTON.CLEAR" | translate }}</ion-button
-      >
-    </ng-container>
-
-    <ng-container *ngIf="workflowStep === WorkflowStep.DisplayExtractedText">
-      <img
-        [src]="selectedPhoto?.webviewPath"
-        class="selected-photo"
-        alt="extract text from displayed image"
-      />
-
-      <ion-item>
-        <ion-label class="ion-padding">
-          {{ "FEATURE.CARD.LABEL.EXTRACTED_TEXT" | translate }}
-        </ion-label>
-      </ion-item>
-
-      <ion-item>
-        <pre>{{ extractedText }}</pre>
-      </ion-item>
-
-      <ion-item>
-        <ion-label class="ion-padding">
-          Anzahl Zeilen: {{ textStatistics.lineCount }}
-        </ion-label>
-        <ion-label class="ion-padding">
-          Anzahl Wörter: {{ textStatistics.wordCount }}
-        </ion-label>
-        <ion-label class="ion-padding">
-          Anzahl Zeichen: {{ textStatistics.characterCount }}
-        </ion-label>
-      </ion-item>
-
-      <div>
+    <div class="ion-text-center">
+      <ng-container *ngIf="workflowStep === WorkflowStep.SelectPhoto">
+        <app-spinner *ngIf="isLoading"></app-spinner>
         <ion-button
           fill="clear"
-          (click)="saveTextAndPhoto()"
-          (keydown.enter)="saveTextAndPhoto()"
-          ><ion-icon name="list-outline" slot="start"></ion-icon>
-          {{ "FEATURE.CARD.BUTTON.SAVE_DATA" | translate }}</ion-button
+          (click)="makePhoto()"
+          (keydown.enter)="makePhoto()"
+          ><ion-icon name="camera-outline" slot="start"></ion-icon>
+          {{ "FEATURE.CARD.BUTTON.CAMERA" | translate }}</ion-button
         >
         <ion-button
-          name="send-extracted-text"
           fill="clear"
-          (click)="sendMail($event)"
-          (keydown.enter)="sendMail($event)"
+          (click)="selectPhotoFromGallery()"
+          (keydown.enter)="selectPhotoFromGallery()"
+          ><ion-icon name="image-outline" slot="start"></ion-icon>
+          {{ "FEATURE.CARD.BUTTON.GALLERY" | translate }}</ion-button
+        >
+        <ion-button
+          name="load-data"
+          fill="clear"
+          (click)="selectPhotosFromStorage($event)"
+          (keydown.enter)="selectPhotosFromStorage($event)"
+          ><ion-icon name="images-outline" slot="start"></ion-icon>
+          {{ "FEATURE.CARD.BUTTON.LOAD_HISTORY" | translate }}</ion-button
+        >
+      </ng-container>
+
+      <ng-container *ngIf="workflowStep === WorkflowStep.ExtractText">
+        <img
+          *ngIf="selectedPhoto"
+          [src]="selectedPhoto.webviewPath"
+          class="selected-photo"
+          alt="extract text from displayed image"
+        />
+        <app-spinner *ngIf="isLoading"></app-spinner>
+        <ion-button
+          name="extract-text"
+          fill="clear"
+          (click)="extractTextFromPhoto()"
+          (keydown.enter)="extractTextFromPhoto()"
           ><ion-icon name="list-outline" slot="start"></ion-icon>
-          {{ "FEATURE.CARD.BUTTON.SEND_MAIL" | translate }}</ion-button
+          {{ "FEATURE.CARD.BUTTON.EXTRACT_TEXT" | translate }}</ion-button
         >
         <ion-button
           name="clear"
           fill="clear"
           (click)="clear($event)"
           (keydown.enter)="clear($event)"
-          ><ion-icon name="images-outline" slot="start"></ion-icon>
+          ><ion-icon name="backspace-outline" slot="start"></ion-icon>
           {{ "FEATURE.CARD.BUTTON.CLEAR" | translate }}</ion-button
         >
-      </div>
-    </ng-container>
+      </ng-container>
 
-    <ng-container
-      *ngIf="workflowStep === WorkflowStep.DisplayResultsFromStorage"
-    >
-      <div>Anzahl: {{ photoService.photos.length }}</div>
-      <ion-grid>
-        <ion-row>
-          <ion-col
-            size="12"
-            size-md="6"
-            size-lg="4"
-            *ngFor="let photo of photoService.photos; let position = index"
+      <ng-container *ngIf="workflowStep === WorkflowStep.DisplayExtractedText">
+        <img
+          *ngIf="selectedPhoto"
+          [src]="selectedPhoto.webviewPath"
+          class="selected-photo"
+          alt="extract text from displayed image"
+        />
+
+        <ion-item>
+          <ion-label class="ion-padding">
+            {{ "FEATURE.CARD.LABEL.EXTRACTED_TEXT" | translate }}
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <pre>{{ extractedText }}</pre>
+        </ion-item>
+
+        <ion-item>
+          <ion-label class="ion-padding">
+            Anzahl Zeilen: {{ textStatistics.lineCount }}
+          </ion-label>
+          <ion-label class="ion-padding">
+            Anzahl Wörter: {{ textStatistics.wordCount }}
+          </ion-label>
+          <ion-label class="ion-padding">
+            Anzahl Zeichen: {{ textStatistics.characterCount }}
+          </ion-label>
+        </ion-item>
+
+        <app-spinner *ngIf="isLoading"></app-spinner>
+        <div>
+          <ion-button
+            fill="clear"
+            (click)="addInfo($event)"
+            (keydown.enter)="addInfo($event)"
+            ><ion-icon name="create-outline" slot="start"></ion-icon>
+            {{ "FEATURE.CARD.BUTTON.ADD_INFO" | translate }}</ion-button
           >
-            <ion-img [src]="photo.webviewPath"></ion-img>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-      <ion-button
-        name="send-from-storage"
-        fill="clear"
-        (click)="sendMail($event)"
-        (keydown.enter)="sendMail($event)"
-        ><ion-icon name="list-outline" slot="start"></ion-icon>
-        {{ "FEATURE.CARD.BUTTON.SEND_MAIL" | translate }}</ion-button
+          <ion-button
+            fill="clear"
+            (click)="saveTextAndPhoto()"
+            (keydown.enter)="saveTextAndPhoto()"
+            ><ion-icon name="save-outline" slot="start"></ion-icon>
+            {{ "FEATURE.CARD.BUTTON.SAVE_DATA" | translate }}</ion-button
+          >
+          <ion-button
+            name="clear"
+            fill="clear"
+            (click)="clear($event)"
+            (keydown.enter)="clear($event)"
+            ><ion-icon name="backspace-outline" slot="start"></ion-icon>
+            {{ "FEATURE.CARD.BUTTON.CLEAR" | translate }}</ion-button
+          >
+        </div>
+      </ng-container>
+
+      <ng-container
+        *ngIf="workflowStep === WorkflowStep.DisplayResultsFromStorage"
       >
-      <ion-button
-        fill="clear"
-        (click)="deleteTextAndPhoto()"
-        (keydown.enter)="deleteTextAndPhoto()"
-        ><ion-icon name="list-outline" slot="start"></ion-icon>
-        {{ "FEATURE.CARD.BUTTON.DELETE_DATA" | translate }}</ion-button
-      >
-      <ion-button
-        fill="clear"
-        (click)="deleteAll()"
-        (keydown.enter)="deleteAll()"
-        ><ion-icon name="list-outline" slot="start"></ion-icon>
-        {{ "FEATURE.CARD.BUTTON.DELETE_ALL" | translate }}</ion-button
-      >
-      <ion-button
-        name="clear"
-        fill="clear"
-        (click)="clear($event)"
-        (keydown.enter)="clear($event)"
-        ><ion-icon name="images-outline" slot="start"></ion-icon>
-        {{ "FEATURE.CARD.BUTTON.CLEAR" | translate }}</ion-button
-      >
-    </ng-container>
-  </div>
+        <div>Anzahl: {{ photoService.photos.length }}</div>
+        <ion-grid>
+          <ion-row>
+            <ion-col
+              size="12"
+              *ngFor="let photo of photoService.photos; let position = index"
+            >
+              <ion-img [src]="photo.webviewPath"></ion-img>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <app-spinner *ngIf="isLoading"></app-spinner>
+        <ion-button
+          name="change-info"
+          fill="clear"
+          (click)="changeInfo()"
+          (keydown.enter)="changeInfo()"
+          ><ion-icon name="create-outline" slot="start"></ion-icon>
+          {{ "FEATURE.CARD.BUTTON.CHANGE_INFO" | translate }}</ion-button
+        >
+        <ion-button
+          name="copy-data"
+          fill="clear"
+          (click)="copyData()"
+          (keydown.enter)="copyData()"
+          ><ion-icon name="copy-outline" slot="start"></ion-icon>
+          {{ "FEATURE.CARD.BUTTON.COPY_DATA" | translate }}</ion-button
+        >
+        <ion-button
+          fill="clear"
+          (click)="deleteTextAndPhoto()"
+          (keydown.enter)="deleteTextAndPhoto()"
+          ><ion-icon name="trash-bin-outline" slot="start"></ion-icon>
+          {{ "FEATURE.CARD.BUTTON.DELETE_DATA" | translate }}</ion-button
+        >
+        <ion-button
+          fill="clear"
+          (click)="deleteAllPhotos()"
+          (keydown.enter)="deleteAllPhotos()"
+          ><ion-icon name="trash-outline" slot="start"></ion-icon>
+          {{ "FEATURE.CARD.BUTTON.DELETE_ALL" | translate }}</ion-button
+        >
+        <ion-button
+          name="clear"
+          fill="clear"
+          (click)="clear($event)"
+          (keydown.enter)="clear($event)"
+          ><ion-icon name="backspace-outline" slot="start"></ion-icon>
+          {{ "FEATURE.CARD.BUTTON.CLEAR" | translate }}</ion-button
+        >
+      </ng-container>
+    </div>
+  </ion-card-content>
 </ion-card>

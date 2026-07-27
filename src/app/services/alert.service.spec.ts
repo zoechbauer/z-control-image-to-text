@@ -26,34 +26,6 @@ describe('AlertService', () => {
     service = TestBed.inject(AlertService);
   });
 
-  describe('showErrorAlert', () => {
-    it('should create and present an error alert with translated strings', async () => {
-      translateServiceSpy.get.and.callFake((key: string) => {
-        switch (key) {
-          case 'ERROR_ALERT_TITLE_ERROR':
-            return of('Error');
-          case 'ERROR_ALERT_BUTTON_OK':
-            return of('OK');
-          default:
-            return of('Translated: ' + key);
-        }
-      });
-      alertControllerSpy.create.and.resolveTo(alertSpy);
-
-      await service.showErrorAlert('SOME_ERROR_KEY');
-
-      expect(translateServiceSpy.get).toHaveBeenCalledWith('SOME_ERROR_KEY');
-      expect(translateServiceSpy.get).toHaveBeenCalledWith('ERROR_ALERT_TITLE_ERROR');
-      expect(translateServiceSpy.get).toHaveBeenCalledWith('ERROR_ALERT_BUTTON_OK');
-      expect(alertControllerSpy.create).toHaveBeenCalledWith({
-        header: 'Error',
-        message: 'Translated: SOME_ERROR_KEY',
-        buttons: ['OK'],
-      });
-      expect(alertSpy.present).toHaveBeenCalled();
-    });
-  });
-
   describe('showStoragePermissionError', () => {
     it('should create and present a storage permission error alert with translated strings', async () => {
       translateServiceSpy.get.and.callFake((key: string) => of('Translated: ' + key));
@@ -61,16 +33,16 @@ describe('AlertService', () => {
 
       await service.showStoragePermissionError();
 
-      expect(translateServiceSpy.get).toHaveBeenCalledWith('ERROR_MESSAGE_SAVE_QR_HEADER');
-      expect(translateServiceSpy.get).toHaveBeenCalledWith('ERROR_MESSAGE_SAVE_QR_SUBHEADER');
-      expect(translateServiceSpy.get).toHaveBeenCalledWith('ERROR_MESSAGE_SAVE_QR_MESSAGE');
+      expect(translateServiceSpy.get).toHaveBeenCalledWith('APP.ALERT_SERVICE.STORAGE_PERMISSION.HEADER');
+      expect(translateServiceSpy.get).toHaveBeenCalledWith('APP.ALERT_SERVICE.STORAGE_PERMISSION.SUBHEADER');
+      expect(translateServiceSpy.get).toHaveBeenCalledWith('APP.ALERT_SERVICE.STORAGE_PERMISSION.MESSAGE');
       expect(alertControllerSpy.create).toHaveBeenCalledWith({
-        header: 'Translated: ERROR_MESSAGE_SAVE_QR_HEADER',
-        subHeader: 'Translated: ERROR_MESSAGE_SAVE_QR_SUBHEADER',
-        message: 'Translated: ERROR_MESSAGE_SAVE_QR_MESSAGE',
+        header: 'Translated: APP.ALERT_SERVICE.STORAGE_PERMISSION.HEADER',
+        subHeader: 'Translated: APP.ALERT_SERVICE.STORAGE_PERMISSION.SUBHEADER',
+        message: 'Translated: APP.ALERT_SERVICE.STORAGE_PERMISSION.MESSAGE',
         buttons: [
           {
-            text: 'OK',
+            text: 'Translated: APP.ALERT_SERVICE.OK',
             role: 'cancel',
           },
         ],

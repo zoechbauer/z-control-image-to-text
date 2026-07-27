@@ -900,7 +900,7 @@ describe('FirebaseFirestoreService', () => {
         new Error('call failed'),
       );
       expect(toastServiceMock.showToast).toHaveBeenCalledWith(
-        'TRANSLATE.CARD_RESULTS.TOAST.ERROR_GETTING_PROGRAMMER_DEVICE_STATUS',
+        'FEATURE.TOAST.ERROR_GETTING_PROGRAMMER_DEVICE_STATUS',
         ToastAnchor.MainPage,
       );
       expect(result).toBeFalse();
@@ -947,7 +947,7 @@ describe('FirebaseFirestoreService', () => {
         new Error('call failed'),
       );
       expect(toastServiceMock.showToast).toHaveBeenCalledWith(
-        'TRANSLATE.CARD_RESULTS.TOAST.ERROR_GETTING_PROGRAMMER_DEVICES',
+        'FEATURE.TOAST.ERROR_GETTING_PROGRAMMER_DEVICES',
         ToastAnchor.MainPage,
       );
       expect(result).toEqual([]);
@@ -1025,7 +1025,7 @@ describe('FirebaseFirestoreService', () => {
         new Error('call failed'),
       );
       expect(toastServiceMock.showToast).toHaveBeenCalledWith(
-        'TRANSLATE.CARD_RESULTS.TOAST.ERROR_UPDATING_PROGRAMMER_DEVICES',
+        'FEATURE.TOAST.ERROR_UPDATING_PROGRAMMER_DEVICES',
         ToastAnchor.MainPage,
       );
     });
@@ -1071,7 +1071,7 @@ describe('FirebaseFirestoreService', () => {
       ]);
     });
 
-    it('should return empty array when programmer devices are defined in environment but updateUsermap is false', () => {
+    it('should return empty array when progr.devices are defined in environment but updateUsermap is false', () => {
       (environment as any).app.programmerDevices.devices = [
         { 'Device 1': 'uid1' },
         { 'Device 2': 'uid2' },
@@ -1152,7 +1152,7 @@ describe('FirebaseFirestoreService', () => {
         new Error('call failed'),
       );
       expect(toastServiceMock.showToast).toHaveBeenCalledWith(
-        'TRANSLATE.CARD_RESULTS.TOAST.ERROR_ADDING_USER',
+        'FEATURE.TOAST.ERROR_ADDING_USER',
         ToastAnchor.MainPage,
       );
     });
@@ -1231,7 +1231,9 @@ describe('FirebaseFirestoreService', () => {
       expect(result).toEqual([users[1]]);
     });
 
-    it('should include user from another creation month when cached feature usage exist for selected month', async () => {
+    const TEST_NAME =
+      'should include user from another creation month when cached feature usage exist for selected month';
+    it(TEST_NAME, async () => {
       spyOn<any>(service, 'getDocs').and.resolveTo(
         createSnapshotMock(users) as any,
       );
@@ -1281,7 +1283,7 @@ describe('FirebaseFirestoreService', () => {
         new Error('getDocs failed'),
       );
       expect(toastServiceMock.showToast).toHaveBeenCalledWith(
-        'TRANSLATE.CARD_RESULTS.TOAST.ERROR_LOADING_USERS',
+        'FEATURE.TOAST.ERROR_LOADING_USERS',
         ToastAnchor.SettingsPage,
       );
       expect(result).toEqual([]);
@@ -1565,7 +1567,7 @@ describe('FirebaseFirestoreService', () => {
     });
 
     describe('getFirestoreDocSnapshot and getFirestoreDoc', () => {
-      it('should execute getFirestoreDocSnapshot path directly in readFeatureContingentData and handle failure', async () => {
+      it('should exec getFirestoreDocSnapshot path in readFeatureContingentData and handle failure', async () => {
         spyOn(console, 'error');
         spyOn<any>(service, 'getFirestoreDoc').and.returnValue({
           id: 'mock-ref',
@@ -1595,7 +1597,9 @@ describe('FirebaseFirestoreService', () => {
     });
 
     describe('getCollection and getDocs', () => {
-      it('should execute getCollection path directly in getAllUserFeatureUsageStatisticsForMonth and handle failure', async () => {
+      const TEST_NAME = 'should execute getCollection path directly in getAllUserFeatureUsageStatisticsForMonth ' +
+        'and handle failure';
+      it(TEST_NAME, async () => {
         spyOn(console, 'error');
         spyOn(utilsServiceMock, 'getCurrentMonth').and.returnValue('2026-03');
 
@@ -1611,7 +1615,7 @@ describe('FirebaseFirestoreService', () => {
         );
       });
 
-      it('should execute getDocs path directly in getAllUserFeatureUsageStatisticsForMonth and handle failure', async () => {
+      it('should execute getDocs path in getAllUserFeatureUsageStatisticsForMonth and handle failure', async () => {
         spyOn(console, 'error');
         spyOn(utilsServiceMock, 'getCurrentMonth').and.returnValue('2026-03');
         spyOn<any>(service, 'getCollection').and.returnValue({} as any);

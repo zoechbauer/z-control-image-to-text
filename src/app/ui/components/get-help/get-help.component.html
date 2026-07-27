@@ -79,33 +79,48 @@
     </div>
 
     <p style="color: var(--ion-color-danger)">
-      This help page is a placeholder and should be customized for your
-      application.
+      This help page is a work in progress - it does not yet fully describe the
+      app.
     </p>
 
     <h3 id="what-can-the-app-do">What can the app do?</h3>
     <strong>What is this app for?</strong>
     <p>
-      <strong>Describe the app's core functionality here.</strong>
+      <strong
+        >Make a photo or load an image from your device, and the app will
+        extract the text from the image using Optical Character Recognition
+        (OCR) technology.</strong
+      >
     </p>
     <p>
-      Here, we deliberately do not provide a description of the demo feature
-      "Search related words".
+      The extracted text together with an entered title and description can be
+      copied to clipboard or saved to your device.
     </p>
     <p>
-      But with this feature, you can better understand the management of the
-      quota. With each word search, the monthly quota is reduced. The quota is
-      automatically reset in the next month.
-    </p>
-    <p>
-      You can find out how to check your monthly allowance further down in the
-      section "How do I use the app?".
+      The app also provides statistics about the extracted text, including word
+      count, line count, and character count.
     </p>
     <p>You can choose the base language (English or German) in the settings.</p>
     <p><strong>Highlights:</strong></p>
     <ul class="no-list-style-inside">
-      <li>Describe highlight 1.</li>
-      <li>Describe highlight 2, and so on.</li>
+      <li>
+        <strong>Extract text and add information</strong><br />The photo and the
+        extracted text can be displayed, and a title and description can be
+        added and saved on the device.
+      </li>
+      <li>
+        <strong>Manage history</strong><br />You can view and manage the history
+        of images with the extracted text and the added information.
+      </li>
+      <li>
+        <strong>Copy captured info, extracted text and photo</strong><br />You
+        can then easily share this information by pasting the copied content
+        into another app.
+      </li>
+      <li>
+        <strong>Status indicator</strong><br />This always shows the next
+        processing step.
+      </li>
     </ul>
     <p><strong>Limitations:</strong></p>
     <ul class="no-list-style-inside">
@@ -115,7 +130,7 @@
           {{ maxFreeFeatureCharsLengthPerMonth | number: "1.0-0" : "de" }}
           characters for all users
         </strong>
-        (Example: Google Translate). If this quota is exceeded,
+        If this quota is exceeded,
         <i>z-control</i> incurs costs.
         <p>
           Therefore, available options are limited to prevent the shared monthly
@@ -137,12 +152,23 @@
       </li>
       <li>
         <p><strong>Run the app feature</strong></p>
-        <ol>
+        <ul class="no-list-style-inside">
           <li>
             Describe the workflow how to run the app feature, e.g. step 1.
           </li>
-          <li>step 2, etc.</li>
-        </ol>
+          <li>
+            <b>What does the status indicator do?</b>
+            <p>
+              The app displays a status indicator under the heading "Extract
+              text from image". This feature guides you step by step through the
+              process by always showing the next action to take – for example:
+              select an image, extract text from the image, send it by email, or
+              select, edit, or delete saved data. This helps you keep an
+              overview, and makes the app especially easier and more intuitive
+              for new users.
+            </p>
+          </li>
+        </ul>
       </li>
       <li>
         <strong>How can I check my monthly feature quota?</strong>
@@ -250,17 +276,35 @@
     <div>
       <h3 id="troubleshooting">Troubleshooting & Problem Solving</h3>
       <ul class="no-list-style">
-        <li>
-          <p>
-            <b>Description of problem 1:</b>
-          </p>
-          <p>Description of the cause and solution for this problem.</p>
-        </li>
         <li *ngIf="isNative">
+          <b
+            >Why do I get "Storage Permission Required" error and how do I fix
+            it?</b
+          >
           <p>
-            <b>Description of problem 2:</b>
+            If you see this error when saving or mailing images, you need to
+            grant storage permissions to the app:
           </p>
-          <p>Description of the cause and solution for this problem.</p>
+          <p>Solution:</p>
+          <ol>
+            <li>Go to Settings</li>
+            <li>Select Apps</li>
+            <li>Find z-control Image to Text</li>
+            <li>Tap Permissions</li>
+            <li>Enable Storage permission</li>
+          </ol>
+          <p>
+            This error typically occurs on older Android versions (e.g., Android
+            9). When you first start the app, you'll be asked to allow
+            permissions to access photos, media, and files. If you previously
+            denied permissions and selected "Don't ask again", you'll get this
+            error and need to manually enable them in your device settings.
+          </p>
+          <p>
+            On certain devices, such as Samsung Galaxy S8/S9 models, it may
+            still not work despite these settings. In that case, please use the
+            web version of this app.
+          </p>
         </li>
       </ul>
     </div>
@@ -347,27 +391,26 @@
     </div>
 
     <p style="color: var(--ion-color-danger)">
-      Diese Hilfeseite dient als Platzhalter und sollte für Ihre Anwendung
-      angepasst werden.
+      Diese Hilfeseite ist in Arbeit - sie beschreibt die App noch nicht
+      vollständig.
     </p>
 
     <h3 id="what-can-the-app-do-DE">Was kann die App?</h3>
     <strong>Wofür ist diese App gedacht?</strong>
     <p>
-      <strong>Beschreiben Sie hier die Funktionen der App.</strong>
+      <strong
+        >Machen Sie ein Foto oder laden Sie ein Bild von Ihrem Gerät, und die
+        App extrahiert den Text aus dem Bild mithilfe der optischen
+        Zeichenerkennung (Optical Character Recognition, OCR).</strong
+      >
     </p>
     <p>
-      Es wird hier bewusst keine Beschreibung des Demo-Features "Bekannte Wörter
-      suchen" gegeben.
+      Der extrahierte Text kann zusammen mit einem eingegebenen Titel und einer
+      Beschreibung kopiert oder auf Ihrem Gerät gespeichert werden.
     </p>
     <p>
-      Aber mit diesem Feature können Sie die Verwaltung des Kontingents besser
-      verstehen. Bei jeder Wortsuche wird das monatliche Kontingent reduziert.
-      Im nächsten Monat wird das Kontingent automatisch zurückgesetzt.
-    </p>
-    <p>
-      Wie Sie das monatliche Kontingent überprüfen können, erfahren Sie weiter
-      unten im Abschnitt "Wie benutze ich die App?".
+      Die App bietet außerdem Statistiken zum extrahierten Text, einschließlich
+      Wortanzahl, Zeilenanzahl und Zeichenanzahl.
     </p>
     <p>
       Die Basissprache (Englisch oder Deutsch) können Sie in den Einstellungen
@@ -375,8 +418,25 @@
     </p>
     <p><strong>Highlights:</strong></p>
     <ul class="no-list-style-inside">
-      <li>Beschreiben Sie Highlight 1.</li>
-      <li>Beschreiben Sie Highlight 2 usw.</li>
+      <li>
+        <strong>Text extrahieren und Informationen ergänzen</strong><br />Das
+        Foto und der extrahierte Text können angezeigt und Titel und
+        Beschreibung ergänzt und auf dem Gerät gespeichert werden.
+      </li>
+      <li>
+        <strong>Historie verwalten</strong><br />Sie können die Historie der
+        Bilder mit dem extrahierten Text und den ergänzten Informationen
+        einsehen und verwalten.
+      </li>
+      <li>
+        <strong>Erfasste Info, extrahierten Text und Foto kopieren</strong
+        ><br />Sie können diese Informationen dann sehr einfach teilen, indem
+        Sie die kopierten Informationen in eine andere App einfügen.
+      </li>
+      <li>
+        <strong>Statusanzeige</strong><br />Damit wird immer der nächste
+        Verarbeitungsschritt angezeigt.
+      </li>
     </ul>
     <p><strong>Einschränkungen:</strong></p>
     <ul class="no-list-style-inside">
@@ -384,10 +444,9 @@
         <strong>
           Gemeinsames kostenloses Monatskontingent:
           {{ maxFreeFeatureCharsLengthPerMonth | number: "1.0-0" : "de" }}
-          Zeichen für alle Nutzer
+          Bild-Verarbeitungen für alle Nutzer
         </strong>
-        (Beispiel Google Translate). Wird dieses Kontingent überschritten,
-        entstehen für
+        Wird dieses Kontingent überschritten, entstehen für
         <i>z-control</i> Kosten.
         <p>
           Daher ist die Auswahl begrenzt, damit das gemeinsame Monatskontingent
@@ -409,13 +468,25 @@
       </li>
       <li>
         <p><strong>Feature der App ausführen</strong></p>
-        <ol>
+        <ul class="no-list-style-inside">
           <li>
             Beschreiben Sie hier den Workflow, wie das Feature der App
             ausgeführt wird, z.B. Schritt 1,
           </li>
-          <li>Schritt 2, usw.</li>
-        </ol>
+          <li>
+            <b>Was macht die Statusanzeige?</b>
+            <p>
+              Die App zeigt unterhalbe der Überschrift "Text aus Bild
+              extrahieren" eine Statusanzeige an. Diese Funktion führt Sie
+              Schritt für Schritt durch den Prozess, indem immer der nächste
+              Handlungsschritt angezeigt wird – beispielsweise Bild auswählen,
+              Text aus Bild extrahieren, per E-Mail versenden, gespeicherte
+              Daten auswählen, ändern oder löschen. So behalten Sie stets den
+              Überblick, und die Bedienung wird besonders für neue Nutzer noch
+              einfacher und intuitiver.
+            </p>
+          </li>
+        </ul>
       </li>
       <li>
         <strong
@@ -538,17 +609,38 @@
     <div>
       <h3 id="troubleshooting-DE">Fehlerbehebung & Problemlösung</h3>
       <ul class="no-list-style">
-        <li>
-          <p>
-            <strong>Beschreibung von Problem 1:</strong>
-          </p>
-          <p>Beschreibung der Ursache und Lösung des Problems.</p>
-        </li>
         <li *ngIf="isNative">
+          <b
+            >Warum erhalte ich die Fehlermeldung "Speicherberechtigung
+            erforderlich" und wie behebe ich das?</b
+          >
           <p>
-            <strong>Beschreibung von Problem 2:</strong>
+            Falls beim Speichern oder Versenden von Bildern dieser Fehler
+            auftritt, müssen Sie der App Speicherberechtigungen erteilen:
           </p>
-          <p>Beschreibung der Ursache und Lösung des Problems.</p>
+          <p>Lösung:</p>
+          <ol>
+            <li>Gehen Sie zu Einstellungen</li>
+            <li>Wählen Sie Apps</li>
+            <li>Suchen Sie z-control Image to Text</li>
+            <li>Tippen Sie auf Berechtigungen</li>
+            <li>Aktivieren Sie die Speicherberechtigung</li>
+          </ol>
+          <p>
+            Dieser Fehler tritt typischerweise bei älteren Android-Versionen
+            (z.B. Android 9) auf. Beim ersten Start der App werden Sie gefragt,
+            ob Sie Berechtigungen für den Zugriff auf Fotos, Medien und Dateien
+            erteilen möchten. Falls Sie zuvor die Berechtigung verweigert und
+            "Nicht mehr fragen" ausgewählt haben, erhalten Sie diese
+            Fehlermeldung und müssen die Berechtigung manuell in den
+            Geräteeinstellungen aktivieren.
+          </p>
+          <p>
+            Bei bestimmten Geräten, wie zum Beispiel dem Samsung Galaxy S8/S9,
+            kann es vorkommen, dass es trotz korrekter Einstellungen weiterhin
+            nicht funktioniert. In diesem Fall nutzen Sie bitte die Web-Version
+            dieser App.
+          </p>
         </li>
       </ul>
     </div>

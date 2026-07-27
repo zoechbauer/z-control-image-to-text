@@ -129,7 +129,10 @@ export class SettingsPage implements OnInit, OnDestroy {
       return;
     }
 
-    // refresh statistic on open to update data on month change - we need to do this before setting the openAccordion value, because the accordion content gets destroyed on close and recreated on open - so we need to update the data before that happens
+    // refresh statistic on open to update data on month change
+    // we need to do this before setting the openAccordion value,
+    // because the accordion content gets destroyed on close and recreated on open - 
+    // so we need to update the data before that happens
     if (value === 'get-statistics') {
       this.firestoreUtilsService.requestStatisticsRefresh();
     }

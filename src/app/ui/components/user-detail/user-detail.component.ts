@@ -57,7 +57,8 @@ export class UserDetailComponent {
     if (!this.userStatistic?.deviceInfo?.appVersion?.date) {
       return '';
     }
-    return `${this.userStatistic.deviceInfo.appVersion.major}.${this.userStatistic.deviceInfo.appVersion.minor} (${this.userStatistic.deviceInfo.appVersion.date})`;
+    const v = this.userStatistic.deviceInfo.appVersion;
+    return `${v.major}.${v.minor} (${v.date})`;
   }
 
   getFormatDateTime(dateTime: Date | null): string {

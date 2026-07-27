@@ -27,8 +27,6 @@ export class GetMobileAppComponent {
   @Input() appName!: string;
   LogoType = LogoType;
 
-  constructor() {}
-
   get maxFeatureCharsLengthPerMonth(): number {
     return AppConstants.maxFreeFeatureCharsPerMonth;
   }

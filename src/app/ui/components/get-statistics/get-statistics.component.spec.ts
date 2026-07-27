@@ -764,7 +764,9 @@ describe('GetStatisticsComponent', () => {
         expect(initSpy).not.toHaveBeenCalled();
       });
 
-      it('should subscribe to firestoreService.programmerDeviceRefresh$ and update isProgrammerDevice if value changes', () => {
+      const TEST_NAME_1 =
+        'should subscribe to firestoreService.programmerDeviceRefresh$ and update isProgrammerDevice if value changes';
+      it(TEST_NAME_1, () => {
         const refresh$ = new Subject<void>();
         let isProgrammerDeviceValue = false;
         Object.defineProperty(firestoreServiceSpy, 'programmerDeviceRefresh$', {
@@ -784,7 +786,10 @@ describe('GetStatisticsComponent', () => {
         expect(component.isProgrammerDevice).toBeTrue();
       });
 
-      it('should subscribe to firestoreService.programmerDeviceRefresh$ and do not update isProgrammerDevice if value does not change', () => {
+      const TEST_NAME_2 =
+        'should subscribe to firestoreService.programmerDeviceRefresh$ and ' +
+        'do not update isProgrammerDevice if value does not change';
+      it(TEST_NAME_2, () => {
         Object.defineProperty(firestoreServiceSpy, 'programmerDeviceRefresh$', {
           get: () => of(void 0),
         });
@@ -812,7 +817,9 @@ describe('GetStatisticsComponent', () => {
       });
 
       describe('init', () => {
-        it('should clear search term, load current user uid, display mode, isProgrammerDevice and contingent data', async () => {
+        const TEST_NAME =
+          'should clear search term, load current user uid, display mode, isProgrammerDevice and contingent data';
+        it(TEST_NAME, async () => {
           const isProgrammerDeviceSpy = Object.defineProperty(
             firestoreServiceSpy,
             'isProgrammerDevice',
@@ -933,7 +940,9 @@ describe('GetStatisticsComponent', () => {
       });
 
       describe('setFilterValues', () => {
-        it('should set displayMode, filterSelectedMonth based on local storage values, and load allFilterMonthValues', async () => {
+        const TEST_NAME =
+          'should set displayMode, filterSelectedMonth based on local storage values, and load allFilterMonthValues';
+        it(TEST_NAME, async () => {
           localStorageServiceSpy.getStatisticsDisplayMode.and.returnValue(
             Promise.resolve(DisplayMode.Programmer),
           );
@@ -1019,7 +1028,10 @@ describe('GetStatisticsComponent', () => {
         expect(spinners.length).toBe(1);
       });
 
-      it('should render two spinner elements if isNative = true (one at the top and one at the bottom, so a spinner is always visible regardless of scroll position)', () => {
+      const TEST_NAME =
+        'should render two spinner elements if isNative = true (one at the top and one at the bottom, ' +
+        'so a spinner is always visible regardless of scroll position)';
+      it(TEST_NAME, () => {
         // On native devices, the template intentionally renders two <app-spinner> elements:
         // one at the top and one at the bottom of the page. This ensures that a loading spinner
         // is always visible to the user, even if they have scrolled to the top or bottom.
@@ -1639,7 +1651,9 @@ describe('GetStatisticsComponent', () => {
         expect(getFormatDateTimeSpy).toHaveBeenCalledWith(featureDate);
       });
 
-      it('should verify conditional logic: uses lastFeatureDate when present, falls back to userCreatedAt when null', () => {
+      const TEST_NAME =
+        'should verify conditional logic: uses lastFeatureDate when present, falls back to userCreatedAt when null';
+      it(TEST_NAME, () => {
         spyOn(component, 'getFormatDateTime').and.callFake((date: Date) => {
           return date ? date.toISOString().split('T')[0] : '';
         });

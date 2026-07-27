@@ -1,5 +1,6 @@
-import { inject, Inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { Capacitor } from '@capacitor/core';
 import { Directory } from '@capacitor/filesystem';
 import { Photo } from '@capacitor/camera';
@@ -9,32 +10,34 @@ import { BehaviorSubject } from 'rxjs';
 import { AlertService } from './alert.service';
 import { ToastService } from './toast.service';
 import { FILESYSTEM, FilesystemLike } from './filesystem.token';
-import { FileExtension, FileNamePrefix } from '../shared/enums';
+import { FileNamePrefix, ToastAnchor } from '../shared/enums';
 import { UserPhoto } from '../shared/app.interfaces';
+import { FileConversionService } from './file-conversion.service';
+import { FilePathService } from './file-path.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class FileUtilsService {
+export class PhotoStorageService {
+  private readonly translate = inject(TranslateService);
   private readonly storage = inject(Storage);
   private readonly alertService = inject(AlertService);
   private readonly loadingCtrl = inject(LoadingController);
   private readonly toastService = inject(ToastService);
+  private readonly fileConversionService = inject(FileConversionService);
+  private readonly filePathService = inject(FilePathService);
+  private readonly filesystem: FilesystemLike = inject(FILESYSTEM);
 
   private readonly PHOTO_STORAGE: string = 'photos';
   private readonly photosSubject = new BehaviorSubject<UserPhoto[]>([]);
   public photos$ = this.photosSubject.asObservable();
   private photos: UserPhoto[] = [];
-  private fileName: string = '';
-
-  constructor(
-    @Inject(FILESYSTEM) private readonly filesystem: FilesystemLike,
-  ) {}
+  private readonly fileName: string = '';
 
   /**
-   * Initializes the Ionic Storage instance. 
+   * Initializes the Ionic Storage instance.
    * This method should be called before any storage operations are performed.
-   * It ensures that the storage is ready for use and prevents potential errors 
+   * It ensures that the storage is ready for use and prevents potential errors
    * related to uninitialized storage.
    */
   async initStorage() {
@@ -67,23 +70,28 @@ export class FileUtilsService {
    * @returns The saved photo as a UserPhoto object.
    */
   async savePhoto(photo: Photo): Promise<UserPhoto> {
+    if (!(await this.checkAndRequestFilesystemPermission())) {
+      this.alertService.showStoragePermissionError();
+      throw new Error('Storage permission denied');
+    }
+    let savedPhoto: UserPhoto;
     // base64 format is required by FileSystem API to save
     const base64Data = await this.readAsBase64(photo);
 
     // write file to data directory
-    const fileName = this.getFileName(FileNamePrefix.ImageToText);
-    console.log('savePhoto - fileName:', fileName);
+    const fileName = this.filePathService.getFileName(
+      FileNamePrefix.ImageToText,
+    );
     const savedFile = await this.filesystem.writeFile({
       path: fileName,
       data: base64Data,
       directory: Directory.Documents,
     });
-    console.log('savePhoto - savedFile:', savedFile);
 
     if (Capacitor.isNativePlatform()) {
       // Display the new image by rewriting the 'file://' path to HTTP
-      // Details: https://ionicframework.com/docs/building/webview#file-protocol
-      return {
+      // Details: [https://ionicframework.com/docs/building/webview#file-protocol](https://ionicframework.com/docs/building/webview#file-protocol)
+      savedPhoto = {
         filepath: savedFile.uri,
         webviewPath: Capacitor.convertFileSrc(savedFile.uri),
       };
@@ -93,12 +101,16 @@ export class FileUtilsService {
       // in the filesystem and will be lost after app restart
       const response = await fetch(photo.webPath!);
       const blob = await response.blob();
-      const base64Data = (await this.blobToDataUrl(blob)) as string;
-      return {
+      const base64Data = (await this.fileConversionService.blobToDataUrl(
+        blob,
+      )) as string;
+      savedPhoto = {
         filepath: fileName,
         webviewPath: base64Data,
       };
     }
+    this.photos.unshift(savedPhoto);
+    return savedPhoto;
   }
 
   /**
@@ -109,7 +121,6 @@ export class FileUtilsService {
    * @returns The photo as a base64 string.
    */
   private async readAsBase64(photo: Photo) {
-    console.log('readAsBase64 - photo:', photo);
     if (Capacitor.isNativePlatform()) {
       // read file into base64
       const file = await this.filesystem.readFile({
@@ -122,7 +133,7 @@ export class FileUtilsService {
       const response = await fetch(photo.webPath!);
       const blob = await response.blob();
 
-      return (await this.blobToBase64(blob)) as string;
+      return (await this.fileConversionService.blobToBase64(blob)) as string;
     }
   }
 
@@ -210,7 +221,7 @@ export class FileUtilsService {
 
     // check permissions
     if (!(await this.checkFilesystemPermission())) {
-      console.log('Storage permission not granted, skipping file deletion');
+      console.warn('Storage permission not granted, skipping file deletion');
       return;
     }
     const numberOfPhotos = this.photos.length;
@@ -230,13 +241,9 @@ export class FileUtilsService {
    * @returns A promise that resolves when the photo has been deleted.
    */
   public async deletePhoto(photo: UserPhoto) {
-    console.log('deletePhoto - deleting photo:', photo);
-    console.log(
-      'Capacitor.convertFileSrc:',
-      Capacitor.convertFileSrc(photo.filepath),
+    const filename = this.filePathService.getFilenameFromFilepath(
+      photo.filepath,
     );
-    const filename = this.getFilenameFromFilepath(photo.filepath);
-    console.log('deletePhoto - filename:', filename);
     try {
       await this.filesystem.deleteFile({
         path: filename,
@@ -264,8 +271,11 @@ export class FileUtilsService {
    * @param data The file data as a base64 string.
    */
   async saveFile(fileName: string, data: string) {
-    console.log('saveFile - fileName:', fileName);
     if (Capacitor.isNativePlatform()) {
+      if (!(await this.checkAndRequestFilesystemPermission())) {
+        this.alertService.showStoragePermissionError();
+        throw new Error('Storage permission denied');
+      }
       // use Capacitor Filesystem API for mobiles
       try {
         await this.filesystem.writeFile({
@@ -279,28 +289,28 @@ export class FileUtilsService {
       }
     } else {
       // for Desktop/Web: create a download link
-      const blob = this.base64ToBlob(data);
+      const blob = this.fileConversionService.base64ToBlob(data);
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
       link.download = fileName;
       link.click();
       window.URL.revokeObjectURL(url);
-      console.log('WEB: File download url:', url);
     }
   }
 
   /**
    * Downloads a file from the given URL and saves it to the filesystem.
    * @param fileDownloadLink The URL of the file to download.
-   * @returns A promise that resolves to true if the file was successfully 
+   * @returns A promise that resolves to true if the file was successfully
    *          downloaded and saved, false otherwise.
    */
   async downloadFile(fileDownloadLink: string): Promise<boolean> {
     if (!fileDownloadLink?.trim()) {
-      console.error('File URL is not available');
-      this.alertService.showErrorAlert(
-        'FEATURE.TOAST.ERROR__MISSING_DOWNLOAD_URL',
+      console.error(`File URL '${fileDownloadLink}' is not available`);
+      this.toastService.showToast(
+        this.translate.instant('FEATURE.TOAST.ERROR_MISSING_DOWNLOAD_URL'),
+        ToastAnchor.MainPage,
       );
       return false;
     }
@@ -312,7 +322,7 @@ export class FileUtilsService {
     try {
       const response = await fetch(fileDownloadLink);
       const blob = await response.blob();
-      const base64Data = await this.blobToBase64(blob);
+      const base64Data = await this.fileConversionService.blobToBase64(blob);
 
       await this.saveFile(this.fileName, base64Data);
       return true;
@@ -359,7 +369,6 @@ export class FileUtilsService {
     }
     try {
       const permissions = await this.filesystem.checkPermissions();
-
       if (permissions.publicStorage === 'granted') {
         return true;
       } else {
@@ -382,88 +391,5 @@ export class FileUtilsService {
       // Continue - older Android versions might not support this
     }
     return true;
-  }
-
-  /**
-   * Converts a Blob object to a data URL.
-   * @param blob The Blob object to convert.
-   * @returns A promise that resolves to the data URL representation of the Blob.
-   */
-  async blobToDataUrl(blob: Blob): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-  }
-
-  /**
-   * Converts a Blob object to a base64 string.
-   * @param blob The Blob object to convert.
-   * @returns A promise that resolves to the base64 representation of the Blob.
-   */
-  async blobToBase64(blob: Blob): Promise<string> {
-    const dataUrl = await this.blobToDataUrl(blob);
-    const comma = dataUrl.indexOf(',');
-    return comma >= 0 ? dataUrl.substring(comma + 1) : dataUrl;
-  }
-
-  /**
-   * Converts a base64 string or data URL to a Blob object.
-   * @param base64OrDataUrl The base64 string or data URL to convert.
-   * @returns The Blob representation of the base64 string or data URL.
-   */
-  base64ToBlob(base64OrDataUrl: string): Blob {
-    const parts = base64OrDataUrl.split(',');
-    const base64 = parts.length > 1 ? parts[1] : parts[0];
-    const mimeMatch = parts[0]?.match(/data:([^;]+);base64/) || [];
-    const mime = mimeMatch[1] || 'application/octet-stream';
-    const byteCharacters = atob(base64);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    return new Blob([byteArray], { type: mime });
-  }
-
-  /**
-   * Generates a file name with the given prefix and extension.
-   * @param filePrefix The prefix for the file name.
-   * @param fileExtension The extension for the file name. Defaults to JPEG.
-   * @returns The generated file name.
-   */
-  private getFileName(
-    filePrefix: FileNamePrefix,
-    fileExtension: FileExtension = FileExtension.JPEG,
-  ): string {
-    this.fileName = `${filePrefix}_${this.generateTimestamp()}.${fileExtension}`;
-    return this.fileName;
-  }
-
-  /**
-   * Extracts the file name from a given file path.
-   * @param filepath The full file path.
-   * @returns The extracted file name.
-   */
-  private getFilenameFromFilepath(filepath: string): string {
-    if (!filepath) return filepath;
-    // strip file:// prefix if present
-    const p = filepath.startsWith('file://') ? filepath.slice(7) : filepath;
-    return p.substring(p.lastIndexOf('/') + 1);
-  }
-
-  /**
-   * Generates a timestamp string in the format YYYYMMDD_HHMMSS.
-   * This timestamp is used for creating unique file names.
-   * @returns The generated timestamp string.
-   */
-  private generateTimestamp(): string {
-    const now = new Date(Date.now());
-    const pad = (n: number) => n.toString().padStart(2, '0');
-    return `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(
-      now.getDate(),
-    )}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
   }
 }

@@ -575,7 +575,8 @@ export class FirebaseFirestoreService {
 
   /**
    * Retrieves feature usage statistics for all users for the selected month or all months from Firestore.
-   *  @param selectedMonth The month for which to retrieve user feature usage statistics or all for all user feature usage statistics.
+   *  @param selectedMonth The month for which to retrieve user feature usage statistics or all for 
+   *                       all user feature usage statistics.
    *
    *  @returns An array of UserFeatureUsageStatistics objects.
    */

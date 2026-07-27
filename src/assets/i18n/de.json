@@ -2,7 +2,17 @@
   "------ global": "-------",
   "APP": {
     "LOADING_DATA": "Daten werden geladen...",
-    "UNDER_CONSTRUCTION": "Diese Funktion ist in Arbeit."
+    "UNDER_CONSTRUCTION": "Diese Funktion ist in Arbeit.",
+    "ALERT_SERVICE": {
+      "STORAGE_PERMISSION": {
+        "HEADER": "Speicherberechtigung erforderlich",
+        "SUBHEADER": "Bitte aktivieren Sie die Speicherberechtigung unter Einstellungen → Apps → z-control Image To Text → Berechtigungen → Speicher.",
+        "MESSAGE": "Detaillierte Hilfe finden Sie in unserem Benutzerhandbuch FAQ."
+      },
+      "OK": "OK",
+      "CANCEL": "Abbrechen",
+      "CONFIRM": "Bestätigen"
+    }
   },
   "------ header page": "-------",
   "HEADER": {
@@ -41,6 +51,8 @@
     "CARD": {
       "TITLE": "Text aus Bild extrahieren",
       "INFO": "Bitte wählen Sie aus, ob Sie ein Bild aufnehmen oder ein Bild aus der Galerie auswählen möchten. Anschließend wird der Text aus dem Bild extrahiert und angezeigt.",
+      "INFO-2": "Sie können sich auch alle durchgeführten Text-Extraktionen ansehen.",
+      "INFO-3": "Bitte beachten Sie, dass die Texterkennung über die Google Cloud Vision API erfolgt. Das monatliche Kontingent für die Texterkennung ist begrenzt. Sobald das Kontingent aufgebraucht ist, wird das Feature bis zum nächsten Monat ausgesetzt.",
       "LABEL": {
         "EXTRACTED_TEXT": "Extrahierter Text"
       },
@@ -48,16 +60,30 @@
         "CAMERA": "Kamera",
         "GALLERY": "Galerie",
         "EXTRACT_TEXT": "Text extrahieren",
-        "SEND_MAIL": "Mail senden",
+        "ADD_INFO": "Info erfassen",
+        "CHANGE_INFO": "Info ändern",
         "SAVE_DATA": "Daten speichern",
-        "LOAD_DATA": "Daten laden",
+        "LOAD_HISTORY": "Historie laden",
+        "COPY_DATA": "Daten kopieren",
         "DELETE_DATA": "Daten löschen",
         "DELETE_ALL": "Alle Daten löschen",
-        "CLEAR": "Zurücksetzen"
+        "CLEAR": "Zurück"
+      }
+    },
+    "PHOTO_INFO_MODAL": {
+      "TITLE": "Bildinformationen",
+      "LABEL": {
+        "TITLE": "Titel",
+        "DESCRIPTION": "Beschreibung",
+        "EXTRACTED_TEXT": "Extrahierter Text"
+      },
+      "BUTTON": {
+        "SAVE": "Speichern",
+        "CANCEL": "Abbrechen"
       }
     },
     "TOAST": {
-      "QUOTA_REDUCED": "Das monatliche Kontingent wurde reduziert.",
+      "QUOTA_REDUCED": "Der Text wurde extrahiert und das monatliche Kontingent wurde verringert.",
       "CONTINGENT_EXCEEDED": "Texterkennungs-Kontingent überschritten. Bitte versuchen Sie es nächsten Monat erneut.",
       "ERROR_CALLING_FEATURE": "Fehler beim Aufruf der Texterkennung mittels Google Cloud Vision.",
       "ERROR_CREATING_MISSING_CONTINGENT_DATA": "Fehler beim Erstellen fehlender Kontingentdaten.",
@@ -66,13 +92,14 @@
       "ERROR_UPDATING_PROGRAMMER_DEVICES": "Fehler beim Aktualisieren der Programmiergeräte. Bitte versuchen Sie es erneut.",
       "ERROR_GETTING_PROGRAMMER_DEVICES": "Fehler beim Abrufen der Programmierer-Geräte. Bitte versuchen Sie es erneut.",
       "ERROR_GETTING_PROGRAMMER_DEVICE_STATUS": "Fehler beim Abrufen des Status des Programmierer-Geräts. Bitte versuchen Sie es erneut.",
-      "ERROR__MISSING_DOWNLOAD_URL": "URL für Download nicht verfügbar."
+      "ERROR_MISSING_DOWNLOAD_URL": "URL für Download nicht verfügbar.",
+      "ERROR_NO_PHOTO_SELECTED": "Kein Foto ausgewählt. Bitte wählen Sie zuerst ein Foto aus."
     },
     "WORKFLOW_STEPS": {
       "SELECT_PHOTO": "Nächster Schritt: Wählen Sie ein Bild aus.",
       "EXTRACT_TEXT": "Nächster Schritt: Texte aus dem Bild extrahieren.",
-      "DISPLAY_EXTRACTED_TEXT": "Nächster Schritt: Bild und Text speichern und per Mail versenden.",
-      "DISPLAY_RESULTS_FROM_STORAGE": "Nächster Schritt: Gespeicherte Daten anzeigen und per Mail versenden oder löschen."
+      "DISPLAY_EXTRACTED_TEXT": "Nächster Schritt: Info erfassen und Bild, Text und Info speichern.",
+      "DISPLAY_RESULTS_FROM_STORAGE": "Nächster Schritt: Gespeicherte Daten auswählen und ändern, kopieren oder löschen."
     }
   },
 
