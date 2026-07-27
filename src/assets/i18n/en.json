@@ -3,10 +3,15 @@
   "APP": {
     "LOADING_DATA": "Loading data...",
     "UNDER_CONSTRUCTION": "This feature is under construction.",
-    "MAIN": {
-      "TOAST": {
-        "ERROR_CALLING_FEATURE": "Error calling the main feature. Please try again later or use another word."
-      }
+    "ALERT_SERVICE": {
+      "STORAGE_PERMISSION": {
+        "HEADER": "Storage Permission Required",
+        "SUBHEADER": "Please enable storage permission under Settings → Apps → z-control Image To Text → Permissions → Storage.",
+        "MESSAGE": "See our user guide FAQ for detailed help."
+      },
+      "OK": "OK",
+      "CANCEL": "Cancel",
+      "CONFIRM": "Confirm"
     }
   },
   "------ header page": "-------",
@@ -44,26 +49,57 @@
   },
   "FEATURE": {
     "CARD": {
-      "TITLE": "Search related words",
-      "SUBTITLE": "Enter a word and find related words",
-      "INFO-1": "offers many features.",
-      "INFO-2": "We only show the search for related words here so you can test the quota management in this setup.",
-      "BUTTON": {
-        "SEARCH": "Search",
-        "CLEAR": "Clear"
-      },
+      "TITLE": "Extract Text from Image",
+      "INFO": "Please choose whether to take a photo or select an image from the gallery. The text will then be extracted from the image and displayed.",
+      "INFO-2": "You can also view all text extractions performed.",
+      "INFO-3": "Please note that text recognition is performed via the Google Cloud Vision API. The monthly quota for text recognition is limited. Once the quota is used up, the feature will be suspended until the next month.",
       "LABEL": {
-        "RELATED_WORDS": "Related words:"
+        "EXTRACTED_TEXT": "Extracted Text"
       },
-      "PLACEHOLDER": {
-        "INPUT": "Enter a word..."
+      "BUTTON": {
+        "CAMERA": "Camera",
+        "GALLERY": "Gallery",
+        "EXTRACT_TEXT": "Extract Text",
+         "ADD_INFO": "Add Info",
+        "CHANGE_INFO": "Change Info",
+        "SAVE_DATA": "Save Data",
+        "LOAD_HISTORY": "Load History",
+        "COPY_DATA": "Copy Data",
+        "DELETE_DATA": "Delete Data",
+        "DELETE_ALL": "Delete All Data",
+        "CLEAR": "Clear"
+      }
+    },
+    "PHOTO_INFO_MODAL": {
+      "TITLE": "Photo Information",
+      "LABEL": {
+        "TITLE": "Title",
+        "DESCRIPTION": "Description",
+        "EXTRACTED_TEXT": "Extracted Text"
+      },
+      "BUTTON": {
+        "SAVE": "Save",
+        "CANCEL": "Cancel"
       }
     },
     "TOAST": {
-      "QUOTA_REDUCED": "The monthly quota has been reduced.",
-      "CONTINGENT_EXCEEDED": "Feature quota exceeded. Please try again next month.",
-      "ERROR_CALLING_FEATURE": "Error calling the main feature. Please try again later or use another word.",
-      "ERROR_CREATING_MISSING_CONTINGENT_DATA": "Error creating missing contingent data."
+      "QUOTA_REDUCED": "The text has been extracted and the monthly quota has been reduced.",
+      "CONTINGENT_EXCEEDED": "Text recognition quota exceeded. Please try again next month.",
+      "ERROR_CALLING_FEATURE": "Error calling text recognition via Google Cloud Vision.",
+      "ERROR_CREATING_MISSING_CONTINGENT_DATA": "Error creating missing contingent data.",
+      "ERROR_ADDING_USER": "Error adding user. Please try again.",
+      "ERROR_LOADING_USERS": "Error loading users. Please try http://127.0.0.1:4000/  again.",
+      "ERROR_UPDATING_PROGRAMMER_DEVICES": "Error updating programmer devices. Please try again.",
+      "ERROR_GETTING_PROGRAMMER_DEVICES": "Error getting programmer devices. Please try again.",
+      "ERROR_GETTING_PROGRAMMER_DEVICE_STATUS": "Error getting programmer device status. Please try again.",
+      "ERROR_MISSING_DOWNLOAD_URL": "Download URL not available.",
+      "ERROR_NO_PHOTO_SELECTED": "No photo selected. Please select a photo first."
+    },
+    "WORKFLOW_STEPS": {
+      "SELECT_PHOTO": "Next step: Select a photo.",
+      "EXTRACT_TEXT": "Next step: Extract text from the image.",
+      "DISPLAY_EXTRACTED_TEXT": "Next step: Capture info and save image, text, and info.",
+      "DISPLAY_RESULTS_FROM_STORAGE": "Next step: Select stored data and edit, copy, or delete."
     }
   },
 
@@ -153,9 +189,9 @@
         "BUFFER": "Buffer",
         "AVAILABLE": "Available",
         "CHECKSUM_ALL_USERS": "Used by all users",
-        "CHARS": "Characters",
+        "CHARS": "Images",
         "GRID_INFO_NOTE": "Sorted in descending order by the date of the last feature usage",
-        "GRID_SEARCH_INFO": "Text for User & Platform; Used Characters: >|<",
+        "GRID_SEARCH_INFO": "Text for User & Platform; Scanned Images: >|<",
         "USER_STATISTICS_OVERVIEW": "User Statistics Overview",
         "JSON_DATA": "Raw Data (JSON) - Debug Only"
       },
@@ -209,7 +245,7 @@
         "FEATURE_STATISTICS": {
           "TITLE": "Feature Statistics",
           "LABEL": {
-            "CONSUMED_CHARS": "Consumed Characters",
+            "CONSUMED_CHARS": "Scanned Images",
             "LANGUAGE": "Language",
             "LAST_FEATURE_USAGE": "Last Feature Usage"
           }

@@ -78,6 +78,20 @@ Guides for setting up, running, and improving Angular unit tests with Karma and 
 - **upload-to-google-playstore/docs/ionic-capacitor-splash-screens-guide.md**  
   Guide to creating and implementing app icons and splash screens for Android using @capacitor/assets or manual drawable generation. Includes image specifications, tools, and troubleshooting tips.
 
+## F. OCR Image To Text Documentation
+
+- **ocr-image-to-text-specification.md**  
+  Describes the Google Cloud Vision API and ML Kit Digital Ink Recognition used for OCR, including architecture, application logic, and cost considerations.
+
+- **ocr-image-flow-documentation.md**  
+  This document describes the image-to-text flow used by the **z-control Image To Text** app. The flow starts with a selected photo, compresses it for OCR, builds a Google Vision-compatible request, and sends the base64 image to the secure OCR endpoint.
+
+- **google-play-release-fallback-and-compat-checklist.md**  
+  Checklist for ensuring fallback and compatibility for Google Play releases, including optional hardening steps, Gradle and plugin version alignment, sync and clean build instructions, and verification of plugin wiring and class presence in the shipped artifact.
+
+- **permission-test-checklist.md**  
+  Checklist for testing saving and reading images to a public folder across Android versions and OEMs, including prioritized test matrix, per-device test steps, acceptance criteria, and helpful adb commands.
+
 ---
 
 ### How to Use This Folder
@@ -87,5 +101,6 @@ Guides for setting up, running, and improving Angular unit tests with Karma and 
 - **Troubleshooting:** Refer to these documents for resolving build, runtime, and deployment issues.
 - **Google Firebase API:** Use the Firebase config guide to manage environment-specific settings securely.
 - **Google Play Store Publication:** Use these guides for creating app assets (icons, splash screens) and the complete publication workflow.
+- **OCR Image To Text Documentation:** Use these documents for understanding the OCR flow, architecture, cost considerations, and testing across Android versions and OEMs.
 
 Each document is self-contained and addresses a specific aspect of the app's development or deployment. For further details, open the relevant markdown file in this folder.

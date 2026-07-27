@@ -17,5 +17,4 @@ export class GetSourceCodeComponent {
   @Input() appName!: string;
   LogoType = LogoType;
 
-  constructor() {}
 }

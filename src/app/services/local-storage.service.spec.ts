@@ -205,7 +205,9 @@ describe('LocalStorageService', () => {
       expect(selectedMonth).toBe('2026-03');
     });
 
-    it('should return current month from utilsService and save in local storage if no selected month is found', async () => {
+    const TEST_NAME =
+      'should return current month from utilsService and save in local storage if no selected month is found';
+    it(TEST_NAME, async () => {
       storageSpy.get.and.returnValue(Promise.resolve(null));
       utilsServiceSpy.getCurrentMonth.and.returnValue('2026-04');
 

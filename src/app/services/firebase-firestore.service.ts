@@ -254,7 +254,7 @@ export class FirebaseFirestoreService {
       console.error('Error loading users from user mapping:', error);
       this.toastService.showToast(
         this.translate.instant(
-          'TRANSLATE.CARD_RESULTS.TOAST.ERROR_LOADING_USERS',
+          'FEATURE.TOAST.ERROR_LOADING_USERS',
         ),
         ToastAnchor.SettingsPage,
       );
@@ -303,7 +303,7 @@ export class FirebaseFirestoreService {
       console.error('Error adding user:', error);
       this.toastService.showToast(
         this.translate.instant(
-          'TRANSLATE.CARD_RESULTS.TOAST.ERROR_ADDING_USER',
+          'FEATURE.TOAST.ERROR_ADDING_USER',
         ),
         ToastAnchor.MainPage,
       );
@@ -333,7 +333,7 @@ export class FirebaseFirestoreService {
       console.error('Error getting all programmer devices:', error);
       this.toastService.showToast(
         this.translate.instant(
-          'TRANSLATE.CARD_RESULTS.TOAST.ERROR_GETTING_PROGRAMMER_DEVICES',
+          'FEATURE.TOAST.ERROR_GETTING_PROGRAMMER_DEVICES',
         ),
         ToastAnchor.MainPage,
       );
@@ -360,7 +360,7 @@ export class FirebaseFirestoreService {
       console.error('Error getting programmer device status:', error);
       this.toastService.showToast(
         this.translate.instant(
-          'TRANSLATE.CARD_RESULTS.TOAST.ERROR_GETTING_PROGRAMMER_DEVICE_STATUS',
+          'FEATURE.TOAST.ERROR_GETTING_PROGRAMMER_DEVICE_STATUS',
         ),
         ToastAnchor.MainPage,
       );
@@ -399,7 +399,7 @@ export class FirebaseFirestoreService {
       console.error('Error updating programmer devices:', error);
       this.toastService.showToast(
         this.translate.instant(
-          'TRANSLATE.CARD_RESULTS.TOAST.ERROR_UPDATING_PROGRAMMER_DEVICES',
+          'FEATURE.TOAST.ERROR_UPDATING_PROGRAMMER_DEVICES',
         ),
         ToastAnchor.MainPage,
       );
@@ -575,7 +575,8 @@ export class FirebaseFirestoreService {
 
   /**
    * Retrieves feature usage statistics for all users for the selected month or all months from Firestore.
-   *  @param selectedMonth The month for which to retrieve user feature usage statistics or all for all user feature usage statistics.
+   *  @param selectedMonth The month for which to retrieve user feature usage statistics or all for 
+   *                       all user feature usage statistics.
    *
    *  @returns An array of UserFeatureUsageStatistics objects.
    */

@@ -30,6 +30,59 @@ import { routes } from './app-routes';
 import { ServicesModule } from './services.module';
 import { environment } from '@env/environment';
 
+function isEmulatorEnabled(): boolean {
+  return !!environment.app?.useFirebaseEmulator;
+}
+
+/**
+ * Resolve the emulator host based on runtime location.
+ * Extend this function if you need additional host mappings (emulators, emulator over adb, etc).
+ */
+function resolveEmulatorHost(): string | undefined {
+  if (!isEmulatorEnabled()) return undefined;
+
+  const host = globalThis.location?.hostname ?? '';
+
+  if (host === 'localhost' || host === '127.0.0.1') {
+    return '127.0.0.1';
+  }
+
+  // Example: developer device LAN IP mapping kept from original logic
+  if (host === '10.0.0.68') {
+    return '10.0.0.68';
+  }
+
+  return undefined;
+}
+
+/**
+ * Create and return Firebase providers.
+ * This keeps emulator wiring isolated from the top-level provider list.
+ */
+function createFirebaseProviders() {
+  const emulatorHost = resolveEmulatorHost();
+
+  const firestoreProvider = provideFirestore(() => {
+    const firestore = getFirestore();
+    if (emulatorHost) {
+      console.log('Connecting to Firestore emulator with host:', emulatorHost);
+      connectFirestoreEmulator(firestore, emulatorHost, 8080);
+    }
+    return firestore;
+  });
+
+  const functionsProvider = provideFunctions(() => {
+    const functions = getFunctions();
+    if (emulatorHost) {
+      console.log('Connecting to Functions emulator with host:', emulatorHost);
+      connectFunctionsEmulator(functions, emulatorHost, 5001);
+    }
+    return functions;
+  });
+
+  return [firestoreProvider, functionsProvider];
+}
+
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
@@ -39,63 +92,15 @@ export const appConfig: ApplicationConfig = {
     }),
     provideHttpClient(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
-
     importProvidersFrom(ServicesModule),
-
     provideTranslateService({ fallbackLang: 'de' }),
     ...provideTranslateHttpLoader({
       prefix: './assets/i18n/',
       suffix: '.json',
     }),
-
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
-    // DRY: Helper to get emulator host or undefined if not using emulator
-    (() => {
-      const getEmulatorHost = () => {
-        if (!environment.app.useFirebaseEmulator) {
-          return undefined;
-        }
-
-        const host = globalThis.location.hostname;
-
-        if (host === 'localhost' || host === '127.0.0.1') {
-          return '127.0.0.1';
-        }
-
-        if (host === '10.0.0.68') {
-          return '10.0.0.68';
-        }
-
-        return undefined;
-      };
-
-      return [
-        provideFirestore(() => {
-          const firestore = getFirestore();
-          const emulatorHost = getEmulatorHost();
-          if (emulatorHost) {
-            console.log(
-              'Connecting to Firestore emulator with host:',
-              emulatorHost,
-            );
-            connectFirestoreEmulator(firestore, emulatorHost, 8080);
-          }
-          return firestore;
-        }),
-        provideFunctions(() => {
-          const functions = getFunctions();
-          const emulatorHost = getEmulatorHost();
-          if (emulatorHost) {
-            console.log(
-              'Connecting to Functions emulator with host:',
-              emulatorHost,
-            );
-            connectFunctionsEmulator(functions, emulatorHost, 5001);
-          }
-          return functions;
-        }),
-      ];
-    })(),
+    // Firebase service providers (firestore + functions). Emulator wiring is isolated in createFirebaseProviders().
+    ...createFirebaseProviders(),
   ],
 };

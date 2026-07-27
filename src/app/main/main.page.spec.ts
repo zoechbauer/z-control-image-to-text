@@ -10,6 +10,8 @@ import { UtilsService } from '../services/utils.service';
 import { MainPage } from './main.page';
 import { UserStatisticComponent } from '../ui/components/user-statistic/user-statistic.component';
 import { createTranslateServiceMock } from '../testing/translate-service.mock';
+import { PhotoStorageService } from '../services/photo-storage.service';
+import { FeatureComponent } from '../feature/feature.component';
 
 @Component({
   selector: 'app-header',
@@ -18,11 +20,11 @@ import { createTranslateServiceMock } from '../testing/translate-service.mock';
 })
 class MockHeaderComponent {}
 @Component({
-  selector: 'app-feature-example',
+  selector: 'app-feature',
   template: '',
   standalone: true,
 })
-class MockFeatureExampleComponent {}
+class MockFeatureComponent {}
 @Component({
   selector: 'app-user-statistic',
   template: '',
@@ -46,13 +48,24 @@ describe('MainPage', () => {
       ['isContingentExceeded', 'requestStatisticsRefresh'],
     );
     TestBed.configureTestingModule({
-      imports: [
-        MainPage,
-        MockFeatureExampleComponent,
-        MockUserStatisticComponent,
-      ],
+      imports: [MainPage, MockFeatureComponent, MockUserStatisticComponent],
       providers: [
         { provide: TranslateService, useValue: createTranslateServiceMock() },
+        {
+          provide: PhotoStorageService,
+          useValue: {
+            initStorage: jasmine
+              .createSpy('initStorage')
+              .and.resolveTo(undefined),
+            photos$: of([]),
+            loadSavedPhotos: jasmine
+              .createSpy('loadSavedPhotos')
+              .and.resolveTo(undefined),
+            getPhotosFromCache: jasmine
+              .createSpy('getPhotosFromCache')
+              .and.resolveTo(undefined),
+          },
+        },
         {
           provide: LocalStorageService,
           useValue: {
@@ -68,8 +81,8 @@ describe('MainPage', () => {
       ],
     })
       .overrideComponent(MainPage, {
-        remove: { imports: [UserStatisticComponent] },
-        add: { imports: [MockUserStatisticComponent] },
+        remove: { imports: [UserStatisticComponent, FeatureComponent] },
+        add: { imports: [MockUserStatisticComponent, MockFeatureComponent] },
       })
       .compileComponents();
     fixture = TestBed.createComponent(MainPage);
@@ -83,24 +96,28 @@ describe('MainPage', () => {
     });
 
     describe('ngOnInit', () => {
-      it('should call showOrHideIonTabBar, setupEventListeners, setupSubscriptions, updateIsContingentExceeded, initFormControls, and getTranslationPlaceholder', async () => {
-        const showOrHideIonTabBarSpy = utilsServiceSpy.showOrHideIonTabBar;
-        const setupEventListenersSpy = spyOn<any>(
-          component,
-          'setupEventListeners',
-        );
-        const setupSubscriptionsSpy = spyOn<any>(
-          component,
-          'setupSubscriptions',
-        );
+      const TEST_NAME =
+        'should call showOrHideIonTabBar, setupEventListeners, setupSubscriptions, ' +
+        'updateIsContingentExceeded, initFormControls, and getTranslationPlaceholder';
+      it(TEST_NAME, async () => {
+          const showOrHideIonTabBarSpy = utilsServiceSpy.showOrHideIonTabBar;
+          const setupEventListenersSpy = spyOn<any>(
+            component,
+            'setupEventListeners',
+          );
+          const setupSubscriptionsSpy = spyOn<any>(
+            component,
+            'setupSubscriptions',
+          );
 
-        component.ngOnInit();
-        await fixture.whenStable();
+          component.ngOnInit();
+          await fixture.whenStable();
 
-        expect(showOrHideIonTabBarSpy).toHaveBeenCalled();
-        expect(setupEventListenersSpy).toHaveBeenCalled();
-        expect(setupSubscriptionsSpy).toHaveBeenCalled();
-      });
+          expect(showOrHideIonTabBarSpy).toHaveBeenCalled();
+          expect(setupEventListenersSpy).toHaveBeenCalled();
+          expect(setupSubscriptionsSpy).toHaveBeenCalled();
+        },
+      );
 
       describe('setupEventListeners', () => {
         it('should add resize event listeners', () => {
@@ -187,9 +204,8 @@ describe('MainPage', () => {
 
     it('should show header, feature and user statistic components', () => {
       const headerComponent = fixture.nativeElement.querySelector('app-header');
-      const featureComponent = fixture.nativeElement.querySelector(
-        'app-feature-example',
-      );
+      const featureComponent =
+        fixture.nativeElement.querySelector('app-feature');
       const userStatisticComponent =
         fixture.nativeElement.querySelector('app-user-statistic');
 

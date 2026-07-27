@@ -9,6 +9,7 @@ import { FirebaseFirestoreService } from './services/firebase-firestore.service'
 import { SystemBarsService } from './services/system-bars.service';
 import { SafeAreaInsetsService } from './services/safe-area-insets.service';
 import { CapacitorPlatformService } from './services/capacitor-platform.service';
+import { PhotoStorageService } from './services/photo-storage.service';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,7 @@ export class AppComponent implements OnInit {
   private readonly renderer = inject(Renderer2);
   private readonly firestoreService = inject(FirebaseFirestoreService);
   private readonly localStorageService = inject(LocalStorageService);
+  private readonly photoStorageService = inject(PhotoStorageService);
   private readonly safeAreaInsets = inject(SafeAreaInsetsService);
   private readonly systemBars = inject(SystemBarsService);
   private readonly capacitorPlatformService = inject(CapacitorPlatformService);
@@ -32,6 +34,11 @@ export class AppComponent implements OnInit {
     this.initializeApp();
   }
 
+  /**
+   * Initialize the application by setting up platform-specific configurations,
+   * initializing services, and managing the splash screen and status bar.
+   * This method is called during the component's initialization phase (ngOnInit).
+   */
   async initializeApp() {
     if (this.isNativeApp) {
       this.renderer.addClass(document.body, 'native-app');
@@ -49,6 +56,7 @@ export class AppComponent implements OnInit {
     }
 
     await this.localStorageService.initializeServicesAsync(this.translate);
+    await this.photoStorageService.initStorage();
     await this.firestoreService.init();
   }
 }

@@ -1,36 +1,31 @@
 # z-control Image to Text
 
-## TODOs
+Make a photo or load an image from your device, and the app will extract the text from the image using Optical Character Recognition (OCR) technology. The extracted text together with an entered title and description can be copied or saved to your device. The app also provides statistics about the extracted text, including word count, line count, and character count.
 
-Update the following items in the project to reflect the new app's purpose and branding:
+The app uses the Google Cloud Vision API for OCR. It is built with Ionic 8 and Angular 20, and it can be run as a web app or installed on Android devices.
 
-## Template Text
+Google Cloud Vision API usage is limited to 1,000 requests per month for free, shared across all users of the app. The app will display a warning when the quota is close to being reached.
 
-The z-control IONIC Setup app is a starter template and utility for building Ionic applications within the z-control ecosystem. It provides a structured foundation with built-in features like quota management, tab-based navigation, and comprehensive documentation to help developers quickly create and deploy their own Ionic apps.
+This app was created with the **z-control IONIC Setup** app (https://github.com/zoechbauer/z-control-ionic-setup), which is a starter template and utility for building Ionic applications within the z-control ecosystem. It provides a structured foundation with built-in features like quota management, tab-based navigation, and comprehensive documentation to help developers quickly create and deploy their own Ionic apps.
 
 ## Features
 
 - **Quota management**: Track and display API usage with clear quota limits and warnings
-- **Tab-based navigation**: Clean, intuitive UI with separate tabs for main feature and settings
+- **Shared monthly quota**: Free tier with 1,000 requests for text recognition per month shared across all users
+- **Tab-based navigation**: Clean, intuitive UI with separate tabs for main feature and settings (Text Recognition)
+- **Step-by-step workflow**: Guided process from image selection to text extraction, sharing, and history management
 - **Built-in help**: Help page for step-by-step instructions and FAQs
 - **Structure for Settings**: Dedicated settings tab with accordions for configuration, Feedback, Change-log, Privacy Policy, and support
 
 Download now for free and use it to create your own Ionic apps!
 
 ## Download & Online Access
-**Web Application**
 
-Explore the z-control Ionic Setup application online via Firebase Hosting:
+- **Web App:**  
+  [Run the app online (Firebase Hosting)](https://z-control-image-to-text.web.app/)
 
-👉 https://z-control-ionic-setup.web.app/
-
-The online demo uses the free Datamuse API, allowing you to test quota management and application features without setting up your own backend environment.
-
-**Android Application**
-
-The Android app is **available only to the z-control team in Google Play Internal Test Group** for testing and validation purposes, as it is used to create new applications based on this setup. It is not intended for public distribution.
-
-👉 https://play.google.com/store/apps/details?id=at.zcontrol.zoe.ionicsetup
+- **Native Mobile App on Android devices:**
+  [Get the app on Google Play Store](https://play.google.com/store/apps/details?id=at.zcontrol.zoe.image_to_text) — currently available through closed testing.
 
 ---
 
@@ -45,11 +40,13 @@ The Android app is **available only to the z-control team in Google Play Interna
 - **Backend**: Firebase (Firestore, Cloud Functions, Hosting) managed by [z-control Backend Functions](https://github.com/zoechbauer/z-control-backend-functions) repository
 - **Testing**: Karma + Jasmine (frontend), Vitest (backend)
 - **Deployment**: Capacitor (Android) for Frontend
+- **OCR Service**: Google Cloud Vision API for text recognition
+- **Image Compression**: ImageManipulator (native) and pica (web) for resizing and compressing images before sending to OCR
 
 ## 📁 Project Structure
 
-```
-z-control-ionic-setup/
+```text
+z-control-image-to-text/
 ├── src/                         # Angular/Ionic frontend source
 │   ├── app/                     # Pages, components, services, shared code
 │   ├── assets/                  # Static assets, logs, language files
@@ -67,23 +64,6 @@ z-control-ionic-setup/
 
 ```
 
-## Development Workflow
-
-Use this workflow when you build a new feature for another z-control app (for example translator) that needs backend changes.
-
-1. Implement backend changes in [z-control Backend Functions](https://github.com/zoechbauer/z-control-backend-functions) repository and deploy them from there.
-2. Start Firebase emulators from z-control Backend Functions repository.
-3. Run this target frontend app with `ionic serve`.
-4. Test FE and BE integration against the Firebase emulator.
-5. Deploy shared Firebase Functions from the z-control Backend Functions repository only.
-6. Deploy the target frontend app after integration tests pass.
-
-Why this works:
-
-- Shared backend stays in one source of truth.
-- Function deployments remain safe and predictable.
-- Frontend repos can evolve independently without backend deployment ownership.
-
 ## Getting Started
 
 ### Prerequisites
@@ -96,8 +76,8 @@ Why this works:
 ### Installation
 
 ```bash
-git clone https://github.com/zoechbauer/z-control-ionic-setup
-cd z-control-ionic-setup
+git clone https://github.com/zoechbauer/z-control-image-to-text.git
+cd z-control-image-to-text
 npm install
 ionic serve
 ```
@@ -133,7 +113,7 @@ cd android
 
 ## Documentation
 
-- [How to use this setup app](docs/z-control-ionic-setup-usage.md)
+- [TODO List](docs/TODO-list-open-activities.md)
 - [Docs index](docs/README.md)
 
 ## Tools

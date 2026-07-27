@@ -1,17 +1,23 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { registerLocaleData } from '@angular/common';
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import localeDe from '@angular/common/locales/de';
 import { addIcons } from 'ionicons';
 import {
   arrowBackOutline,
   arrowForwardOutline,
   arrowUpOutline,
+  cameraOutline,
   caretDownOutline,
   checkboxOutline,
   checkmarkOutline,
   closeOutline,
   cloudDownloadOutline,
+  copyOutline,
+  createOutline,
   helpOutline,
+  imageOutline,
+  imagesOutline,
   informationCircle,
   languageOutline,
   listOutline,
@@ -26,8 +32,10 @@ import {
   qrCodeOutline,
   reloadOutline,
   rocketOutline,
+  saveOutline,
   settingsOutline,
   trashOutline,
+  trashBinOutline,
   volumeHighOutline,
 } from 'ionicons/icons';
 
@@ -39,12 +47,18 @@ addIcons({
   'arrow-back-outline': arrowBackOutline,
   'arrow-forward-outline': arrowForwardOutline,
   'arrow-up-outline': arrowUpOutline,
+  'backspace-outline': arrowBackOutline,
+  'camera-outline': cameraOutline,
   'caret-down-outline': caretDownOutline,
   'checkbox-outline': checkboxOutline,
   'checkmark-outline': checkmarkOutline,
   'close-outline': closeOutline,
   'cloud-download': cloudDownloadOutline,
+  'copy-outline': copyOutline,
+  'create-outline': createOutline,
   'help-outline': helpOutline,
+  'image-outline': imageOutline,
+  'images-outline': imagesOutline,
   'information-circle': informationCircle,
   'language-outline': languageOutline,
   'list-outline': listOutline,
@@ -59,10 +73,15 @@ addIcons({
   'qr-code-outline': qrCodeOutline,
   'reload-outline': reloadOutline,
   'rocket-outline': rocketOutline,
+  'save-outline': saveOutline,
   'settings-outline': settingsOutline,
   'trash-outline': trashOutline,
+  'trash-bin-outline': trashBinOutline,
   'volume-high-outline': volumeHighOutline,
 });
+
+// Register PWA Components like Camera, File, etc. for use in the application on Web
+defineCustomElements(window);
 
 // Register German locale data for number/date pipes
 registerLocaleData(localeDe);

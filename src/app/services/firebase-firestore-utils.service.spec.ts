@@ -824,7 +824,10 @@ describe('FirebaseFirestoreUtilsService', () => {
         );
       });
 
-      it('should sort displayedUserStatistics by last feature usage date descending or creation date descending if feature usage date is not available', async () => {
+      const TEST_NAME =
+        'should sort displayedUserStatistics by last feature usage date descending or creation date descending ' +
+        'if feature usage date is not available';
+      it(TEST_NAME, async () => {
         localStorageServiceMock.getStatisticsDisplayMode.and.resolveTo(
           DisplayMode.Programmer,
         );
@@ -837,12 +840,13 @@ describe('FirebaseFirestoreUtilsService', () => {
           await service.getDisplayedUserStatistics(isProgrammerDevice);
         const userStatsResult = result.displayedUserStatistics;
 
-        expect(userStatsResult.length).toBe(5);
+        expect(userStatsResult).toHaveSize(5);
         const expectedOrder = ['P-1', 'U-2', 'U-1', 'U-3', 'P-2'];
         const actualOrder = userStatsResult.map((u) => u.userId);
         expect(actualOrder).toEqual(
           expectedOrder,
-          'Users should be sorted by last feature usage date desc, or creation date desc if feature usage date is not available',
+          'Users should be sorted by last feature usage date desc, ' +
+          'or creation date desc if feature usage date is not available',
         );
       });
 

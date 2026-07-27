@@ -16,7 +16,7 @@ import { LocalStorageService } from '../services/local-storage.service';
 import { Tab } from '../shared/enums';
 import { UserStatisticComponent } from '../ui/components/user-statistic/user-statistic.component';
 import { FirebaseFirestoreUtilsService } from '../services/firebase-firestore-utils.service';
-import { FeatureExampleComponent } from '../feature-example/feature-example.component';
+import { FeatureComponent } from '../feature/feature.component';
 import { environment } from '@env/environment';
 
 @Component({
@@ -34,14 +34,16 @@ import { environment } from '@env/environment';
     TranslatePipe,
     HeaderComponent,
     UserStatisticComponent,
-    FeatureExampleComponent,
+    FeatureComponent,
   ],
 })
 export class MainPage implements OnInit, OnDestroy {
   translate = inject(TranslateService);
   localStorage = inject(LocalStorageService);
   readonly utilsService = inject(UtilsService);
-  private readonly firestoreUtilsService = inject(FirebaseFirestoreUtilsService);
+  private readonly firestoreUtilsService = inject(
+    FirebaseFirestoreUtilsService,
+  );
 
   Tab = Tab;
   settingsIcon: string = '<ion-icon name="settings-outline"></ion-icon>';

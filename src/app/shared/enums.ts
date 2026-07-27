@@ -64,3 +64,21 @@ export enum FeatureType {
   MLT = 'translator',
   Feature = 'feature',
 }
+
+export enum WorkflowStep {
+  SelectPhoto = 'SELECT_PHOTO',
+  ExtractText = 'EXTRACT_TEXT',
+  DisplayExtractedText = 'DISPLAY_EXTRACTED_TEXT',
+  DisplayResultsFromStorage = 'DISPLAY_RESULTS_FROM_STORAGE',
+}
+
+export enum FileNamePrefix {
+  QRCode = 'qrcode',
+  ImageToText = 'img_txt',
+}
+
+export enum FileExtension {
+  PNG = 'png',
+  JPEG = 'jpeg',
+  PDF = 'pdf',
+}
