@@ -5,6 +5,7 @@ import { ModalController, ToastController } from '@ionic/angular';
 
 import { ToastService } from './toast.service';
 import { UtilsService } from './utils.service';
+import { ToastAnchor } from '../shared/enums';
 
 describe('ToastService', () => {
   let service: ToastService;
@@ -82,6 +83,36 @@ describe('ToastService', () => {
           position: 'top',
         }),
       );
+    });
+
+    it('should set positionAnchor when getToastAnchor returns a value', async () => {
+      spyOn<any>(service, 'getToastAnchor').and.returnValue(
+        ToastAnchor.MainPage,
+      );
+
+      await (service as any).showToastMessage(
+        'Test Message',
+        ToastAnchor.MainPage,
+      );
+
+      expect(toastController.create).toHaveBeenCalledWith(
+        jasmine.objectContaining({
+          positionAnchor: ToastAnchor.MainPage,
+        }),
+      );
+    });
+
+    it('should not set positionAnchor when getToastAnchor returns undefined', async () => {
+      spyOn<any>(service, 'getToastAnchor').and.returnValue(undefined);
+
+      await (service as any).showToastMessage(
+        'Test Message',
+        ToastAnchor.MainPage,
+      );
+
+      const createArgs = toastController.create.calls.mostRecent()
+        .args[0] as any;
+      expect(createArgs.positionAnchor).toBeUndefined();
     });
   });
 
@@ -256,6 +287,129 @@ describe('ToastService', () => {
           position: 'top',
         }),
       );
+    });
+
+    describe('ensureIonToastDefined', () => {
+      it('should return when custom elements registry is unavailable', async () => {
+        spyOn<any>(service, 'getCustomElementsRegistry').and.returnValue(
+          undefined,
+        );
+        const defineSpy = spyOn<any>(service, 'defineIonToastElement');
+
+        await expectAsync(
+          (service as any).ensureIonToastDefined(),
+        ).toBeResolved();
+        expect(defineSpy).not.toHaveBeenCalled();
+      });
+
+      it('should return when ion-toast is already registered', async () => {
+        const registry = jasmine.createSpyObj('CustomElementsRegistry', [
+          'get',
+        ]);
+        registry.get.and.returnValue({});
+
+        spyOn<any>(service, 'getCustomElementsRegistry').and.returnValue(
+          registry,
+        );
+        const defineSpy = spyOn<any>(service, 'defineIonToastElement');
+
+        await expectAsync(
+          (service as any).ensureIonToastDefined(),
+        ).toBeResolved();
+        expect(registry.get).toHaveBeenCalledWith('ion-toast');
+        expect(defineSpy).not.toHaveBeenCalled();
+      });
+
+      it('should define ion-toast only once when missing', async () => {
+        const registry = jasmine.createSpyObj('CustomElementsRegistry', [
+          'get',
+        ]);
+        registry.get.and.returnValue(undefined);
+
+        spyOn<any>(service, 'getCustomElementsRegistry').and.returnValue(
+          registry,
+        );
+        const defineSpy = spyOn<any>(service, 'defineIonToastElement');
+
+        await Promise.all([
+          (service as any).ensureIonToastDefined(),
+          (service as any).ensureIonToastDefined(),
+          (service as any).ensureIonToastDefined(),
+        ]);
+
+        expect(defineSpy).toHaveBeenCalledTimes(1);
+      });
+    });
+  });
+
+  describe('getToastAnchor', () => {
+    it('should return undefined on desktop and skip visibility check', () => {
+      isDesktop = true;
+      const visibleSpy = spyOn<any>(service, 'isAnchorVisible');
+
+      const result = (service as any).getToastAnchor(ToastAnchor.MainPage);
+
+      expect(result).toBeUndefined();
+      expect(visibleSpy).not.toHaveBeenCalled();
+    });
+
+    it('should use SettingsPage as default anchor on mobile when visible', () => {
+      isDesktop = false;
+      const visibleSpy = spyOn<any>(service, 'isAnchorVisible').and.returnValue(
+        true,
+      );
+
+      const result = (service as any).getToastAnchor();
+
+      expect(visibleSpy).toHaveBeenCalledWith(ToastAnchor.SettingsPage);
+      expect(result).toBe(ToastAnchor.SettingsPage);
+    });
+
+    it('should return provided anchor on mobile when visible', () => {
+      isDesktop = false;
+      const visibleSpy = spyOn<any>(service, 'isAnchorVisible').and.returnValue(
+        true,
+      );
+
+      const result = (service as any).getToastAnchor(ToastAnchor.MainPage);
+
+      expect(visibleSpy).toHaveBeenCalledWith(ToastAnchor.MainPage);
+      expect(result).toBe(ToastAnchor.MainPage);
+    });
+
+    it('should return undefined when resolved anchor is not visible', () => {
+      isDesktop = false;
+      spyOn<any>(service, 'isAnchorVisible').and.returnValue(false);
+
+      const result = (service as any).getToastAnchor(ToastAnchor.SettingsPage);
+
+      expect(result).toBeUndefined();
+    });
+  });
+
+  describe('withTimeout', () => {
+    it('should reject with timeout error when promise does not resolve in time', async () => {
+      const neverResolvingPromise = new Promise<void>(() => {
+        // Intentionally never resolves to force timeout branch.
+      });
+
+      await expectAsync(
+        (service as any).withTimeout(
+          neverResolvingPromise,
+          0,
+          'Test timeout message',
+        ),
+      ).toBeRejectedWithError(Error, 'Test timeout message');
+    });
+
+    it('should resolve when promise finishes before timeout', async () => {
+      const result = await (service as any).withTimeout(
+        Promise.resolve('ok'),
+        100,
+        'Should not timeout',
+      );
+
+      expect(result).toBe('ok');
     });
   });
 });

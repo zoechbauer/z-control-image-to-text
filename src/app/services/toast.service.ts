@@ -19,7 +19,11 @@ export class ToastService {
 
   constructor() {
     // Preload toast registration once so first user interaction is not blocked.
-    void this.ensureIonToastDefined();
+    // Schedule the async preload outside the constructor call stack to avoid
+    // performing asynchronous work directly in the constructor (linter rule).
+    setTimeout(() => {
+      void this.ensureIonToastDefined();
+    }, 0);
   }
 
   /**
@@ -48,6 +52,12 @@ export class ToastService {
     });
   }
 
+  /**
+   * Displays a toast message with the given translated message.
+   *
+   * @param translatedToastMessage The message to display (already translated).
+   * @param anchorId Optional anchor ID for positioning the toast.
+   */
   private async showToastMessage(
     translatedToastMessage: string,
     anchorId?: ToastAnchor,
@@ -113,7 +123,7 @@ export class ToastService {
    * may stall before the component is available.
    */
   private async ensureIonToastDefined(): Promise<void> {
-    const customElementsRegistry = globalThis.customElements;
+    const customElementsRegistry = this.getCustomElementsRegistry();
     if (!customElementsRegistry) {
       return;
     }
@@ -122,13 +132,30 @@ export class ToastService {
       return;
     }
 
-    if (!this.toastDefinitionReady) {
-      this.toastDefinitionReady = Promise.resolve().then(() => {
-        defineIonToastElement();
-      });
-    }
+    this.toastDefinitionReady ??= Promise.resolve().then(() => {
+      this.defineIonToastElement();
+    });
 
     await this.toastDefinitionReady;
+  }
+
+  /**
+   * Gets the custom elements registry from the global context.
+   *
+   * @returns The custom elements registry if available, undefined otherwise.
+   */
+  private getCustomElementsRegistry(): CustomElementRegistry | undefined {
+    return globalThis.customElements;
+  }
+
+  /**
+   * Defines the ion-toast web component in the custom elements registry.
+   *
+   * This is necessary to ensure that the ToastController can create and present
+   * the toast component without timing issues in production builds.
+   */
+  private defineIonToastElement(): void {
+    defineIonToastElement();
   }
 
   /**
@@ -161,6 +188,12 @@ export class ToastService {
     });
   }
 
+
+  /**
+   * Gets the preferred toast position based on the platform.
+   *
+   * @returns 'top' for mobile devices, 'bottom' for desktop devices.
+   */
   private getToastPosition(): 'top' | 'bottom' {
     if (this.utilsService.isDesktop) {
       return 'bottom';
@@ -169,6 +202,12 @@ export class ToastService {
     return 'top';
   }
 
+  /**
+   * Gets the appropriate toast anchor element ID for the current platform and visibility.
+   *
+   * @param anchorId Optional anchor ID to use.
+   * @returns The resolved anchor ID if visible, undefined otherwise.
+   */
   private getToastAnchor(anchorId?: ToastAnchor): string | undefined {
     if (this.utilsService.isDesktop) {
       return undefined; // Do not set anchor on desktop
@@ -181,11 +220,18 @@ export class ToastService {
     return resolvedAnchorId;
   }
 
+  /**
+   * Checks if the anchor element with the given ID is visible in the DOM.
+   *
+   * @param anchorId The ID of the anchor element to check.
+   * @returns True if the anchor element is connected and has visible client rects, false otherwise.
+   */
   private isAnchorVisible(anchorId: string): boolean {
     const anchorElement = globalThis.document?.getElementById(anchorId);
-    if (!anchorElement || !anchorElement.isConnected) {
-      return false;
-    }
-    return anchorElement.getClientRects().length > 0;
+
+    return (
+      anchorElement?.isConnected === true &&
+      anchorElement.getClientRects().length > 0
+    );
   }
 }

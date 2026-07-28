@@ -32,12 +32,11 @@ This project uses a simplified major.minor versioning scheme:
 ### 🐛 Fixes
 
 - Fixed a production-only issue where toast notifications did not appear on web and mobile builds while working in ionic serve/dev mode.
-- Removed custom visual toast fallback rendering and kept error-only logging on presentation failures to preserve consistent Ionic UI behavior.
 
 ### 🔧 Internal
 
 - Added and stabilized unit tests for toast service safeguard paths, including component registration flow, controller failure logging, and timeout logging behavior.
-- Verified full test suite passes (534 green tests).
+- Verified full test suite passes (545 green tests).
 
 ## [1.0] – 2026-07-27
 
