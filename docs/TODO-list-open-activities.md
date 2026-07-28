@@ -7,7 +7,7 @@ This document lists open tasks and follow-ups for the z-control Image To Text pr
 - [x] Deploy the app to Firebase Hosting and verify the web build.
 - [x] Deploy the app to the Google Play Store internal test track.
 - [x] Test the app on Samsung Galaxy A33 and A55 devices after installing from Google Play.
-- [ ] Create a privacy policy that clearly explains how user data is handled and protected.
+- [x] Create a privacy policy that clearly explains how user data is handled and protected.
 - [ ] Require a title and description in PhotoInfoModalComponent before saving photos to the device.
 - [ ] Limit the visible history list to a single photo (scrollable) so action buttons remain visible.
 - [ ] Implement confirmDeleteAllPhotos() and confirmDeletePhoto() in PhotoService to show a confirmation modal before deleting photos.

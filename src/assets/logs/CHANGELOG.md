@@ -12,7 +12,6 @@ This project uses a simplified major.minor versioning scheme:
 
 ## What's Coming Next
 
-- Create a new privacy policy for the app, including a clear explanation of how user data is handled and protected.
 - Enter Title and Description of the photo in the PhotoInfoModalComponent before saving the photo to the device.
 - Display only 1 photo in the history list (scrollable) so that the buttons are always visible and not hidden because of long lists of images.
 - Implement confirmDeleteAllPhotos() and confirmDeletePhoto() in PhotoService to confirm deletion of all photos with a modal dialog.
@@ -22,6 +21,23 @@ This project uses a simplified major.minor versioning scheme:
 - Fix translation issues in the app, including hardcoded translations, and wrong translation keys of qr code app, because in in z-control Ionic Setup we changed the structure of translation keys and prefixes, so we need to update the translation keys in this app accordingly.
 - Rotate the photo before extracting text and saving it to the device.
 - Add unit tests for new services and components
+
+## [1.1] – 2026-07-28
+
+### 🚀 Improvements
+
+- Replaced the Ionic Setup privacy policy with an app-specific Privacy Policy that clearly explains data handling and user rights, and added a link to the full policy on the Landing page for easy access.
+- Improved toast reliability in production builds by ensuring ion-toast is registered before ToastController usage and preloading registration during service initialization.
+
+### 🐛 Fixes
+
+- Fixed a production-only issue where toast notifications did not appear on web and mobile builds while working in ionic serve/dev mode.
+- Removed custom visual toast fallback rendering and kept error-only logging on presentation failures to preserve consistent Ionic UI behavior.
+
+### 🔧 Internal
+
+- Added and stabilized unit tests for toast service safeguard paths, including component registration flow, controller failure logging, and timeout logging behavior.
+- Verified full test suite passes (534 green tests).
 
 ## [1.0] – 2026-07-27
 
@@ -43,7 +59,7 @@ This project uses a simplified major.minor versioning scheme:
   - the new PhotoStorageService to manage photo persistence, loading, caching, deletion, and storage permissions,
   - the new FileConversionService to handle Blob/base64/data URL conversion logic,
   - the new FilePathService to handle path resolution, filename generation, image loading, dimensions, byte-size estimation, and canvas conversion
-to better separate concerns and improve maintainability.
+    to better separate concerns and improve maintainability.
 - Splitted interfaces for image compression and Google Vision API into separate files for better organization and maintainability.
 - Improved method names in FeatureComponent to better reflect their purpose and functionality, enhancing code readability and maintainability.
 - Added function descriptions to the FeatureComponent methods to provide clear explanations of their purpose, parameters, and return values, improving code documentation and developer understanding.
