@@ -16,6 +16,9 @@ The [docs](.) folder contains categorized guides, troubleshooting steps, and bes
 - **standalone-config.md**  
   Guide to using Angular's standalone components and ApplicationConfig for centralized provider management without NgModules.
 
+- **checklist-update-objects.md**  
+  Checklist for safely updating nested objects in Angular/TypeScript, including immutability, merging strategies, and unit testing.
+
 ### Unit Testing
 
 Guides for setting up, running, and improving Angular unit tests with Karma and Jasmine, including practical fixes and learning resources.

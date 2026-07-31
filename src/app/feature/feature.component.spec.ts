@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { ModalController } from '@ionic/angular/standalone';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage-angular';
 import { of } from 'rxjs';
@@ -44,11 +45,13 @@ describe('FeatureComponent', () => {
   let photoServiceSpy: jasmine.SpyObj<any>;
   let photoStorageServiceSpy: jasmine.SpyObj<any>;
   let imageCompressionServiceSpy: jasmine.SpyObj<any>;
+  let modalControllerSpy: jasmine.SpyObj<any>;
 
   beforeEach(async () => {
     utilsServiceSpy = jasmine.createSpyObj('UtilsService', [
       'showOrHideIonTabBar',
     ]);
+    modalControllerSpy = jasmine.createSpyObj('ModalController', ['dismiss']);
     firestoreUtilsServiceSpy = jasmine.createSpyObj(
       'FirebaseFirestoreUtilsService',
       ['isContingentExceeded', 'requestStatisticsRefresh'],
@@ -68,6 +71,7 @@ describe('FeatureComponent', () => {
     photoStorageServiceSpy = jasmine.createSpyObj('PhotoStorageService', [
       'loadSavedPhotos',
       'getPhotosFromCache',
+      'updatePhotoInfo',
     ]);
 
     await TestBed.configureTestingModule({
@@ -107,7 +111,9 @@ describe('FeatureComponent', () => {
           provide: ImageCompressionService,
           useValue: imageCompressionServiceSpy,
         },
+        { provide: ModalController, useValue: modalControllerSpy },
       ],
+
     })
       .overrideComponent(FeatureComponent, {
         remove: {
@@ -140,7 +146,7 @@ describe('FeatureComponent', () => {
 
         expect(component.selectedPhoto).toBeUndefined();
         expect(component.extractedText).toBe('');
-        expect(component.extractedTextItems).toEqual([]);
+        expect((component as any).extractedTextItems).toEqual([]);
         expect(component.workflowStep).toBe(WorkflowStep.SelectPhoto);
       });
     });
@@ -150,6 +156,7 @@ describe('FeatureComponent', () => {
         firestoreUtilsServiceSpy.isContingentExceeded.and.returnValue(
           Promise.resolve(false),
         );
+        component.selectedPhoto = { filepath: 'path/to/photo.jpg' } as any;
       });
 
       it('should set isContingentExceeded to true if contingent is exceeded', async () => {
@@ -164,7 +171,6 @@ describe('FeatureComponent', () => {
         firestoreUtilsServiceSpy.isContingentExceeded.and.returnValue(
           Promise.resolve(true),
         );
-        component.selectedPhoto = { filepath: 'path/to/photo.jpg' } as any;
 
         await component.extractTextFromPhoto();
 
@@ -183,7 +189,6 @@ describe('FeatureComponent', () => {
         'if secureRecognize throws an error which contains contingent';
       it(TEST_NAME, async () => {
         component.isLoading = true;
-        component.selectedPhoto = { filepath: 'path/to/photo.jpg' } as any;
         imageCompressionServiceSpy.buildVisionOcrRequestFromPhoto.and.returnValue(
           Promise.resolve({
             requests: [
@@ -213,7 +218,6 @@ describe('FeatureComponent', () => {
       it('should log error, show error toast and clear isLoading if secureRecognize throws an error', async () => {
         component.isLoading = true;
         const consoleErrorSpy = spyOn(console, 'error');
-        component.selectedPhoto = { filepath: 'path/to/photo.jpg' } as any;
         imageCompressionServiceSpy.buildVisionOcrRequestFromPhoto.and.returnValue(
           Promise.resolve({
             requests: [
@@ -246,7 +250,6 @@ describe('FeatureComponent', () => {
       });
 
       it('should call secureRecognize if input is set', async () => {
-        component.selectedPhoto = { filepath: 'path/to/photo.jpg' } as any;
         imageCompressionServiceSpy.buildVisionOcrRequestFromPhoto.and.returnValue(
           Promise.resolve({
             requests: [

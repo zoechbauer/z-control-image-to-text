@@ -11,7 +11,7 @@ import { AlertService } from './alert.service';
 import { ToastService } from './toast.service';
 import { FILESYSTEM, FilesystemLike } from './filesystem.token';
 import { FileNamePrefix, ToastAnchor } from '../shared/enums';
-import { UserPhoto } from '../shared/app.interfaces';
+import { PhotoInfo, UserPhoto } from '../shared/app.interfaces';
 import { FileConversionService } from './file-conversion.service';
 import { FilePathService } from './file-path.service';
 
@@ -391,5 +391,29 @@ export class PhotoStorageService {
       // Continue - older Android versions might not support this
     }
     return true;
+  }
+
+/**
+ * Updates the photo information for a given photo and caches the updated list of photos.
+ * @param photo The photo to update.
+ * @param photoInfo The new photo information to merge with the existing info.
+ * @returns A promise that resolves to the updated UserPhoto object.
+ */
+  async updatePhotoInfo(photo: UserPhoto, photoInfo: Partial<PhotoInfo>): Promise<UserPhoto> {
+    const existingInfo = photo.photoInfo ?? {};
+    
+    const updatedPhoto: UserPhoto = {
+      ...photo,
+      photoInfo: {
+        ...existingInfo,
+        ...photoInfo,
+      },
+    };
+
+    this.photos = this.photos.map((p) =>
+      p.filepath === updatedPhoto.filepath ? updatedPhoto : p,
+    );
+    this.cachePhotos();
+    return updatedPhoto;
   }
 }

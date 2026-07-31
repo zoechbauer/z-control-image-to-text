@@ -1,18 +1,23 @@
 import { Injectable } from '@angular/core';
 import { WorkflowStep } from '../shared/enums';
+import { UserPhoto } from '../shared/app.interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WorkflowService {
-
   /**
-   * Determines the next workflow step based on the current step and an optional event.
+   * Determines the next workflow step based on the current step and an optional event or selected photo.
    * @param currentStep The current workflow step.
    * @param event An optional event of a button click.
+   * @param selectedPhoto An optional selected photo.
    * @returns The next workflow step.
    */
-  getNextWorkflowStep(currentStep: WorkflowStep, event?: any): WorkflowStep {
+  getNextWorkflowStep(
+    currentStep: WorkflowStep,
+    event?: any,
+    selectedPhoto?: UserPhoto,
+  ): WorkflowStep {
     let nextStep: WorkflowStep;
 
     const target = event?.target as HTMLElement | null;
@@ -36,11 +41,24 @@ export class WorkflowService {
         break;
 
       case WorkflowStep.DisplayExtractedText:
-        nextStep = WorkflowStep.DisplayExtractedText;
+          nextStep = WorkflowStep.DisplayExtractedText;
         break;
 
       case WorkflowStep.DisplayResultsFromStorage:
-        nextStep = WorkflowStep.DisplayResultsFromStorage;
+        if (selectedPhoto) {
+          nextStep = WorkflowStep.ManageHistory;
+        } else {
+          nextStep = WorkflowStep.DisplayResultsFromStorage;
+        }
+        break;
+
+      case WorkflowStep.ManageHistory:
+        if (buttonName === 'back-to-history') {
+          nextStep = WorkflowStep.DisplayResultsFromStorage;
+        }
+        else {
+          nextStep = WorkflowStep.ManageHistory;
+        }
         break;
 
       default:

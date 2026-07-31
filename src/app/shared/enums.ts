@@ -69,7 +69,10 @@ export enum WorkflowStep {
   SelectPhoto = 'SELECT_PHOTO',
   ExtractText = 'EXTRACT_TEXT',
   DisplayExtractedText = 'DISPLAY_EXTRACTED_TEXT',
+  AddPhotoInfo = 'ADD_PHOTO_INFO',
   DisplayResultsFromStorage = 'DISPLAY_RESULTS_FROM_STORAGE',
+  ManageHistory = 'MANAGE_HISTORY',
+  UpdatePhotoInfo = 'UPDATE_PHOTO_INFO',
 }
 
 export enum FileNamePrefix {

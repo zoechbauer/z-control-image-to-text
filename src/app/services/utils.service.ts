@@ -11,6 +11,8 @@ import { environment } from '@env/environment';
 import { DisplayedUserStatistics } from '../shared/firebase-firestore.interfaces';
 import { UserDetailComponent } from '../ui/components/user-detail/user-detail.component';
 import { HelpModalComponent } from '../ui/components/get-help/get-help.component';
+import { PhotoInfoComponent } from '../ui/components/photo-info/photo-info.component';
+import { UserPhoto } from '../shared/app.interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -192,6 +194,26 @@ export class UtilsService {
     return await modal.present();
   }
 
+  async openPhotoInfoModal(photo: UserPhoto): Promise<UserPhoto | undefined> {
+    const modal = await this.modalController.create({
+      component: PhotoInfoComponent,
+      componentProps: {
+        photo: photo,
+      },
+    });
+    this.currentModal = modal;
+    this.setModalLandscapeClasses(modal);
+    await modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+    if (role === 'save' && data) {
+      const existingInfo = photo.photoInfo ?? {};
+      photo.photoInfo = { ...existingInfo, ...data };
+      return photo;
+    }
+    return undefined;
+  }
+
   /**
    * Sets appropriate CSS classes on the modal based on component type, device orientation, and platform.
    * Removes existing modal classes and adds component-specific and device-specific classes.
@@ -204,6 +226,7 @@ export class UtilsService {
           'manual-instructions-modal',
           'change-log-modal',
           'user-detail-modal',
+          'photo-info-modal',
           'desktop',
           'landscape',
         );
@@ -216,6 +239,9 @@ export class UtilsService {
             break;
           case UserDetailComponent:
             modal.classList.add('user-detail-modal');
+            break;
+          case PhotoInfoComponent:
+            modal.classList.add('photo-info-modal');
             break;
           default:
             console.error(

@@ -1,24 +1,24 @@
 <ion-card>
   <ion-card-header class="ion-text-center">
-    <ion-card-title>{{ "FEATURE.CARD.TITLE" | translate }}</ion-card-title>
+    <ion-card-title> {{ cardTitle }}</ion-card-title>
     <ion-card-subtitle>
       {{ "FEATURE.WORKFLOW_STEPS." + workflowStep | translate }}
     </ion-card-subtitle>
   </ion-card-header>
   <ion-card-content>
-    <ng-container *ngIf="workflowStep === WorkflowStep.SelectPhoto">
-      <p class="ion-padding">
-        {{ "FEATURE.CARD.INFO" | translate }}
-      </p>
-      <p class="ion-padding">
-        {{ "FEATURE.CARD.INFO-2" | translate }}
-      </p>
-      <p class="ion-padding">
-        {{ "FEATURE.CARD.INFO-3" | translate }}
-      </p>
-    </ng-container>
     <div class="ion-text-center">
       <ng-container *ngIf="workflowStep === WorkflowStep.SelectPhoto">
+        <div class="ion-text-left">
+          <p class="ion-padding">
+            {{ "FEATURE.CARD.INFO" | translate }}
+          </p>
+          <p class="ion-padding">
+            {{ "FEATURE.CARD.INFO-2" | translate }}
+          </p>
+          <p class="ion-padding">
+            {{ "FEATURE.CARD.INFO-3" | translate }}
+          </p>
+        </div>
         <app-spinner *ngIf="isLoading"></app-spinner>
         <ion-button
           fill="clear"
@@ -45,7 +45,7 @@
       </ng-container>
 
       <ng-container *ngIf="workflowStep === WorkflowStep.ExtractText">
-        <img
+        <ion-img
           *ngIf="selectedPhoto"
           [src]="selectedPhoto.webviewPath"
           class="selected-photo"
@@ -71,50 +71,21 @@
       </ng-container>
 
       <ng-container *ngIf="workflowStep === WorkflowStep.DisplayExtractedText">
-        <img
+        <app-feature-result
           *ngIf="selectedPhoto"
-          [src]="selectedPhoto.webviewPath"
-          class="selected-photo"
-          alt="extract text from displayed image"
-        />
-
-        <ion-item>
-          <ion-label class="ion-padding">
-            {{ "FEATURE.CARD.LABEL.EXTRACTED_TEXT" | translate }}
-          </ion-label>
-        </ion-item>
-
-        <ion-item>
-          <pre>{{ extractedText }}</pre>
-        </ion-item>
-
-        <ion-item>
-          <ion-label class="ion-padding">
-            Anzahl Zeilen: {{ textStatistics.lineCount }}
-          </ion-label>
-          <ion-label class="ion-padding">
-            Anzahl Wörter: {{ textStatistics.wordCount }}
-          </ion-label>
-          <ion-label class="ion-padding">
-            Anzahl Zeichen: {{ textStatistics.characterCount }}
-          </ion-label>
-        </ion-item>
+          [selectedHistoryPhoto]="selectedPhoto"
+          [extractedText]="extractedText"
+          [textStatistics]="textStatistics"
+        ></app-feature-result>
 
         <app-spinner *ngIf="isLoading"></app-spinner>
         <div>
           <ion-button
             fill="clear"
-            (click)="addInfo($event)"
-            (keydown.enter)="addInfo($event)"
+            (click)="addInfo()"
+            (keydown.enter)="addInfo()"
             ><ion-icon name="create-outline" slot="start"></ion-icon>
-            {{ "FEATURE.CARD.BUTTON.ADD_INFO" | translate }}</ion-button
-          >
-          <ion-button
-            fill="clear"
-            (click)="saveTextAndPhoto()"
-            (keydown.enter)="saveTextAndPhoto()"
-            ><ion-icon name="save-outline" slot="start"></ion-icon>
-            {{ "FEATURE.CARD.BUTTON.SAVE_DATA" | translate }}</ion-button
+            {{ getInfoButtonLabel(selectedPhoto) | translate }}</ion-button
           >
           <ion-button
             name="clear"
@@ -137,10 +108,39 @@
               size="12"
               *ngFor="let photo of photoService.photos; let position = index"
             >
-              <ion-img [src]="photo.webviewPath"></ion-img>
+              <ion-img
+                [src]="photo.webviewPath"
+                (click)="selectHistoryPhoto(photo)"
+                (keydown.enter)="selectHistoryPhoto(photo)"
+              />
             </ion-col>
           </ion-row>
         </ion-grid>
+        <app-spinner *ngIf="isLoading"></app-spinner>
+        <ion-button
+          fill="clear"
+          (click)="deleteAllPhotos()"
+          (keydown.enter)="deleteAllPhotos()"
+          ><ion-icon name="trash-outline" slot="start"></ion-icon>
+          {{ "FEATURE.CARD.BUTTON.DELETE_ALL" | translate }}</ion-button
+        >
+        <ion-button
+          name="clear"
+          fill="clear"
+          (click)="clear($event)"
+          (keydown.enter)="clear($event)"
+          ><ion-icon name="backspace-outline" slot="start"></ion-icon>
+          {{ "FEATURE.CARD.BUTTON.CLEAR" | translate }}</ion-button
+        >
+      </ng-container>
+      <ng-container *ngIf="workflowStep === WorkflowStep.ManageHistory">
+        <app-feature-result
+          *ngIf="selectedHistoryPhoto"
+          [selectedHistoryPhoto]="selectedHistoryPhoto"
+          [extractedText]="extractedText"
+          [textStatistics]="textStatistics"
+        ></app-feature-result>
+
         <app-spinner *ngIf="isLoading"></app-spinner>
         <ion-button
           name="change-info"
@@ -148,7 +148,7 @@
           (click)="changeInfo()"
           (keydown.enter)="changeInfo()"
           ><ion-icon name="create-outline" slot="start"></ion-icon>
-          {{ "FEATURE.CARD.BUTTON.CHANGE_INFO" | translate }}</ion-button
+          {{ getInfoButtonLabel(selectedHistoryPhoto) | translate }}</ion-button
         >
         <ion-button
           name="copy-data"
@@ -166,17 +166,10 @@
           {{ "FEATURE.CARD.BUTTON.DELETE_DATA" | translate }}</ion-button
         >
         <ion-button
+          name="back-to-history"
           fill="clear"
-          (click)="deleteAllPhotos()"
-          (keydown.enter)="deleteAllPhotos()"
-          ><ion-icon name="trash-outline" slot="start"></ion-icon>
-          {{ "FEATURE.CARD.BUTTON.DELETE_ALL" | translate }}</ion-button
-        >
-        <ion-button
-          name="clear"
-          fill="clear"
-          (click)="clear($event)"
-          (keydown.enter)="clear($event)"
+          (click)="backToHistory($event)"
+          (keydown.enter)="backToHistory($event)"
           ><ion-icon name="backspace-outline" slot="start"></ion-icon>
           {{ "FEATURE.CARD.BUTTON.CLEAR" | translate }}</ion-button
         >

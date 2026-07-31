@@ -13,13 +13,16 @@ import {
   IonRow,
   IonCol,
   IonImg,
-  IonLabel,
-  IonItem,
+  ModalController,
 } from '@ionic/angular/standalone';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Photo } from '@capacitor/camera';
 
-import type { TextStatistics, UserPhoto } from '../shared/app.interfaces';
+import type {
+  PhotoInfo,
+  TextStatistics,
+  UserPhoto,
+} from '../shared/app.interfaces';
 import { ToastAnchor, WorkflowStep } from '../shared/enums';
 import { OcrService } from '../services/ocr.service';
 import { UtilsService } from '../services/utils.service';
@@ -31,13 +34,12 @@ import { WorkflowService } from '../services/workflow-service';
 import { ImageCompressionService } from '../services/image-compression.service';
 import { PhotoService } from '../services/photo.service';
 import { PhotoStorageService } from '../services/photo-storage.service';
+import { FeatureResultComponent } from '../ui/components/feature-result/feature-result.component';
 
 @Component({
   selector: 'app-feature',
   templateUrl: './feature.component.html',
   imports: [
-    IonItem,
-    IonLabel,
     IonIcon,
     IonCardSubtitle,
     IonButton,
@@ -53,6 +55,7 @@ import { PhotoStorageService } from '../services/photo-storage.service';
     FormsModule,
     TranslatePipe,
     SpinnerComponent,
+    FeatureResultComponent,
   ],
 })
 export class FeatureComponent implements OnInit {
@@ -61,6 +64,7 @@ export class FeatureComponent implements OnInit {
   readonly photoService = inject(PhotoService);
   readonly photoStorageService = inject(PhotoStorageService);
   readonly utilsService = inject(UtilsService);
+  private readonly modalCtrl = inject(ModalController);
   private readonly toastService = inject(ToastService);
   private readonly firestoreUtilsService = inject(
     FirebaseFirestoreUtilsService,
@@ -70,8 +74,8 @@ export class FeatureComponent implements OnInit {
   private readonly imageCompressionService = inject(ImageCompressionService);
 
   selectedPhoto?: UserPhoto;
+  selectedHistoryPhoto?: UserPhoto;
   extractedText: string = '';
-  extractedTextItems: string[] = [];
   WorkflowStep = WorkflowStep;
   workflowStep = WorkflowStep.SelectPhoto;
   isLoading = false;
@@ -81,10 +85,36 @@ export class FeatureComponent implements OnInit {
     lineCount: 0,
     characterCount: 0,
   };
+  private extractedTextItems: string[] = [];
 
+  /**
+   * Get the card title based on the current workflow step.
+   * If the workflow step is one of the initial steps (SelectPhoto, ExtractText, DisplayExtractedText, AddPhotoInfo),
+   * the title will be "Extract Text from Image". Otherwise, it will be "Manage History".
+   * @returns The card title as a translated string.
+   */
+  get cardTitle(): string {
+    if (
+      this.workflowStep === WorkflowStep.SelectPhoto ||
+      this.workflowStep === WorkflowStep.ExtractText ||
+      this.workflowStep === WorkflowStep.DisplayExtractedText ||
+      this.workflowStep === WorkflowStep.AddPhotoInfo
+    ) {
+      return this.translate.instant('FEATURE.CARD.TITLE');
+    } else {
+      return this.translate.instant('FEATURE.CARD.TITLE-HISTORY');
+    }
+  }
+
+  /**
+   * Initialize the component by updating the contingent status, initializing form controls,
+   * setting the initial workflow step, and loading saved photos from the photo storage service.
+   * The selected photo is set to the first photo in the loaded photos.
+   */
   ngOnInit() {
     this.updateIsContingentExceeded().then(() => {
       this.initFormControls();
+      this.workflowStep = WorkflowStep.SelectPhoto;
       this.photoStorageService.loadSavedPhotos().then(() => {
         this.isLoading = false;
       });
@@ -93,6 +123,20 @@ export class FeatureComponent implements OnInit {
     this.photoStorageService.photos$.subscribe((photos) => {
       this.selectedPhoto = photos[0];
     });
+  }
+
+  /**
+   * Get the label for the info button based on the provided photo.
+   * If the photo has a title, the label will be "Change Info". Otherwise, it will be "Add Info".
+   * @param photo The selectedPhoto or selectedHistoryPhoto for which to get the info button label.
+   * @returns The info button label as a translated string.
+   */
+  getInfoButtonLabel(photo: UserPhoto | undefined): string {
+    if (photo?.photoInfo?.title) {
+      return this.translate.instant('FEATURE.CARD.BUTTON.CHANGE_INFO');
+    } else {
+      return this.translate.instant('FEATURE.CARD.BUTTON.ADD_INFO');
+    }
   }
 
   /**
@@ -108,6 +152,7 @@ export class FeatureComponent implements OnInit {
    * update the selected photo and workflow step accordingly.
    */
   async makePhoto() {
+    this.initFormControls();
     await this.photoService.makePhoto();
 
     this.workflowStep = this.workflowService.getNextWorkflowStep(
@@ -120,10 +165,28 @@ export class FeatureComponent implements OnInit {
    * update the selected photo and workflow step accordingly.
    */
   async selectPhotoFromGallery() {
+    this.initFormControls();
     await this.photoService.selectPhoto();
 
     this.workflowStep = this.workflowService.getNextWorkflowStep(
       this.workflowStep,
+    );
+  }
+
+  /**
+   * Select a photo from the history and update the selected history photo.
+   * @param photo The photo to select from the history.
+   */
+  async selectHistoryPhoto(photo: UserPhoto) {
+    this.initFormControls();
+    this.selectedHistoryPhoto = photo;
+    this.extractedText = photo.photoInfo?.extractedText || '';
+    this.displayTextStatistics();
+
+    this.workflowStep = this.workflowService.getNextWorkflowStep(
+      this.workflowStep,
+      null,
+      photo,
     );
   }
 
@@ -193,7 +256,7 @@ export class FeatureComponent implements OnInit {
         this.isLoading = false;
         return;
       }
-      this.displayFeatureResults(featureResults);
+      await this.storeAndDisplayFeatureResults(featureResults);
       this.firestoreUtilsService.requestStatisticsRefresh();
       this.toastService.showToast(
         this.translate.instant('FEATURE.TOAST.QUOTA_REDUCED'),
@@ -222,7 +285,7 @@ export class FeatureComponent implements OnInit {
   }
 
   /**
-   * Delete the extracted text and the selected photo, 
+   * Delete the extracted text and the selected photo,
    * and update the workflow step accordingly.
    */
   deleteTextAndPhoto() {
@@ -246,31 +309,88 @@ export class FeatureComponent implements OnInit {
     this.isLoading = false;
   }
 
-  addInfo(event: any) {
-    this.toastService.showToast(
-      this.translate.instant('APP.UNDER_CONSTRUCTION'),
-      ToastAnchor.MainPage,
-    );
+  /**
+   * Add the information of the selected photo by opening a modal for user input.
+   * If the user provides updated information, the photo is updated and persisted
+   * using the photo storage service. A toast notification is shown to inform
+   * the user that the information has been updated. The workflow step is updated
+   * accordingly.
+   */
+  async addInfo() {
+    const updatedPhoto: UserPhoto | undefined =
+      await this.utilsService.openPhotoInfoModal(
+        this.selectedPhoto as UserPhoto,
+      );
+
+    if (updatedPhoto) {
+      this.selectedPhoto = await this.savePhotoInfo(
+        this.selectedPhoto!,
+        updatedPhoto.photoInfo?.title || '',
+        updatedPhoto.photoInfo?.description || '',
+      );
+    }
 
     this.workflowStep = this.workflowService.getNextWorkflowStep(
       this.workflowStep,
-      event,
     );
   }
 
   /**
-   * Change the information of the selected photo 
+   * Change the information of the selected photo
    * and update the workflow step accordingly.
    */
-  changeInfo() {
-    this.toastService.showToast(
-      this.translate.instant('APP.UNDER_CONSTRUCTION'),
-      ToastAnchor.MainPage,
-    );
+  async changeInfo() {
+    const updatedPhoto: UserPhoto | undefined =
+      await this.utilsService.openPhotoInfoModal(
+        this.selectedHistoryPhoto as UserPhoto,
+      );
+
+    if (updatedPhoto) {
+      this.selectedHistoryPhoto = (await this.savePhotoInfo(
+        this.selectedHistoryPhoto!,
+        updatedPhoto.photoInfo?.title || '',
+        updatedPhoto.photoInfo?.description || '',
+      )) as UserPhoto;
+    }
 
     this.workflowStep = this.workflowService.getNextWorkflowStep(
-      this.workflowStep
+      this.workflowStep,
     );
+  }
+
+  /**
+   * Save title and description.
+   * As the extracted text is not editable, it is used from the existing photo information.
+   * The updated photo information is persisted using the photo storage service.
+   * A toast notification is shown to inform the user that the information has been updated.
+   * @param photo The photo to update.
+   * @param title The new title for the photo.
+   * @param description The new description for the photo.
+   */
+  private async savePhotoInfo(
+    photo: UserPhoto,
+    title: string,
+    description: string,
+  ): Promise<UserPhoto> {
+    const photoInfo: Partial<PhotoInfo> = {};
+
+    if (title !== undefined) {
+      photoInfo.title = title;
+    }
+    if (description !== undefined) {
+      photoInfo.description = description;
+    }
+
+    const updatedPhoto = await this.photoStorageService.updatePhotoInfo(
+      photo,
+      photoInfo as PhotoInfo,
+    );
+
+    this.toastService.showToast(
+      this.translate.instant('FEATURE.PHOTO_INFO_MODAL.TOAST.INFO_UPDATED'),
+      ToastAnchor.MainPage,
+    );
+    return updatedPhoto;
   }
 
   /**
@@ -284,22 +404,18 @@ export class FeatureComponent implements OnInit {
     );
 
     this.workflowStep = this.workflowService.getNextWorkflowStep(
-      this.workflowStep
+      this.workflowStep,
     );
   }
 
   /**
-   * Save the extracted text, compressed photo, and statistics to the device storage
-   * and update the workflow step accordingly.
+   * Navigate back to the history view and update the workflow step accordingly.
+   * @param event The event that triggered the navigation back to history.
    */
-  saveTextAndPhoto() {
-    this.toastService.showToast(
-      this.translate.instant('APP.UNDER_CONSTRUCTION'),
-      ToastAnchor.MainPage,
-    );
-
+  backToHistory(event: any) {
     this.workflowStep = this.workflowService.getNextWorkflowStep(
       this.workflowStep,
+      event,
     );
   }
 
@@ -316,8 +432,25 @@ export class FeatureComponent implements OnInit {
     );
   }
 
-  private displayFeatureResults(featureResults: any): void {
+  /**
+   * Store the extracted text and photo information, update the selected photo,
+   * and display the text statistics.
+   * @param featureResults The results of the feature extraction, including the extracted text.
+   */
+  private async storeAndDisplayFeatureResults(
+    featureResults: any,
+  ): Promise<void> {
     this.extractedText = featureResults?.text ?? '';
+
+    const photoInfo: Partial<PhotoInfo> = {
+      extractedText: this.extractedText,
+    };
+
+    this.selectedPhoto = await this.photoStorageService.updatePhotoInfo(
+      this.selectedPhoto as UserPhoto,
+      photoInfo,
+    );
+
     this.displayTextStatistics();
   }
 
@@ -342,14 +475,13 @@ export class FeatureComponent implements OnInit {
   }
 
   /**
-   * Initialize form controls by resetting the selected photo, extracted text, 
-   * extracted text items, and workflow step to their default values.
-   * This method is called when the component is initialized or when the user clears the form.
+   * Initialize form controls by resetting the selected photo, extracted text,
+   * and workflow step to their default values.
    */
   private initFormControls(): void {
     this.selectedPhoto = undefined;
+    this.selectedHistoryPhoto = undefined;
     this.extractedText = '';
     this.extractedTextItems = [];
-    this.workflowStep = WorkflowStep.SelectPhoto;
   }
 }

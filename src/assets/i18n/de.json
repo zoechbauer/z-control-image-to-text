@@ -50,11 +50,17 @@
   "FEATURE": {
     "CARD": {
       "TITLE": "Text aus Bild extrahieren",
+      "TITLE-HISTORY": "Historie verwalten",
       "INFO": "Bitte wählen Sie aus, ob Sie ein Bild aufnehmen oder ein Bild aus der Galerie auswählen möchten. Anschließend wird der Text aus dem Bild extrahiert und angezeigt.",
       "INFO-2": "Sie können sich auch alle durchgeführten Text-Extraktionen ansehen.",
       "INFO-3": "Bitte beachten Sie, dass die Texterkennung über die Google Cloud Vision API erfolgt. Das monatliche Kontingent für die Texterkennung ist begrenzt. Sobald das Kontingent aufgebraucht ist, wird das Feature bis zum nächsten Monat ausgesetzt.",
       "LABEL": {
-        "EXTRACTED_TEXT": "Extrahierter Text"
+        "EXTRACTED_TEXT": "Extrahierter Text",
+        "NO_EXTRACTED_TEXT": "Kein extrahierter Text vorhanden.",
+        "NO_EXTRACTED_TEXT_INFO": "Es wurde kein Text aus dem Bild extrahiert oder Sie haben die Texterkennung nicht durchgeführt.",
+        "NUMBER_OF_LINES": "Anzahl Zeilen",
+        "NUMBER_OF_WORDS": "Anzahl Wörter",
+        "NUMBER_OF_CHARACTERS": "Anzahl Zeichen"
       },
       "BUTTON": {
         "CAMERA": "Kamera",
@@ -71,7 +77,8 @@
       }
     },
     "PHOTO_INFO_MODAL": {
-      "TITLE": "Bildinformationen",
+      "TITLE_ADD_INFO": "Bildinformationen erfassen",
+      "TITLE_CHANGE_INFO": "Bildinformationen ändern",
       "LABEL": {
         "TITLE": "Titel",
         "DESCRIPTION": "Beschreibung",
@@ -80,6 +87,10 @@
       "BUTTON": {
         "SAVE": "Speichern",
         "CANCEL": "Abbrechen"
+      },
+      "TOAST": {
+        "INFO_UPDATED": "Bildinformationen wurden aktualisiert.",
+        "ERROR_TITLE_REQUIRED": "Titel ist erforderlich. Bitte geben Sie einen Titel ein."
       }
     },
     "TOAST": {
@@ -98,8 +109,9 @@
     "WORKFLOW_STEPS": {
       "SELECT_PHOTO": "Nächster Schritt: Wählen Sie ein Bild aus.",
       "EXTRACT_TEXT": "Nächster Schritt: Texte aus dem Bild extrahieren.",
-      "DISPLAY_EXTRACTED_TEXT": "Nächster Schritt: Info erfassen und Bild, Text und Info speichern.",
-      "DISPLAY_RESULTS_FROM_STORAGE": "Nächster Schritt: Gespeicherte Daten auswählen und ändern, kopieren oder löschen."
+      "DISPLAY_EXTRACTED_TEXT": "Nächster Schritt: optional Titel und Beschreibung erfassen.",
+      "DISPLAY_RESULTS_FROM_STORAGE": "Nächster Schritt: Bild auswählen oder alle Daten löschen.",
+      "MANAGE_HISTORY": "Nächster Schritt: Gespeicherte Daten bearbeiten, kopieren oder löschen."
     }
   },
 
@@ -110,6 +122,7 @@
     },
     "CARD": {
       "TITLE": "Verfügbares Kontingent für {{yearMonth}}",
+      "SUBTITLE": "Anzahl der Bildverarbeitungsanfragen",
       "GRID": {
         "USER": "Benutzer",
         "USER_NAME_YOU": "Sie",

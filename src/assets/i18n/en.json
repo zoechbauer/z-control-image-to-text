@@ -50,17 +50,23 @@
   "FEATURE": {
     "CARD": {
       "TITLE": "Extract Text from Image",
+      "TITLE-HISTORY": "Manage History",
       "INFO": "Please choose whether to take a photo or select an image from the gallery. The text will then be extracted from the image and displayed.",
       "INFO-2": "You can also view all text extractions performed.",
       "INFO-3": "Please note that text recognition is performed via the Google Cloud Vision API. The monthly quota for text recognition is limited. Once the quota is used up, the feature will be suspended until the next month.",
       "LABEL": {
-        "EXTRACTED_TEXT": "Extracted Text"
+        "EXTRACTED_TEXT": "Extracted Text",
+        "NO_EXTRACTED_TEXT": "No extracted text available.",
+        "NO_EXTRACTED_TEXT_INFO": "No text was extracted from the image or you did not perform text recognition.",
+        "NUMBER_OF_LINES": "Nbr of lines",
+        "NUMBER_OF_WORDS": "Nbr of words",
+        "NUMBER_OF_CHARACTERS": "Nbr of chars"
       },
       "BUTTON": {
         "CAMERA": "Camera",
         "GALLERY": "Gallery",
         "EXTRACT_TEXT": "Extract Text",
-         "ADD_INFO": "Add Info",
+        "ADD_INFO": "Add Info",
         "CHANGE_INFO": "Change Info",
         "SAVE_DATA": "Save Data",
         "LOAD_HISTORY": "Load History",
@@ -71,7 +77,8 @@
       }
     },
     "PHOTO_INFO_MODAL": {
-      "TITLE": "Photo Information",
+      "TITLE_ADD_INFO": "Add Photo Information",
+      "TITLE_CHANGE_INFO": "Change Photo Information",
       "LABEL": {
         "TITLE": "Title",
         "DESCRIPTION": "Description",
@@ -80,6 +87,10 @@
       "BUTTON": {
         "SAVE": "Save",
         "CANCEL": "Cancel"
+      },
+      "TOAST": {
+        "INFO_UPDATED": "Photo information has been updated.",
+        "ERROR_TITLE_REQUIRED": "Title is required. Please enter a title."
       }
     },
     "TOAST": {
@@ -98,8 +109,9 @@
     "WORKFLOW_STEPS": {
       "SELECT_PHOTO": "Next step: Select a photo.",
       "EXTRACT_TEXT": "Next step: Extract text from the image.",
-      "DISPLAY_EXTRACTED_TEXT": "Next step: Capture info and save image, text, and info.",
-      "DISPLAY_RESULTS_FROM_STORAGE": "Next step: Select stored data and edit, copy, or delete."
+      "DISPLAY_EXTRACTED_TEXT": "Next step: optionally enter title and description.",
+      "DISPLAY_RESULTS_FROM_STORAGE": "Next step: Select image or delete all data.",
+      "MANAGE_HISTORY": "Next step: Edit, copy, or delete stored data."
     }
   },
 
@@ -110,7 +122,7 @@
     },
     "CARD": {
       "TITLE": "Available Quota for {{yearMonth}}",
-      "SUBTITLE": "Number of used characters",
+      "SUBTITLE": "Number of image-processing requests",
       "GRID": {
         "USER": "User",
         "USER_NAME_YOU": "You",

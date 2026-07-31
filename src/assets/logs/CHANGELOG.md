@@ -12,15 +12,39 @@ This project uses a simplified major.minor versioning scheme:
 
 ## What's Coming Next
 
-- Enter Title and Description of the photo in the PhotoInfoModalComponent before saving the photo to the device.
-- Display only 1 photo in the history list (scrollable) so that the buttons are always visible and not hidden because of long lists of images.
-- Implement confirmDeleteAllPhotos() and confirmDeletePhoto() in PhotoService to confirm deletion of all photos with a modal dialog.
-- Update Online Help with the features of this app
-- Allow editing photo metadata (title and description) from the history list and persist changes to device storage.
-- Add copy-to-clipboard feature for extracted text, compressed photo, and statistics to simplify the workflow and improve usability
-- Fix translation issues in the app, including hardcoded translations, and wrong translation keys of qr code app, because in in z-control Ionic Setup we changed the structure of translation keys and prefixes, so we need to update the translation keys in this app accordingly.
-- Rotate the photo before extracting text and saving it to the device.
-- Add unit tests for new services and components
+- Add delete actions for individual photos and their associated data in the History list, including confirmation dialogs.
+- Implement `confirmDeleteAllPhotos()` and `confirmDeletePhoto()` in `PhotoService` to show modal confirmations before deletion.
+- Update the Online Help to document History, metadata editing, and related workflows.
+- Add copy-to-clipboard support for a photo's extracted text, compressed image, and metadata.
+- Fix localization issues: remove hardcoded strings and update translation keys/prefixes to match the z-control Ionic Setup structure.
+- Store and display creation and last-modified timestamps for photos and extracted text metadata.
+- Add unit tests for the new services and components.
+- Add a search feature to find saved photos by title, description, or extracted text.
+- Apply automatic rotation to photos before text extraction and saving to ensure correct orientation.
+
+## [1.2] – 2026-07-31
+
+### ✨ New Features
+
+- Added a History workflow step to view, edit, copy, and delete previously extracted text and photos, giving users an organized way to manage past results.
+- Introduced the PhotoInfoModalComponent to capture and edit photo metadata (title and description) before saving, improving organization and searchability.
+- Show the photo's title and description beneath the image for a quick metadata preview without opening the modal.
+
+### 🚀 Improvements
+
+- Redesigned PhotoInfoComponent: the photo now appears below the title and description inputs, and the modal header includes save and cancel icons for clearer navigation.
+- On mobile, hide the photo while editing metadata to maximize space for input fields and reduce visual clutter.
+- Update the app title to "Manage History" when viewing or editing saved extractions to provide clearer context.
+- Removed the Save button from `WorkflowStep.DISPLAY_EXTRACTED_TEXT`; extracted text and the photo are now saved automatically.
+- Added FeatureResultComponent to present extracted text, the photo, and metadata in a clearer, more maintainable layout.
+
+### 🐛 Fixes
+
+- Added the missing translation key for `UserstatisticsComponent` to resolve a localization issue.
+
+### 🔧 Internal
+
+- Added docs/checklist-update-objects.md: guidance for safely updating nested objects in Angular/TypeScript, covering immutability, merging strategies, and unit-testing best practices to avoid data loss or race conditions.
 
 ## [1.1] – 2026-07-28
 

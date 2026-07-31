@@ -150,7 +150,8 @@ ion-header ion-toolbar:first-of-type {
 
 .change-log-modal,
 .manual-instructions-modal,
-.user-detail-modal {
+.user-detail-modal,
+.photo-info-modal {
   // Modal ends vertically above navigation bar in portrait mode
   max-height: calc(100vh - var(--safe-area-bottom-fix, 44px)) !important;
   overflow-y: auto !important;

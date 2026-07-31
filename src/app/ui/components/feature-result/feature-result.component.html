@@ -1,0 +1,64 @@
+<div *ngIf="selectedHistoryPhoto">
+  <!-- display image -->
+  <ion-img
+    [src]="selectedHistoryPhoto.webviewPath"
+    class="selected-photo"
+    alt="extract text from displayed image"
+  />
+
+  <!-- display title and description -->
+  <ion-card
+    *ngIf="selectedHistoryPhoto.photoInfo?.title"
+    class="ion-text-center"
+  >
+    <ion-card-header class="ion-text-center">
+      <ion-card-subtitle>
+        {{ selectedHistoryPhoto.photoInfo!.title }}</ion-card-subtitle
+      >
+    </ion-card-header>
+    <ion-card-content
+      *ngIf="selectedHistoryPhoto.photoInfo!.description"
+      class="ion-text-left"
+    >
+      <p>{{ selectedHistoryPhoto!.photoInfo!.description }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- display extracted text -->
+  <ion-card *ngIf="extractedText" class="ion-text-center">
+    <ion-card-header class="ion-text-center">
+      <ion-card-subtitle>
+        {{ "FEATURE.CARD.LABEL.EXTRACTED_TEXT" | translate }}</ion-card-subtitle
+      >
+    </ion-card-header>
+    <ion-card-content class="ion-text-left">
+      <ion-item>
+        <pre>{{ extractedText }}</pre>
+      </ion-item>
+      <ion-item class="extract-statistics">
+        <ion-label class="ion-padding">
+          {{ "FEATURE.CARD.LABEL.NUMBER_OF_LINES" | translate }}: {{ textStatistics.lineCount }}
+        </ion-label>
+        <ion-label class="ion-padding">
+          {{ "FEATURE.CARD.LABEL.NUMBER_OF_WORDS" | translate }}: {{ textStatistics.wordCount }}
+        </ion-label>
+        <ion-label class="ion-padding">
+          {{ "FEATURE.CARD.LABEL.NUMBER_OF_CHARACTERS" | translate }}: {{ textStatistics.characterCount }}
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- display no extracted text info-->
+  <ion-card *ngIf="!extractedText" class="ion-text-center">
+    <ion-card-header class="ion-text-center">
+      <ion-card-title>
+        {{ "FEATURE.CARD.LABEL.NO_EXTRACTED_TEXT" | translate }}</ion-card-title
+      >
+    </ion-card-header>
+
+    <ion-card-content class="ion-text-left">
+      <p>{{ "FEATURE.CARD.LABEL.NO_EXTRACTED_TEXT_INFO" | translate }}</p>
+    </ion-card-content>
+  </ion-card>
+</div>
