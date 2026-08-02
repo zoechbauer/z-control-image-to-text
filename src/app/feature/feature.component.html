@@ -22,6 +22,7 @@
         <app-spinner *ngIf="isLoading"></app-spinner>
         <ion-button
           fill="clear"
+          [disabled]="isLoading"
           (click)="makePhoto()"
           (keydown.enter)="makePhoto()"
           ><ion-icon name="camera-outline" slot="start"></ion-icon>
@@ -29,6 +30,7 @@
         >
         <ion-button
           fill="clear"
+          [disabled]="isLoading"
           (click)="selectPhotoFromGallery()"
           (keydown.enter)="selectPhotoFromGallery()"
           ><ion-icon name="image-outline" slot="start"></ion-icon>
@@ -37,6 +39,7 @@
         <ion-button
           name="load-data"
           fill="clear"
+          [disabled]="isLoading"
           (click)="selectPhotosFromStorage($event)"
           (keydown.enter)="selectPhotosFromStorage($event)"
           ><ion-icon name="images-outline" slot="start"></ion-icon>
@@ -55,18 +58,20 @@
         <ion-button
           name="extract-text"
           fill="clear"
+          [disabled]="isLoading"
           (click)="extractTextFromPhoto()"
           (keydown.enter)="extractTextFromPhoto()"
           ><ion-icon name="list-outline" slot="start"></ion-icon>
           {{ "FEATURE.CARD.BUTTON.EXTRACT_TEXT" | translate }}</ion-button
         >
         <ion-button
-          name="clear"
+          name="back-to-previous"
           fill="clear"
+          [disabled]="isLoading"
           (click)="clear($event)"
           (keydown.enter)="clear($event)"
           ><ion-icon name="backspace-outline" slot="start"></ion-icon>
-          {{ "FEATURE.CARD.BUTTON.CLEAR" | translate }}</ion-button
+          {{ 'FEATURE.CARD.BUTTON.BACK_TO_PREVIOUS' | translate }}</ion-button
         >
       </ng-container>
 
@@ -82,18 +87,20 @@
         <div>
           <ion-button
             fill="clear"
+            [disabled]="isLoading"
             (click)="addInfo()"
             (keydown.enter)="addInfo()"
             ><ion-icon name="create-outline" slot="start"></ion-icon>
             {{ getInfoButtonLabel(selectedPhoto) | translate }}</ion-button
           >
           <ion-button
-            name="clear"
+            name="back-to-previous"
             fill="clear"
+            [disabled]="isLoading"
             (click)="clear($event)"
             (keydown.enter)="clear($event)"
             ><ion-icon name="backspace-outline" slot="start"></ion-icon>
-            {{ "FEATURE.CARD.BUTTON.CLEAR" | translate }}</ion-button
+            {{ "FEATURE.CARD.BUTTON.BACK_TO_PREVIOUS" | translate }}</ion-button
           >
         </div>
       </ng-container>
@@ -101,7 +108,7 @@
       <ng-container
         *ngIf="workflowStep === WorkflowStep.DisplayResultsFromStorage"
       >
-        <div>Anzahl: {{ photoService.photos.length }}</div>
+        <div>{{ "FEATURE.CARD.LABEL.NUMBER_OF_IMAGES" | translate }}: {{ photoService.photos.length }}</div>
         <ion-grid>
           <ion-row>
             <ion-col
@@ -118,19 +125,22 @@
         </ion-grid>
         <app-spinner *ngIf="isLoading"></app-spinner>
         <ion-button
+          *ngIf="photoService.photos.length > 0"
           fill="clear"
+          [disabled]="isLoading"
           (click)="deleteAllPhotos()"
           (keydown.enter)="deleteAllPhotos()"
           ><ion-icon name="trash-outline" slot="start"></ion-icon>
           {{ "FEATURE.CARD.BUTTON.DELETE_ALL" | translate }}</ion-button
         >
         <ion-button
-          name="clear"
+          name="back-to-previous"
           fill="clear"
+          [disabled]="isLoading"
           (click)="clear($event)"
           (keydown.enter)="clear($event)"
           ><ion-icon name="backspace-outline" slot="start"></ion-icon>
-          {{ "FEATURE.CARD.BUTTON.CLEAR" | translate }}</ion-button
+          {{ "FEATURE.CARD.BUTTON.BACK_TO_PREVIOUS" | translate }}</ion-button
         >
       </ng-container>
       <ng-container *ngIf="workflowStep === WorkflowStep.ManageHistory">
@@ -145,6 +155,7 @@
         <ion-button
           name="change-info"
           fill="clear"
+          [disabled]="isLoading"
           (click)="changeInfo()"
           (keydown.enter)="changeInfo()"
           ><ion-icon name="create-outline" slot="start"></ion-icon>
@@ -153,6 +164,7 @@
         <ion-button
           name="copy-data"
           fill="clear"
+          [disabled]="isLoading"
           (click)="copyData()"
           (keydown.enter)="copyData()"
           ><ion-icon name="copy-outline" slot="start"></ion-icon>
@@ -160,18 +172,21 @@
         >
         <ion-button
           fill="clear"
-          (click)="deleteTextAndPhoto()"
-          (keydown.enter)="deleteTextAndPhoto()"
+          [disabled]="isLoading"
+          name="delete-data"
+          (click)="deleteTextAndPhoto($event)"
+          (keydown.enter)="deleteTextAndPhoto($event)"
           ><ion-icon name="trash-bin-outline" slot="start"></ion-icon>
           {{ "FEATURE.CARD.BUTTON.DELETE_DATA" | translate }}</ion-button
         >
         <ion-button
           name="back-to-history"
           fill="clear"
+          [disabled]="isLoading"
           (click)="backToHistory($event)"
           (keydown.enter)="backToHistory($event)"
           ><ion-icon name="backspace-outline" slot="start"></ion-icon>
-          {{ "FEATURE.CARD.BUTTON.CLEAR" | translate }}</ion-button
+          {{ "FEATURE.CARD.BUTTON.BACK_TO_PREVIOUS" | translate }}</ion-button
         >
       </ng-container>
     </div>

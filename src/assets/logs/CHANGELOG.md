@@ -12,15 +12,28 @@ This project uses a simplified major.minor versioning scheme:
 
 ## What's Coming Next
 
-- Add delete actions for individual photos and their associated data in the History list, including confirmation dialogs.
-- Implement `confirmDeleteAllPhotos()` and `confirmDeletePhoto()` in `PhotoService` to show modal confirmations before deletion.
-- Update the Online Help to document History, metadata editing, and related workflows.
 - Add copy-to-clipboard support for a photo's extracted text, compressed image, and metadata.
-- Fix localization issues: remove hardcoded strings and update translation keys/prefixes to match the z-control Ionic Setup structure.
+- Update the Online Help to document History, metadata editing, and related workflows.
+- Limit the visible history list to a single photo (scrollable) so action buttons remain visible.
 - Store and display creation and last-modified timestamps for photos and extracted text metadata.
-- Add unit tests for the new services and components.
 - Add a search feature to find saved photos by title, description, or extracted text.
+- Add unit tests for the new services and components.
 - Apply automatic rotation to photos before text extraction and saving to ensure correct orientation.
+
+## [1.3] – 2026-08-02
+
+### ✨ New Features
+
+- Added ability to delete individual photos and their associated data from the History list.
+- Added confirmation dialogs for deleting a single photo or all photos, including clear warnings that the action is irreversible.
+
+### 🚀 Improvements
+
+- Hid the "Delete all data" button in the History workflow when there are no saved photos.
+- Disabled action buttons while an operation is in progress to prevent duplicate submissions.
+- Showed a notification when the user cancels photo selection or capture to provide immediate feedback.
+- Replaced hardcoded UI strings with translation keys and updated translation prefixes to match the z-control Ionic Setup.
+- Clarified the label for the "back" button in the History workflow and updated translations to match its purpose.
 
 ## [1.2] – 2026-07-31
 

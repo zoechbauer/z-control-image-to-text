@@ -9,9 +9,20 @@
         "SUBHEADER": "Bitte aktivieren Sie die Speicherberechtigung unter Einstellungen → Apps → z-control Image To Text → Berechtigungen → Speicher.",
         "MESSAGE": "Detaillierte Hilfe finden Sie in unserem Benutzerhandbuch FAQ."
       },
+      "DELETE_PHOTOS": {
+        "HEADER": "Alle Fotos löschen",
+        "SUBHEADER": "Möchten Sie wirklich alle Fotos und zugehörigen Daten löschen?",
+        "MESSAGE": "Diese Aktion kann nicht rückgängig gemacht werden."
+      },
+      "DELETE_PHOTO": {
+        "HEADER": "Foto löschen",
+        "SUBHEADER": "Möchten Sie wirklich dieses Foto und die zugehörigen Daten löschen?",
+        "MESSAGE": "Diese Aktion kann nicht rückgängig gemacht werden."
+      },
       "OK": "OK",
       "CANCEL": "Abbrechen",
-      "CONFIRM": "Bestätigen"
+      "CONFIRM": "Bestätigen",
+      "DELETE": "Löschen"
     }
   },
   "------ header page": "-------",
@@ -58,6 +69,7 @@
         "EXTRACTED_TEXT": "Extrahierter Text",
         "NO_EXTRACTED_TEXT": "Kein extrahierter Text vorhanden.",
         "NO_EXTRACTED_TEXT_INFO": "Es wurde kein Text aus dem Bild extrahiert oder Sie haben die Texterkennung nicht durchgeführt.",
+        "NUMBER_OF_IMAGES": "Anzahl Bilder",
         "NUMBER_OF_LINES": "Anzahl Zeilen",
         "NUMBER_OF_WORDS": "Anzahl Wörter",
         "NUMBER_OF_CHARACTERS": "Anzahl Zeichen"
@@ -73,7 +85,7 @@
         "COPY_DATA": "Daten kopieren",
         "DELETE_DATA": "Daten löschen",
         "DELETE_ALL": "Alle Daten löschen",
-        "CLEAR": "Zurück"
+        "BACK_TO_PREVIOUS": "Zurück"
       }
     },
     "PHOTO_INFO_MODAL": {
@@ -104,7 +116,16 @@
       "ERROR_GETTING_PROGRAMMER_DEVICES": "Fehler beim Abrufen der Programmierer-Geräte. Bitte versuchen Sie es erneut.",
       "ERROR_GETTING_PROGRAMMER_DEVICE_STATUS": "Fehler beim Abrufen des Status des Programmierer-Geräts. Bitte versuchen Sie es erneut.",
       "ERROR_MISSING_DOWNLOAD_URL": "URL für Download nicht verfügbar.",
-      "ERROR_NO_PHOTO_SELECTED": "Kein Foto ausgewählt. Bitte wählen Sie zuerst ein Foto aus."
+      "PHOTO_CAPTURE_CANCELLED": "Die Fotoaufnahme wurde abgebrochen.",
+      "PHOTO_SELECTION_CANCELLED": "Die Fotoauswahl wurde abgebrochen.",
+      "ERROR_PHOTO_CAPTURE": "Fehler beim Aufnehmen des Fotos. Bitte versuchen Sie es erneut.",
+      "ERROR_PHOTO_SELECTION": "Fehler beim Auswählen des Fotos. Bitte versuchen Sie es erneut.",
+      "ERROR_LOADING_PHOTOS": "Fehler beim Laden der Fotos. Bitte versuchen Sie es erneut.",
+      "ERROR_NO_PHOTO_SELECTED": "Es wurde kein Foto ausgewählt. Bitte wählen Sie zuerst ein Foto aus.",
+      "SUCCESS_PHOTO_DELETED": "Das Foto und zugehörige Daten wurden erfolgreich gelöscht.",
+      "ERROR_DELETING_PHOTO": "Fehler beim Löschen des Fotos. Bitte versuchen Sie es erneut.",
+      "ERROR_DELETING_ALL_PHOTOS": "Fehler beim Löschen aller Fotos. Bitte versuchen Sie es erneut.",
+      "SUCCESS_ALL_PHOTOS_DELETED": "Alle Fotos und zugehörigen Daten wurden erfolgreich gelöscht."
     },
     "WORKFLOW_STEPS": {
       "SELECT_PHOTO": "Nächster Schritt: Wählen Sie ein Bild aus.",
@@ -112,6 +133,9 @@
       "DISPLAY_EXTRACTED_TEXT": "Nächster Schritt: optional Titel und Beschreibung erfassen.",
       "DISPLAY_RESULTS_FROM_STORAGE": "Nächster Schritt: Bild auswählen oder alle Daten löschen.",
       "MANAGE_HISTORY": "Nächster Schritt: Gespeicherte Daten bearbeiten, kopieren oder löschen."
+    },
+    "LOADING": {
+      "LOADING_PHOTOS": "Fotos werden geladen..."
     }
   },
 

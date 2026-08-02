@@ -35,6 +35,7 @@ import { ImageCompressionService } from '../services/image-compression.service';
 import { PhotoService } from '../services/photo.service';
 import { PhotoStorageService } from '../services/photo-storage.service';
 import { FeatureResultComponent } from '../ui/components/feature-result/feature-result.component';
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-feature',
@@ -72,6 +73,7 @@ export class FeatureComponent implements OnInit {
   private readonly ocrService = inject(OcrService);
   private readonly workflowService = inject(WorkflowService);
   private readonly imageCompressionService = inject(ImageCompressionService);
+  private readonly alertService = inject(AlertService);
 
   selectedPhoto?: UserPhoto;
   selectedHistoryPhoto?: UserPhoto;
@@ -153,11 +155,16 @@ export class FeatureComponent implements OnInit {
    */
   async makePhoto() {
     this.initFormControls();
-    await this.photoService.makePhoto();
 
-    this.workflowStep = this.workflowService.getNextWorkflowStep(
-      this.workflowStep,
-    );
+    this.isLoading = true;
+    const selected = await this.photoService.makePhoto();
+    this.isLoading = false;
+
+    if (selected) {
+      this.workflowStep = this.workflowService.getNextWorkflowStep(
+        this.workflowStep,
+      );
+    }
   }
 
   /**
@@ -166,11 +173,16 @@ export class FeatureComponent implements OnInit {
    */
   async selectPhotoFromGallery() {
     this.initFormControls();
-    await this.photoService.selectPhoto();
 
-    this.workflowStep = this.workflowService.getNextWorkflowStep(
-      this.workflowStep,
-    );
+    this.isLoading = true;
+    const selected = await this.photoService.selectPhoto();
+    this.isLoading = false;
+
+    if (selected) {
+      this.workflowStep = this.workflowService.getNextWorkflowStep(
+        this.workflowStep,
+      );
+    }
   }
 
   /**
@@ -285,28 +297,84 @@ export class FeatureComponent implements OnInit {
   }
 
   /**
-   * Delete the extracted text and the selected photo,
-   * and update the workflow step accordingly.
+   * Deletes the selected photo from the photo storage service if the user
+   * confirms the deletion through an alert. A toast notification is shown
+   * to inform the user that all photos have been deleted..
+   * The workflow step is updated accordingly.
+   * @param event The event that triggered the delete action.
+   * @returns A promise that resolves when the operation is complete.
    */
-  deleteTextAndPhoto() {
-    this.toastService.showToast(
-      this.translate.instant('APP.UNDER_CONSTRUCTION'),
-      ToastAnchor.MainPage,
-    );
+  async deleteTextAndPhoto(event: any): Promise<void> {
+    if (
+      !(await this.alertService.confirmDeletePhotoAlert(
+        this.selectedHistoryPhoto as UserPhoto,
+      ))
+    ) {
+      return;
+    }
 
-    this.workflowStep = this.workflowService.getNextWorkflowStep(
-      this.workflowStep,
-    );
+    this.isLoading = true;
+    try {
+      const photoDeleted = await this.photoStorageService.deletePhoto(
+        this.selectedHistoryPhoto as UserPhoto,
+      );
+
+      if (photoDeleted) {
+        this.toastService.showToast(
+          this.translate.instant('FEATURE.TOAST.SUCCESS_PHOTO_DELETED'),
+          ToastAnchor.MainPage,
+        );
+
+        this.workflowStep = this.workflowService.getNextWorkflowStep(
+          this.workflowStep,
+          event,
+        );
+      }
+    } catch (error) {
+      console.error('Error deleting photo:', error);
+      const errorMessage = this.translate.instant(
+        'FEATURE.TOAST.ERROR_DELETING_PHOTO',
+      );
+      this.toastService.showToast(errorMessage);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   /**
-   * Delete all photos from the photo service
-   * and update the workflow step accordingly.
+   * Deletes all photos from the photo storage service if the user
+   * confirms the deletion through an alert. A toast notification is shown
+   * to inform the user that all photos have been deleted..
+   * The workflow step is updated accordingly.
+   * @returns A promise that resolves when the operation is complete.
    */
-  deleteAllPhotos() {
+  async deleteAllPhotos(): Promise<void> {
+    if (!(await this.alertService.confirmDeletePhotoAlert('all'))) {
+      return;
+    }
+
     this.isLoading = true;
-    this.photoService.deleteAllPhotos();
-    this.isLoading = false;
+    try {
+      const isDeleted = await this.photoStorageService.deleteAllPhotos();
+      if (isDeleted) {
+        const successMessage = this.translate.instant(
+          'FEATURE.TOAST.SUCCESS_ALL_PHOTOS_DELETED',
+        );
+        this.toastService.showToast(successMessage);
+
+        this.workflowStep = this.workflowService.getNextWorkflowStep(
+          this.workflowStep,
+        );
+      }
+    } catch (error) {
+      console.error('Error deleting all photos:', error);
+      const errorMessage = this.translate.instant(
+        'FEATURE.TOAST.ERROR_DELETING_ALL_PHOTOS',
+      );
+      this.toastService.showToast(errorMessage);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   /**

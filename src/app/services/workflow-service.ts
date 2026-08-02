@@ -23,7 +23,7 @@ export class WorkflowService {
     const target = event?.target as HTMLElement | null;
     const buttonName = target?.getAttribute('name') ?? null;
 
-    if (buttonName === 'clear') {
+    if (buttonName === 'back-to-previous') {
       return WorkflowStep.SelectPhoto;
     }
 
@@ -41,7 +41,7 @@ export class WorkflowService {
         break;
 
       case WorkflowStep.DisplayExtractedText:
-          nextStep = WorkflowStep.DisplayExtractedText;
+        nextStep = WorkflowStep.DisplayExtractedText;
         break;
 
       case WorkflowStep.DisplayResultsFromStorage:
@@ -53,10 +53,9 @@ export class WorkflowService {
         break;
 
       case WorkflowStep.ManageHistory:
-        if (buttonName === 'back-to-history') {
+        if (buttonName === 'back-to-history' || buttonName === 'delete-data') {
           nextStep = WorkflowStep.DisplayResultsFromStorage;
-        }
-        else {
+        } else {
           nextStep = WorkflowStep.ManageHistory;
         }
         break;
@@ -68,6 +67,9 @@ export class WorkflowService {
         nextStep = WorkflowStep.SelectPhoto;
     }
 
+    console.log(
+      `WorkflowService.getNextWorkflowStep - currentStep: ${currentStep}, buttonName: ${buttonName}, nextStep: ${nextStep}`,
+    );
     return nextStep;
   }
 }

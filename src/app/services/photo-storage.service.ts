@@ -147,13 +147,14 @@ export class PhotoStorageService {
    */
   async loadSavedPhotos() {
     const loading = await this.loadingCtrl.create({
-      message: 'Fotos werden geladen ...',
+      message: this.translate.instant('FEATURE.LOADING.LOADING_PHOTOS'),
     });
     await loading.present();
 
     await this.getPhotosFromCache();
 
     if (!Capacitor.isNativePlatform()) {
+      let loadingErrorOccurred = false;
       for (let photo of this.photos) {
         try {
           if (!photo.webviewPath?.startsWith('data:')) {
@@ -167,11 +168,15 @@ export class PhotoStorageService {
             );
           }
         } catch (error) {
-          const errorMessage = 'Foto konnte nicht geladen werden!';
-          console.error(errorMessage, error);
-          // this.toast.displayToast({ message: errorMessage, type: 'error' });
-          this.toastService.showToast(errorMessage);
+          console.error('photo.webviewPath is not available or invalid', error);
+          loadingErrorOccurred = true;
         }
+      }
+      if (loadingErrorOccurred) {
+        const errorMessage = this.translate.instant(
+          'TOAST.ERROR_LOADING_PHOTOS',
+        );
+        this.toastService.showToast(errorMessage);
       }
       this.photosSubject.next(this.photos);
     }
@@ -213,34 +218,35 @@ export class PhotoStorageService {
   /**
    * Deletes all photos from the filesystem and clears the cache.
    * This method checks for necessary permissions before attempting deletion.
-   * @returns A promise that resolves when all photos have been deleted.
    */
-  public async deleteAllPhotos() {
-    // TODO implement confirmDeleteAllPhotos
-    // if (await this.confirmDeleteAllPhotos()) {
-
+  public async deleteAllPhotos(): Promise<boolean> {
     // check permissions
     if (!(await this.checkFilesystemPermission())) {
       console.warn('Storage permission not granted, skipping file deletion');
-      return;
+      this.alertService.showStoragePermissionError();
+      return false;
     }
     const numberOfPhotos = this.photos.length;
     for (let i = 0; i < numberOfPhotos; i++) {
       await this.deletePhoto(this.photos[0]);
     }
-    const successMessage = 'alle Fotos wurden gelöscht!';
-    // this.toast.displayToast({ message: successMessage, type: 'success' });
-    this.toastService.showToast(successMessage);
-    // }
+    return true;
   }
 
   /**
    * Deletes a specific photo from the filesystem and updates the cache.
    * This method checks for necessary permissions before attempting deletion.
    * @param photo The photo to delete.
-   * @returns A promise that resolves when the photo has been deleted.
+   * @returns A promise that resolves to true when the photo has been deleted.
    */
-  public async deletePhoto(photo: UserPhoto) {
+  public async deletePhoto(photo: UserPhoto): Promise<boolean> {
+    // check permissions
+    if (!(await this.checkFilesystemPermission())) {
+      console.warn('Storage permission not granted, skipping file deletion');
+      this.alertService.showStoragePermissionError();
+      return false;
+    }
+
     const filename = this.filePathService.getFilenameFromFilepath(
       photo.filepath,
     );
@@ -253,13 +259,10 @@ export class PhotoStorageService {
       this.photos = this.photos.filter((p) => p.filepath !== photo.filepath);
 
       await this.cachePhotos();
-
-      const successMessage = 'Foto wurde gelöscht!';
-      this.toastService.showToast(successMessage);
+      return true;
     } catch (error) {
-      const errorMessage = 'Foto konnte nicht gelöscht werden!';
-      console.error(errorMessage, error);
-      this.toastService.showToast(errorMessage);
+      console.error('Error deleting photo:', error);
+      throw error;
     }
   }
 
@@ -309,7 +312,9 @@ export class PhotoStorageService {
     if (!fileDownloadLink?.trim()) {
       console.error(`File URL '${fileDownloadLink}' is not available`);
       this.toastService.showToast(
-        this.translate.instant('FEATURE.TOAST.ERROR_MISSING_DOWNLOAD_URL'),
+        this.translate.instant(
+          'FEATURE.TOAST.ERROR_MISSING_DOWNLOAD_URL',
+        ),
         ToastAnchor.MainPage,
       );
       return false;
@@ -393,15 +398,18 @@ export class PhotoStorageService {
     return true;
   }
 
-/**
- * Updates the photo information for a given photo and caches the updated list of photos.
- * @param photo The photo to update.
- * @param photoInfo The new photo information to merge with the existing info.
- * @returns A promise that resolves to the updated UserPhoto object.
- */
-  async updatePhotoInfo(photo: UserPhoto, photoInfo: Partial<PhotoInfo>): Promise<UserPhoto> {
+  /**
+   * Updates the photo information for a given photo and caches the updated list of photos.
+   * @param photo The photo to update.
+   * @param photoInfo The new photo information to merge with the existing info.
+   * @returns A promise that resolves to the updated UserPhoto object.
+   */
+  async updatePhotoInfo(
+    photo: UserPhoto,
+    photoInfo: Partial<PhotoInfo>,
+  ): Promise<UserPhoto> {
     const existingInfo = photo.photoInfo ?? {};
-    
+
     const updatedPhoto: UserPhoto = {
       ...photo,
       photoInfo: {

@@ -9,9 +9,20 @@
         "SUBHEADER": "Please enable storage permission under Settings → Apps → z-control Image To Text → Permissions → Storage.",
         "MESSAGE": "See our user guide FAQ for detailed help."
       },
+      "DELETE_PHOTOS": {
+        "HEADER": "Delete All Photos",
+        "SUBHEADER": "Are you sure you want to delete all photos and associated data?",
+        "MESSAGE": "This action cannot be undone."
+      },
+      "DELETE_PHOTO": {
+        "HEADER": "Delete Photo",
+        "SUBHEADER": "Are you sure you want to delete this photo and the associated data?",
+        "MESSAGE": "This action cannot be undone."
+      },
       "OK": "OK",
       "CANCEL": "Cancel",
-      "CONFIRM": "Confirm"
+      "CONFIRM": "Confirm",
+      "DELETE": "Delete"
     }
   },
   "------ header page": "-------",
@@ -58,6 +69,7 @@
         "EXTRACTED_TEXT": "Extracted Text",
         "NO_EXTRACTED_TEXT": "No extracted text available.",
         "NO_EXTRACTED_TEXT_INFO": "No text was extracted from the image or you did not perform text recognition.",
+        "NUMBER_OF_IMAGES": "Number of images",
         "NUMBER_OF_LINES": "Nbr of lines",
         "NUMBER_OF_WORDS": "Nbr of words",
         "NUMBER_OF_CHARACTERS": "Nbr of chars"
@@ -73,7 +85,7 @@
         "COPY_DATA": "Copy Data",
         "DELETE_DATA": "Delete Data",
         "DELETE_ALL": "Delete All Data",
-        "CLEAR": "Clear"
+        "BACK_TO_PREVIOUS": "Go Back"
       }
     },
     "PHOTO_INFO_MODAL": {
@@ -104,7 +116,16 @@
       "ERROR_GETTING_PROGRAMMER_DEVICES": "Error getting programmer devices. Please try again.",
       "ERROR_GETTING_PROGRAMMER_DEVICE_STATUS": "Error getting programmer device status. Please try again.",
       "ERROR_MISSING_DOWNLOAD_URL": "Download URL not available.",
-      "ERROR_NO_PHOTO_SELECTED": "No photo selected. Please select a photo first."
+      "PHOTO_CAPTURE_CANCELLED": "Photo capture cancelled.",
+      "PHOTO_SELECTION_CANCELLED": "Photo selection cancelled.",
+      "ERROR_PHOTO_CAPTURE": "Error capturing photo. Please try again.",
+      "ERROR_PHOTO_SELECTION": "Error selecting photo. Please try again.",
+      "ERROR_LOADING_PHOTOS": "Error loading photos. Please try again.",
+      "ERROR_NO_PHOTO_SELECTED": "No photo selected. Please select a photo first.",
+      "SUCCESS_PHOTO_DELETED": "Photo and associated data have been successfully deleted.",
+      "ERROR_DELETING_PHOTO": "Error deleting the photo. Please try again.",
+      "ERROR_DELETING_ALL_PHOTOS": "Error deleting all photos. Please try again.",
+      "SUCCESS_ALL_PHOTOS_DELETED": "All photos and associated data have been successfully deleted."
     },
     "WORKFLOW_STEPS": {
       "SELECT_PHOTO": "Next step: Select a photo.",
@@ -112,6 +133,9 @@
       "DISPLAY_EXTRACTED_TEXT": "Next step: optionally enter title and description.",
       "DISPLAY_RESULTS_FROM_STORAGE": "Next step: Select image or delete all data.",
       "MANAGE_HISTORY": "Next step: Edit, copy, or delete stored data."
+    },
+    "LOADING": {
+      "LOADING_PHOTOS": "Loading photos..."
     }
   },
 
