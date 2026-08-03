@@ -27,24 +27,13 @@
   <!-- display extracted text -->
   <ion-card *ngIf="extractedText" class="ion-text-center">
     <ion-card-header class="ion-text-center">
-      <ion-card-subtitle>
-        {{ "FEATURE.CARD.LABEL.EXTRACTED_TEXT" | translate }}</ion-card-subtitle
+      <ion-card-title>
+        {{ "FEATURE.CARD.LABEL.EXTRACTED_TEXT" | translate }}</ion-card-title
       >
     </ion-card-header>
     <ion-card-content class="ion-text-left">
       <ion-item>
         <pre>{{ extractedText }}</pre>
-      </ion-item>
-      <ion-item class="extract-statistics">
-        <ion-label class="ion-padding">
-          {{ "FEATURE.CARD.LABEL.NUMBER_OF_LINES" | translate }}: {{ textStatistics.lineCount }}
-        </ion-label>
-        <ion-label class="ion-padding">
-          {{ "FEATURE.CARD.LABEL.NUMBER_OF_WORDS" | translate }}: {{ textStatistics.wordCount }}
-        </ion-label>
-        <ion-label class="ion-padding">
-          {{ "FEATURE.CARD.LABEL.NUMBER_OF_CHARACTERS" | translate }}: {{ textStatistics.characterCount }}
-        </ion-label>
       </ion-item>
     </ion-card-content>
   </ion-card>
@@ -58,7 +47,63 @@
     </ion-card-header>
 
     <ion-card-content class="ion-text-left">
-      <p>{{ "FEATURE.CARD.LABEL.NO_EXTRACTED_TEXT_INFO" | translate }}</p>
+      <p>
+        {{ photoStorageService.getNoExtractedTextInfo(selectedHistoryPhoto) }}
+      </p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- display statistics -->
+  <ion-card  *ngIf="selectedHistoryPhoto.photoInfo">
+    <ion-card-content class="ion-text-left">
+      <div class="statistics">
+        <ion-grid class="extracted-text-statistic" *ngIf="extractedText">
+          <ion-row class="ion-text-center">
+            <ion-col>{{ "FEATURE.STATISTICS.TITLE" | translate }}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>{{
+              "FEATURE.STATISTICS.LABEL.NUMBER_OF_LINES" | translate
+            }}</ion-col>
+            <ion-col>{{
+              "FEATURE.STATISTICS.LABEL.NUMBER_OF_WORDS" | translate
+            }}</ion-col>
+            <ion-col>{{
+              "FEATURE.STATISTICS.LABEL.NUMBER_OF_CHARACTERS" | translate
+            }}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>{{ textStatistics.lineCount }}</ion-col>
+            <ion-col>{{ textStatistics.wordCount }}</ion-col>
+            <ion-col>{{ textStatistics.characterCount }}</ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <ion-grid class="updated-timestamps">
+          <ion-row *ngIf="selectedHistoryPhoto.photoInfo!.createdAt">
+            <ion-col size="1"></ion-col>
+            <ion-col size="4">{{
+              "FEATURE.STATISTICS.LABEL.CREATED_AT" | translate
+            }}</ion-col>
+            <ion-col size="6">{{
+              selectedHistoryPhoto.photoInfo!.createdAt
+                | date: "yyyy-MM-dd HH:mm"
+            }}</ion-col>
+            <ion-col size="1"></ion-col>
+          </ion-row>
+          <ion-row *ngIf="selectedHistoryPhoto.photoInfo!.modifiedAt">
+            <ion-col size="1"></ion-col>
+            <ion-col size="4">{{
+              "FEATURE.STATISTICS.LABEL.MODIFIED_AT" | translate
+            }}</ion-col>
+            <ion-col size="6">{{
+              selectedHistoryPhoto.photoInfo!.modifiedAt
+                | date: "yyyy-MM-dd HH:mm"
+            }}</ion-col>
+            <ion-col size="1"></ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
     </ion-card-content>
   </ion-card>
 </div>

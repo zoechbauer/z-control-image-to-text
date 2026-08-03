@@ -67,9 +67,6 @@ export class WorkflowService {
         nextStep = WorkflowStep.SelectPhoto;
     }
 
-    console.log(
-      `WorkflowService.getNextWorkflowStep - currentStep: ${currentStep}, buttonName: ${buttonName}, nextStep: ${nextStep}`,
-    );
     return nextStep;
   }
 }

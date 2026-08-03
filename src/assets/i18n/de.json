@@ -68,7 +68,8 @@
       "LABEL": {
         "EXTRACTED_TEXT": "Extrahierter Text",
         "NO_EXTRACTED_TEXT": "Kein extrahierter Text vorhanden.",
-        "NO_EXTRACTED_TEXT_INFO": "Es wurde kein Text aus dem Bild extrahiert oder Sie haben die Texterkennung nicht durchgeführt.",
+        "NO_EXTRACTED_TEXT_FOUND": "Das Bild enthält keinen Text.",
+        "NO_EXTRACTED_TEXT_NO_METADATA_INFO": "Sie haben die Texterkennung nicht aufgerufen.",
         "NUMBER_OF_IMAGES": "Anzahl Bilder",
         "NUMBER_OF_LINES": "Anzahl Zeilen",
         "NUMBER_OF_WORDS": "Anzahl Wörter",
@@ -85,7 +86,9 @@
         "COPY_DATA": "Daten kopieren",
         "DELETE_DATA": "Daten löschen",
         "DELETE_ALL": "Alle Daten löschen",
-        "BACK_TO_PREVIOUS": "Zurück"
+        "BACK_TO_PREVIOUS": "Zurück",
+        "NEXT_IMAGE": "Nächstes",
+        "PREVIOUS_IMAGE": "Vorheriges"
       }
     },
     "PHOTO_INFO_MODAL": {
@@ -103,6 +106,17 @@
       "TOAST": {
         "INFO_UPDATED": "Bildinformationen wurden aktualisiert.",
         "ERROR_TITLE_REQUIRED": "Titel ist erforderlich. Bitte geben Sie einen Titel ein."
+      }
+    },
+    "STATISTICS": {
+      "TITLE": "Statistik",
+      "LABEL": {
+        "NUMBER_OF_IMAGES": "Anzahl Bilder",
+        "NUMBER_OF_LINES": "Anzahl Zeilen",
+        "NUMBER_OF_WORDS": "Anzahl Wörter",
+        "NUMBER_OF_CHARACTERS": "Anzahl Zeichen",
+        "CREATED_AT": "Erstellt am:",
+        "MODIFIED_AT": "Geändert am:"
       }
     },
     "TOAST": {

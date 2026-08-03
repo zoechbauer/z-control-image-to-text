@@ -1,3 +1,18 @@
-ion-icon {
-  font-size: 1.5rem;
+.photo-info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  overflow-y: auto;
+
+  ion-icon {
+    font-size: 1.5rem;
+  }
+
+  ion-img {
+    padding: 10px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
 }

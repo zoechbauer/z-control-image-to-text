@@ -7,6 +7,8 @@ export interface PhotoInfo {
   title?: string;
   description?: string;
   extractedText?: string;
+  createdAt?: string;
+  modifiedAt?: string;
 }
 export interface RecognizeInputData {
   imageBase64: string;

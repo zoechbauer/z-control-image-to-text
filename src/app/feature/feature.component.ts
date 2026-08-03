@@ -87,6 +87,8 @@ export class FeatureComponent implements OnInit {
     lineCount: 0,
     characterCount: 0,
   };
+  hasNextImage: boolean = true;
+  hasPreviousImage: boolean = false;
   private extractedTextItems: string[] = [];
 
   /**
@@ -486,6 +488,47 @@ export class FeatureComponent implements OnInit {
       event,
     );
   }
+
+  /**
+   * Navigate to the next image in the history and update the selected history photo.
+   * The availability of next and previous images is also updated accordingly.
+   */
+  getNextImage() {
+    const nextPhoto = this.photoStorageService.getNextPhoto(
+      this.selectedHistoryPhoto as UserPhoto,
+    );
+    if (nextPhoto) {
+      this.selectedHistoryPhoto = nextPhoto;
+      this.hasNextImage = !!this.photoStorageService.getNextPhoto(nextPhoto);
+      this.hasPreviousImage = !!this.photoStorageService.getPreviousPhoto(nextPhoto);
+    } else {
+      this.hasNextImage = false;
+      this.hasPreviousImage = !!this.photoStorageService.getPreviousPhoto(
+        this.selectedHistoryPhoto as UserPhoto,
+      );
+    }
+  }
+
+  /**
+   * Navigate to the previous image in the history and update the selected history photo.
+   * The availability of next and previous images is also updated accordingly.
+   */
+  getPreviousImage() {
+    const previousPhoto = this.photoStorageService.getPreviousPhoto(
+      this.selectedHistoryPhoto as UserPhoto,
+    );
+    if (previousPhoto) {
+      this.selectedHistoryPhoto = previousPhoto;
+      this.hasNextImage = !!this.photoStorageService.getNextPhoto(previousPhoto);
+      this.hasPreviousImage = !!this.photoStorageService.getPreviousPhoto(previousPhoto);
+    } else {
+      this.hasPreviousImage = false;
+      this.hasNextImage = !!this.photoStorageService.getNextPhoto(
+        this.selectedHistoryPhoto as UserPhoto,
+      );
+    }
+  }
+
 
   /**
    * Clear the current form controls and update the workflow step accordingly.

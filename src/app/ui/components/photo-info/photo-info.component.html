@@ -1,53 +1,56 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="cancel()" (keydown.enter)="cancel()"
-        ><ion-icon name="close-outline"> </ion-icon
-      ></ion-button>
-    </ion-buttons>
-    <ion-title>{{ headerTitle | translate }}</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="save()" (keydown.enter)="save()" [strong]="true">
-        <ion-icon name="checkmark-outline"> </ion-icon
-      ></ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<div class="photo-info-container">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="cancel()" (keydown.enter)="cancel()"
+          ><ion-icon name="close-outline"> </ion-icon
+        ></ion-button>
+      </ion-buttons>
+      <ion-title>{{ headerTitle | translate }}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button
+          (click)="save()"
+          (keydown.enter)="save()"
+          [strong]="true"
+          [disabled]="!hasDataChanged()"
+        >
+          <ion-icon name="checkmark-outline"> </ion-icon
+        ></ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
 
-<ion-card>
-  <ion-card-content>
-    <form [formGroup]="photoForm">
-      <ion-item>
-        <ion-label position="floating">{{
-          "FEATURE.PHOTO_INFO_MODAL.LABEL.TITLE" | translate
-        }}</ion-label>
-        <ion-input
-          formControlName="title"
-          (click)="setHideImageWhenEditingOnMobile()"
-          (keydown.enter)="setHideImageWhenEditingOnMobile()"
-        ></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">{{
-          "FEATURE.PHOTO_INFO_MODAL.LABEL.DESCRIPTION" | translate
-        }}</ion-label>
-        <ion-textarea
-          formControlName="description"
-          rows="5"
-          (click)="setHideImageWhenEditingOnMobile()"
-          (keydown.enter)="setHideImageWhenEditingOnMobile()"
-        ></ion-textarea>
-      </ion-item>
-    </form>
-  </ion-card-content>
-</ion-card>
-<ion-grid
-  *ngIf="!hideImageWhenEditingOnMobile"
-  style="background-color: var(--ion-color-light)"
->
-  <ion-row>
-    <ion-col size="12" class="ion-text-center">
-      <ion-img [src]="photo.webviewPath"></ion-img>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+  <ion-card>
+    <ion-card-content>
+      <form [formGroup]="photoForm">
+        <ion-item>
+          <ion-label position="floating">{{
+            "FEATURE.PHOTO_INFO_MODAL.LABEL.TITLE" | translate
+          }}</ion-label>
+          <ion-input
+            formControlName="title"
+            (click)="setHideImageWhenEditingOnMobile()"
+            (keydown.enter)="setHideImageWhenEditingOnMobile()"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">{{
+            "FEATURE.PHOTO_INFO_MODAL.LABEL.DESCRIPTION" | translate
+          }}</ion-label>
+          <ion-textarea
+            formControlName="description"
+            rows="5"
+            (click)="setHideImageWhenEditingOnMobile()"
+            (keydown.enter)="setHideImageWhenEditingOnMobile()"
+          ></ion-textarea>
+        </ion-item>
+      </form>
+    </ion-card-content>
+  </ion-card>
+  <div
+    *ngIf="!hideImageWhenEditingOnMobile"
+    style="background-color: var(--ion-color-light)"
+  >
+    <ion-img [src]="photo.webviewPath"></ion-img>
+  </div>
+</div>

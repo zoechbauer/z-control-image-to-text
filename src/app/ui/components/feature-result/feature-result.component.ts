@@ -10,16 +10,22 @@ import {
   IonImg,
   IonLabel,
   IonItem,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonButton,
 } from '@ionic/angular/standalone';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { TextStatistics, UserPhoto } from 'src/app/shared/app.interfaces';
+import { PhotoStorageService } from 'src/app/services/photo-storage.service';
 
 @Component({
   selector: 'app-feature-result',
   templateUrl: './feature-result.component.html',
   styleUrls: ['./feature-result.component.scss'],
   imports: [
+    IonButton,
     IonItem,
     IonLabel,
     IonCardSubtitle,
@@ -28,6 +34,9 @@ import { TextStatistics, UserPhoto } from 'src/app/shared/app.interfaces';
     IonCardTitle,
     IonCardContent,
     IonImg,
+    IonGrid,
+    IonRow,
+    IonCol,
     CommonModule,
     FormsModule,
     TranslatePipe,
@@ -42,5 +51,6 @@ export class FeatureResultComponent {
     characterCount: 0,
   };
 
+  readonly photoStorageService = inject(PhotoStorageService);
   private readonly translate = inject(TranslateService);
 }

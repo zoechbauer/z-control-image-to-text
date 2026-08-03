@@ -68,11 +68,8 @@
       "LABEL": {
         "EXTRACTED_TEXT": "Extracted Text",
         "NO_EXTRACTED_TEXT": "No extracted text available.",
-        "NO_EXTRACTED_TEXT_INFO": "No text was extracted from the image or you did not perform text recognition.",
-        "NUMBER_OF_IMAGES": "Number of images",
-        "NUMBER_OF_LINES": "Nbr of lines",
-        "NUMBER_OF_WORDS": "Nbr of words",
-        "NUMBER_OF_CHARACTERS": "Nbr of chars"
+        "NO_EXTRACTED_TEXT_FOUND": "No text found in the image.",
+        "NO_EXTRACTED_TEXT_NO_METADATA_INFO": "You did not perform text recognition."
       },
       "BUTTON": {
         "CAMERA": "Camera",
@@ -85,7 +82,9 @@
         "COPY_DATA": "Copy Data",
         "DELETE_DATA": "Delete Data",
         "DELETE_ALL": "Delete All Data",
-        "BACK_TO_PREVIOUS": "Go Back"
+        "BACK_TO_PREVIOUS": "Go Back",
+        "NEXT_IMAGE": "Next",
+        "PREVIOUS_IMAGE": "Previous"
       }
     },
     "PHOTO_INFO_MODAL": {
@@ -103,6 +102,17 @@
       "TOAST": {
         "INFO_UPDATED": "Photo information has been updated.",
         "ERROR_TITLE_REQUIRED": "Title is required. Please enter a title."
+      }
+    },
+    "STATISTICS": {
+      "TITLE": "Statistics",
+      "LABEL": {
+        "NUMBER_OF_IMAGES": "Number of Images",
+        "NUMBER_OF_LINES": "Number of Lines",
+        "NUMBER_OF_WORDS": "Number of Words",
+        "NUMBER_OF_CHARACTERS": "Number of Characters",
+        "CREATED_AT": "Created At:",
+        "MODIFIED_AT": "Modified At:"
       }
     },
     "TOAST": {

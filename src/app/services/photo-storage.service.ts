@@ -312,9 +312,7 @@ export class PhotoStorageService {
     if (!fileDownloadLink?.trim()) {
       console.error(`File URL '${fileDownloadLink}' is not available`);
       this.toastService.showToast(
-        this.translate.instant(
-          'FEATURE.TOAST.ERROR_MISSING_DOWNLOAD_URL',
-        ),
+        this.translate.instant('FEATURE.TOAST.ERROR_MISSING_DOWNLOAD_URL'),
         ToastAnchor.MainPage,
       );
       return false;
@@ -409,6 +407,12 @@ export class PhotoStorageService {
     photoInfo: Partial<PhotoInfo>,
   ): Promise<UserPhoto> {
     const existingInfo = photo.photoInfo ?? {};
+    // update createdAt and modifiedAt timestamps
+    if (!existingInfo.createdAt) {
+      photoInfo.createdAt = existingInfo.createdAt ?? new Date().toISOString();
+    } else {
+      photoInfo.modifiedAt = new Date().toISOString();
+    };
 
     const updatedPhoto: UserPhoto = {
       ...photo,
@@ -423,5 +427,52 @@ export class PhotoStorageService {
     );
     this.cachePhotos();
     return updatedPhoto;
+  }
+
+  /**
+   * Returns a user-friendly message indicating that no text has been extracted from the photo.
+   * If the photo has no metadata, the user did not extract text from the photo. 
+   * If the photo has metadata but no extracted text, the photo has no extracted text.
+   * @param photo The photo to check.
+   * @returns The translated message to display to the user.
+   */
+  getNoExtractedTextInfo(photo: UserPhoto): string {
+    if (!photo.photoInfo) {
+      return this.translate.instant('FEATURE.CARD.LABEL.NO_EXTRACTED_TEXT_NO_METADATA_INFO');
+    }
+    if (!photo.photoInfo?.extractedText) {
+      return this.translate.instant('FEATURE.CARD.LABEL.NO_EXTRACTED_TEXT_FOUND');
+    }
+    return '';
+  }
+
+  /**
+   * Returns the next photo in the list relative to the current photo.
+   * @param currentPhoto The current photo.
+   * @returns The next photo, or null if there is no next photo.
+   */
+  getNextPhoto(currentPhoto: UserPhoto): UserPhoto | null {
+    const currentIndex = this.photos.findIndex(
+      (photo) => photo.filepath === currentPhoto.filepath,
+    );
+    if (currentIndex >= 0 && currentIndex < this.photos.length - 1) {
+      return this.photos[currentIndex + 1];
+    }
+    return null;
+  }
+
+  /**
+   * Returns the previous photo in the list relative to the current photo.
+   * @param currentPhoto The current photo.
+   * @returns The previous photo, or null if there is no previous photo.
+   */
+  getPreviousPhoto(currentPhoto: UserPhoto): UserPhoto | null {
+    const currentIndex = this.photos.findIndex(
+      (photo) => photo.filepath === currentPhoto.filepath,
+    );
+    if (currentIndex > 0) {
+      return this.photos[currentIndex - 1];
+    }
+    return null;
   }
 }

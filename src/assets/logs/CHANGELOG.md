@@ -14,11 +14,24 @@ This project uses a simplified major.minor versioning scheme:
 
 - Add copy-to-clipboard support for a photo's extracted text, compressed image, and metadata.
 - Update the Online Help to document History, metadata editing, and related workflows.
-- Limit the visible history list to a single photo (scrollable) so action buttons remain visible.
-- Store and display creation and last-modified timestamps for photos and extracted text metadata.
 - Add a search feature to find saved photos by title, description, or extracted text.
 - Add unit tests for the new services and components.
 - Apply automatic rotation to photos before text extraction and saving to ensure correct orientation.
+
+## [1.4] – 2026-08-03
+
+### ✨ New Features
+
+- Save and display creation and last-modified timestamps for each photo and its extracted text, so users can see when an extraction was created and last updated.
+- Add Next and Previous controls to the FeatureComponent for stepping through saved photos and their extracted text.
+
+### 🚀 Improvements
+
+- Show a clear informational message when an image contains no extracted text, explaining that processing completed but no text was detected (or that text recognition was not run).
+- Revise copy in the Get Mobile component (`get-mobile-app`) to remove leftover Ionic Setup phrasing and provide a clearer app description.
+- Refine the layout of the extracted text and statistics in `FeatureResultComponent` for improved readability and visual balance.
+- Disable the Save button in `PhotoInfoModalComponent` when neither title nor description has changed to prevent unnecessary saves.
+- Improve `PhotoInfoModalComponent` layout to better present title, description, and the image.
 
 ## [1.3] – 2026-08-02
 

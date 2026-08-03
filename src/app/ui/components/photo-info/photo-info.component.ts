@@ -127,4 +127,14 @@ export class PhotoInfoComponent implements OnInit {
       this.hideImageWhenEditingOnMobile = true;
     }
   }
+
+  /**
+   * Checks if the photo information has changed compared to the initial values.
+   * @returns True if the title or description has changed, false otherwise.
+   */
+  hasDataChanged(): boolean {
+    const currentTitle = this.photoForm.get('title')?.value;
+    const currentDescription = this.photoForm.get('description')?.value;
+    return currentTitle !== this.title || currentDescription !== this.description;
+  }
 }

@@ -71,7 +71,7 @@
           (click)="clear($event)"
           (keydown.enter)="clear($event)"
           ><ion-icon name="backspace-outline" slot="start"></ion-icon>
-          {{ 'FEATURE.CARD.BUTTON.BACK_TO_PREVIOUS' | translate }}</ion-button
+          {{ "FEATURE.CARD.BUTTON.BACK_TO_PREVIOUS" | translate }}</ion-button
         >
       </ng-container>
 
@@ -108,7 +108,10 @@
       <ng-container
         *ngIf="workflowStep === WorkflowStep.DisplayResultsFromStorage"
       >
-        <div>{{ "FEATURE.CARD.LABEL.NUMBER_OF_IMAGES" | translate }}: {{ photoService.photos.length }}</div>
+        <div>
+          {{ "FEATURE.CARD.LABEL.NUMBER_OF_IMAGES" | translate }}:
+          {{ photoService.photos.length }}
+        </div>
         <ion-grid>
           <ion-row>
             <ion-col
@@ -144,6 +147,28 @@
         >
       </ng-container>
       <ng-container *ngIf="workflowStep === WorkflowStep.ManageHistory">
+        <div class="photo-iterator">
+          <ion-button
+            size="small"
+            *ngIf="hasPreviousImage"
+            name="previous-image"
+            fill="clear"
+            (click)="getPreviousImage()"
+            (keydown.enter)="getPreviousImage()"
+            ><ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+            {{ "FEATURE.CARD.BUTTON.PREVIOUS_IMAGE" | translate }}</ion-button
+          >
+          <ion-button
+            *ngIf="hasNextImage"
+            name="next-image"
+            size="small"
+            fill="clear"
+            (click)="getNextImage()"
+            (keydown.enter)="getNextImage()"
+            ><ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+            {{ "FEATURE.CARD.BUTTON.NEXT_IMAGE" | translate }}</ion-button
+          >
+        </div>
         <app-feature-result
           *ngIf="selectedHistoryPhoto"
           [selectedHistoryPhoto]="selectedHistoryPhoto"
