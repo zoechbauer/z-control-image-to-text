@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, inject, OnInit, OnDestroy } from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -9,10 +9,12 @@ import {
 } from '@ionic/angular/standalone';
 import { NgIf } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
-import { LogoType, Tab } from './../../../shared/enums';
+import { LogoType, Tab, WorkflowStep } from './../../../shared/enums';
 import { UtilsService } from '@app/services/utils.service';
 import { LogoComponent } from '../logo/logo.component';
+import { WorkflowService } from 'src/app/services/workflow-service';
 
 @Component({
   selector: 'app-header',
@@ -31,13 +33,16 @@ import { LogoComponent } from '../logo/logo.component';
     LogoComponent,
   ],
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
   translate = inject(TranslateService);
   readonly utilsService = inject(UtilsService);
+  private readonly workflowService = inject(WorkflowService);
 
   @Input() currentTab!: Tab;
   LogoType = LogoType;
   Tab = Tab;
+  showBackButton: boolean = false;
+  private readonly subscriptions: Subscription[] = [];
 
   get isLargeScreen(): boolean {
     return !this.utilsService.isSmallScreen;
@@ -53,6 +58,18 @@ export class HeaderComponent {
 
   get hideTabsBar(): boolean {
     return !this.utilsService.isShowIonTabBar;
+  }
+
+  ngOnInit() {
+    this.subscriptions.push(
+      this.utilsService.workflowChanged$.subscribe((workflowStep: WorkflowStep) => {
+        this.showBackButton = this.workflowService.showBackButton(workflowStep);
+      }),
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   goToSettings() {
@@ -74,5 +91,9 @@ export class HeaderComponent {
 
   openHelpModal(): Promise<void> {
     return this.utilsService.openHelpModal();
+  }
+
+  goBack(event: Event) {
+    this.utilsService.backButtonClickedSub.next(true);
   }
 }

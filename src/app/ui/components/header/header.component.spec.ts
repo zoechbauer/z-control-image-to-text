@@ -4,7 +4,7 @@ import { IonicModule, ModalController } from '@ionic/angular';
 import { HeaderComponent } from './header.component';
 import { TranslateService } from '@ngx-translate/core';
 import { UtilsService } from '@app/services/utils.service';
-import { Tab } from '@app/shared/enums';
+import { Tab, WorkflowStep } from '@app/shared/enums';
 import { Subject } from 'rxjs';
 import { createTranslateServiceMock } from '@testing/translate-service.mock';
 
@@ -16,6 +16,7 @@ describe('HeaderComponent', () => {
     'create',
   ]);
   const logoClickedSub = new Subject<boolean>();
+  const workflowChangedSub = new Subject<WorkflowStep>();
   const _isSmallScreen = false;
   const utilsServiceMock = {
     get isSmallScreen() {
@@ -29,6 +30,8 @@ describe('HeaderComponent', () => {
     navigateToTabWithParams: jasmine.createSpy('navigateToTabWithParams'),
     logoClickedSub,
     logoClicked$: logoClickedSub.asObservable(),
+    workflowChangedSub,
+    workflowChanged$: workflowChangedSub.asObservable(),
   };
 
   beforeEach(waitForAsync(() => {
@@ -97,5 +100,35 @@ describe('HeaderComponent', () => {
     const utilsService = TestBed.inject(UtilsService);
     Object.defineProperty(utilsService, 'isSmallScreen', { get: () => true });
     expect(component.isLargeScreen).toBeFalse();
+  });
+
+  describe('showBackButton', () => {
+    it('should set showBackButton to true when workflowChanged$ emits a relevant workflow step', () => {
+      const utilsService = TestBed.inject(UtilsService);
+      const relevantSteps: WorkflowStep[] = [
+        WorkflowStep.DisplayExtractedText,
+        WorkflowStep.DisplayResultsFromStorage,
+        WorkflowStep.ManageHistory,
+      ];
+
+      relevantSteps.forEach((step: WorkflowStep) => {
+        utilsService.workflowChangedSub.next(step);
+        expect(component.showBackButton).toBeTrue();
+      });
+    });
+
+    it('should set showBackButton to false when workflowChanged$ emits a non-relevant workflow step', () => {
+      const utilsService = TestBed.inject(UtilsService);
+      const nonRelevantSteps: WorkflowStep[] = [
+        WorkflowStep.SelectPhoto,
+        WorkflowStep.AddPhotoInfo,
+        WorkflowStep.UpdatePhotoInfo,
+      ];
+
+      nonRelevantSteps.forEach((step: WorkflowStep) => {
+        utilsService.workflowChangedSub.next(step);
+        expect(component.showBackButton).toBeFalse();
+      });
+    });
   });
 });

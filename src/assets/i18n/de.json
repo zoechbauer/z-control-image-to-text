@@ -19,10 +19,23 @@
         "SUBHEADER": "Möchten Sie wirklich dieses Foto und die zugehörigen Daten löschen?",
         "MESSAGE": "Diese Aktion kann nicht rückgängig gemacht werden."
       },
+      "COPY_DATA": {
+        "HEADER": "Daten kopieren",
+        "SUBHEADER": "Photos und zugehörige Daten werden in die Zwischenablage kopiert.",
+        "MESSAGE": "Welche Daten möchten Sie kopieren?",
+        "PHOTO_FORMAT_NOT_SUPPORTED_WEB": "Das Format {{format}} wird derzeit nicht unterstützt. Nur png-Bilder können kopiert werden.",
+        "PHOTO_FORMAT_NOT_SUPPORTED_NATIVE": "Das Format {{format}} wird derzeit nicht unterstützt. Nur png/jpeg-Bilder können kopiert werden."
+      },
       "OK": "OK",
       "CANCEL": "Abbrechen",
       "CONFIRM": "Bestätigen",
-      "DELETE": "Löschen"
+      "DELETE": "Löschen",
+      "COPY": "Kopieren",
+      "COPY_PHOTO": "Foto kopieren",
+      "COPY_TITLE_DESCRIPTION": "Titel und Beschreibung kopieren",
+      "COPY_EXTRACTED_TEXT": "Extrahierten Text kopieren",
+      "COPY_CREATED_MODIFIED_TIMESTAMPS": "Erstellungs- und Änderungszeiten kopieren",
+      "COPY_TEXT_STATISTICS": "Textstatistiken kopieren"
     }
   },
   "------ header page": "-------",
@@ -36,7 +49,8 @@
       "OPEN_FEEDBACK": "Feedback-Seite öffnen",
       "OPEN_HELP": "Hilfeseite öffnen",
       "GOTO_MAIN": "Zur Texterkennungsseite wechseln",
-      "GOTO_SETTINGS": "Zur Einstellungsseite wechseln"
+      "GOTO_SETTINGS": "Zur Einstellungsseite wechseln",
+      "GO_BACK": "Zurück"
     }
   },
   "------ footer page": "-------",
@@ -79,6 +93,7 @@
         "CAMERA": "Kamera",
         "GALLERY": "Galerie",
         "EXTRACT_TEXT": "Text extrahieren",
+        "DELETE_IMAGE": "Bild löschen",
         "ADD_INFO": "Info erfassen",
         "CHANGE_INFO": "Info ändern",
         "SAVE_DATA": "Daten speichern",
@@ -86,7 +101,6 @@
         "COPY_DATA": "Daten kopieren",
         "DELETE_DATA": "Daten löschen",
         "DELETE_ALL": "Alle Daten löschen",
-        "BACK_TO_PREVIOUS": "Zurück",
         "NEXT_IMAGE": "Nächstes",
         "PREVIOUS_IMAGE": "Vorheriges"
       }
@@ -119,6 +133,34 @@
         "MODIFIED_AT": "Geändert am:"
       }
     },
+    "COPY_DATA": {
+      "TITLE": "z-control Image To Text - Kopierte Daten lt. Selektionsoptionen",
+      "PHOTO": {
+        "HEADER": "Foto",
+        "PATH": "Pfad",
+        "FILENAME": "Dateiname"
+      },
+      "TITLE_DESCRIPTION": {
+        "HEADER": "Foto Informationen",
+        "TITLE": "Titel",
+        "DESCRIPTION": "Beschreibung"
+      },
+      "TIMESTAMPS": {
+        "HEADER": "Wann wurden die Daten erstellt und zuletzt geändert?",
+        "CREATED_AT": "Erstellt am",
+        "MODIFIED_AT": "Geändert am"
+      },
+      "EXTRACTED_TEXT": {
+        "HEADER": "Extrahierter Text",
+        "HEADER_NO_DATA": "Kein extrahierter Text vorhanden!"
+      },
+      "TEXT_STATISTICS": {
+        "HEADER": "Statistik des extrahierten Textes",
+        "NUMBER_OF_LINES": "Anzahl Zeilen",
+        "NUMBER_OF_WORDS": "Anzahl Wörter",
+        "NUMBER_OF_CHARACTERS": "Anzahl Zeichen"
+      }
+    },
     "TOAST": {
       "QUOTA_REDUCED": "Der Text wurde extrahiert und das monatliche Kontingent wurde verringert.",
       "CONTINGENT_EXCEEDED": "Texterkennungs-Kontingent überschritten. Bitte versuchen Sie es nächsten Monat erneut.",
@@ -139,7 +181,14 @@
       "SUCCESS_PHOTO_DELETED": "Das Foto und zugehörige Daten wurden erfolgreich gelöscht.",
       "ERROR_DELETING_PHOTO": "Fehler beim Löschen des Fotos. Bitte versuchen Sie es erneut.",
       "ERROR_DELETING_ALL_PHOTOS": "Fehler beim Löschen aller Fotos. Bitte versuchen Sie es erneut.",
-      "SUCCESS_ALL_PHOTOS_DELETED": "Alle Fotos und zugehörigen Daten wurden erfolgreich gelöscht."
+      "SUCCESS_ALL_PHOTOS_DELETED": "Alle Fotos und zugehörigen Daten wurden erfolgreich gelöscht.",
+      "SUCCESS_DATA_COPIED": "Die ausgewählten Daten wurden in die Zwischenablage kopiert.",
+      "ERROR_COPYING_DATA": "Fehler beim Kopieren der Daten in die Zwischenablage. Die Daten wurden nicht kopiert.",
+      "IMAGE_COPY_NOT_SUPPORTED_WEB": "Es können derzeit nur Bilder im PNG-Format in die Zwischenablage kopiert werden. Dieses Bild-Format wird nicht unterstützt.",
+      "IMAGE_COPY_NOT_SUPPORTED_NATIVE": "Es können derzeit nur Bilder im PNG/JPEG-Format in die Zwischenablage kopiert werden. Dieses Bild-Format wird nicht unterstützt.",
+      "SUCCESS_DATA_SHARED": "Die ausgewählten Daten wurden erfolgreich geteilt.",
+      "IMAGE_SHARE_NOT_SUPPORTED": "Das Teilen von Bildern wird auf dieser Plattform nicht unterstützt. Bitte verwenden Sie ein anderes Gerät oder einen anderen Browser.",
+      "IMAGE_SHARE_NO_FILEPATH": "Kein Dateipfad zum Teilen verfügbar."
     },
     "WORKFLOW_STEPS": {
       "SELECT_PHOTO": "Nächster Schritt: Wählen Sie ein Bild aus.",

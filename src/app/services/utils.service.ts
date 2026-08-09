@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
+import type { WorkflowStep } from '../shared/enums';
 import { ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -30,6 +31,23 @@ export class UtilsService {
    * Observable for logo click events.
    */
   logoClicked$ = this.logoClickedSub.asObservable();
+  /**
+   * Emits when the back button is clicked (used for navigation triggers).
+   */
+  backButtonClickedSub = new Subject<boolean>();
+  /**
+   * Observable for back button click events.
+   */
+  backButtonClicked$ = this.backButtonClickedSub.asObservable();
+  /**
+   * Emits when the workflow step changes (used for navigation triggers).
+   */
+  workflowChangedSub = new Subject<WorkflowStep>();
+  /**
+   * Observable for workflow step change events.
+   */
+  workflowChanged$ = this.workflowChangedSub.asObservable();
+
   private currentModal: HTMLIonModalElement | null = null;
 
   constructor() {

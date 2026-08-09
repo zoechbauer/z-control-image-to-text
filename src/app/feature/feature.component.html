@@ -65,13 +65,13 @@
           {{ "FEATURE.CARD.BUTTON.EXTRACT_TEXT" | translate }}</ion-button
         >
         <ion-button
-          name="back-to-previous"
           fill="clear"
           [disabled]="isLoading"
-          (click)="clear($event)"
-          (keydown.enter)="clear($event)"
-          ><ion-icon name="backspace-outline" slot="start"></ion-icon>
-          {{ "FEATURE.CARD.BUTTON.BACK_TO_PREVIOUS" | translate }}</ion-button
+          name="delete-photo"
+          (click)="deletePhoto($event)"
+          (keydown.enter)="deletePhoto($event)"
+          ><ion-icon name="trash-bin-outline" slot="start"></ion-icon>
+          {{ "FEATURE.CARD.BUTTON.DELETE_IMAGE" | translate }}</ion-button
         >
       </ng-container>
 
@@ -92,15 +92,6 @@
             (keydown.enter)="addInfo()"
             ><ion-icon name="create-outline" slot="start"></ion-icon>
             {{ getInfoButtonLabel(selectedPhoto) | translate }}</ion-button
-          >
-          <ion-button
-            name="back-to-previous"
-            fill="clear"
-            [disabled]="isLoading"
-            (click)="clear($event)"
-            (keydown.enter)="clear($event)"
-            ><ion-icon name="backspace-outline" slot="start"></ion-icon>
-            {{ "FEATURE.CARD.BUTTON.BACK_TO_PREVIOUS" | translate }}</ion-button
           >
         </div>
       </ng-container>
@@ -135,15 +126,6 @@
           (keydown.enter)="deleteAllPhotos()"
           ><ion-icon name="trash-outline" slot="start"></ion-icon>
           {{ "FEATURE.CARD.BUTTON.DELETE_ALL" | translate }}</ion-button
-        >
-        <ion-button
-          name="back-to-previous"
-          fill="clear"
-          [disabled]="isLoading"
-          (click)="clear($event)"
-          (keydown.enter)="clear($event)"
-          ><ion-icon name="backspace-outline" slot="start"></ion-icon>
-          {{ "FEATURE.CARD.BUTTON.BACK_TO_PREVIOUS" | translate }}</ion-button
         >
       </ng-container>
       <ng-container *ngIf="workflowStep === WorkflowStep.ManageHistory">
@@ -203,15 +185,6 @@
           (keydown.enter)="deleteTextAndPhoto($event)"
           ><ion-icon name="trash-bin-outline" slot="start"></ion-icon>
           {{ "FEATURE.CARD.BUTTON.DELETE_DATA" | translate }}</ion-button
-        >
-        <ion-button
-          name="back-to-history"
-          fill="clear"
-          [disabled]="isLoading"
-          (click)="backToHistory($event)"
-          (keydown.enter)="backToHistory($event)"
-          ><ion-icon name="backspace-outline" slot="start"></ion-icon>
-          {{ "FEATURE.CARD.BUTTON.BACK_TO_PREVIOUS" | translate }}</ion-button
         >
       </ng-container>
     </div>

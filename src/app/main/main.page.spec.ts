@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { Functions } from '@angular/fire/functions';
 
 import { LocalStorageService } from '../services/local-storage.service';
@@ -12,6 +12,8 @@ import { UserStatisticComponent } from '../ui/components/user-statistic/user-sta
 import { createTranslateServiceMock } from '../testing/translate-service.mock';
 import { PhotoStorageService } from '../services/photo-storage.service';
 import { FeatureComponent } from '../feature/feature.component';
+import { WorkflowStep } from '../shared/enums';
+import { WorkflowService } from '../services/workflow-service';
 
 @Component({
   selector: 'app-header',
@@ -38,11 +40,16 @@ describe('MainPage', () => {
   let utilsServiceSpy: jasmine.SpyObj<UtilsService>;
   let firestoreUtilsServiceSpy: jasmine.SpyObj<FirebaseFirestoreUtilsService>;
 
+  const workflowChangedSub = new Subject<WorkflowStep>();
+  
   beforeEach(async () => {
-    utilsServiceSpy = jasmine.createSpyObj('UtilsService', [
-      'showOrHideIonTabBar',
-      'isPortrait',
-    ]);
+    utilsServiceSpy = jasmine.createSpyObj(
+      'UtilsService',
+      ['showOrHideIonTabBar', 'isPortrait', 'workflowChangedSub'],
+      {
+        workflowChanged$: workflowChangedSub.asObservable(),
+      },
+    );
     firestoreUtilsServiceSpy = jasmine.createSpyObj(
       'FirebaseFirestoreUtilsService',
       ['isContingentExceeded', 'requestStatisticsRefresh'],
@@ -78,6 +85,7 @@ describe('MainPage', () => {
           useValue: firestoreUtilsServiceSpy,
         },
         { provide: Functions, useValue: {} },
+        { provide: WorkflowService, useValue: {} },
       ],
     })
       .overrideComponent(MainPage, {
@@ -100,24 +108,23 @@ describe('MainPage', () => {
         'should call showOrHideIonTabBar, setupEventListeners, setupSubscriptions, ' +
         'updateIsContingentExceeded, initFormControls, and getTranslationPlaceholder';
       it(TEST_NAME, async () => {
-          const showOrHideIonTabBarSpy = utilsServiceSpy.showOrHideIonTabBar;
-          const setupEventListenersSpy = spyOn<any>(
-            component,
-            'setupEventListeners',
-          );
-          const setupSubscriptionsSpy = spyOn<any>(
-            component,
-            'setupSubscriptions',
-          );
+        const showOrHideIonTabBarSpy = utilsServiceSpy.showOrHideIonTabBar;
+        const setupEventListenersSpy = spyOn<any>(
+          component,
+          'setupEventListeners',
+        );
+        const setupSubscriptionsSpy = spyOn<any>(
+          component,
+          'setupSubscriptions',
+        );
 
-          component.ngOnInit();
-          await fixture.whenStable();
+        component.ngOnInit();
+        await fixture.whenStable();
 
-          expect(showOrHideIonTabBarSpy).toHaveBeenCalled();
-          expect(setupEventListenersSpy).toHaveBeenCalled();
-          expect(setupSubscriptionsSpy).toHaveBeenCalled();
-        },
-      );
+        expect(showOrHideIonTabBarSpy).toHaveBeenCalled();
+        expect(setupEventListenersSpy).toHaveBeenCalled();
+        expect(setupSubscriptionsSpy).toHaveBeenCalled();
+      });
 
       describe('setupEventListeners', () => {
         it('should add resize event listeners', () => {

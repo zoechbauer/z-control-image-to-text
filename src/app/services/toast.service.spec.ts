@@ -249,6 +249,10 @@ describe('ToastService', () => {
 
     it('should log contextual error when ToastController.create rejects', async () => {
       const failingError = new Error('create failed');
+      const expectedErrorMessage =
+        'Toast presentation failed. ' +
+        'Ionic ToastController may still be affected by a production/runtime issue. ' +
+        'UI fallback is intentionally disabled to preserve consistent Ionic UI.';
       toastController.create.and.returnValue(Promise.reject(failingError));
 
       await (service as any).presentToast({
@@ -257,8 +261,9 @@ describe('ToastService', () => {
         positionAnchor: 'toast-anchor-main',
       });
 
+
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Toast presentation failed. Ionic ToastController may still be affected by a production/runtime issue. UI fallback is intentionally disabled to preserve consistent Ionic UI.',
+        expectedErrorMessage,
         jasmine.objectContaining({
           error: failingError,
           message: 'Test Message',
@@ -270,6 +275,10 @@ describe('ToastService', () => {
 
     it('should log timeout error when toast controller flow times out', async () => {
       const timeoutError = new Error('ToastController flow timed out');
+      const expectedErrorMessage =
+        'Toast presentation failed. ' +
+        'Ionic ToastController may still be affected by a production/runtime issue. ' +
+        'UI fallback is intentionally disabled to preserve consistent Ionic UI.';
       spyOn<any>(service, 'withTimeout').and.returnValue(
         Promise.reject(timeoutError),
       );
@@ -280,7 +289,7 @@ describe('ToastService', () => {
       });
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Toast presentation failed. Ionic ToastController may still be affected by a production/runtime issue. UI fallback is intentionally disabled to preserve consistent Ionic UI.',
+        expectedErrorMessage,
         jasmine.objectContaining({
           error: timeoutError,
           message: 'Timeout Message',

@@ -1,9 +1,15 @@
-<ion-header
-  class="app-header"
-  [class.landscape]="!utilsService.isPortrait"
->
+<ion-header class="app-header" [class.landscape]="!utilsService.isPortrait">
   <ion-toolbar color="primary" [class.landscape]="!utilsService.isPortrait">
     <ion-buttons slot="start">
+      <ion-button *ngIf="showBackButton"
+        name="go-back"
+        fill="clear"
+        (click)="goBack($event)"
+        (keydown.enter)="goBack($event)"
+        title="{{ 'HEADER.TOOLTIP.GO_BACK' | translate }}"
+        ><ion-icon name="backspace-outline" slot="icon-only" ></ion-icon>
+        </ion-button
+      >
       <app-logo
         [type]="LogoType.Company"
         (click)="goToSettingsAndOpenFeedback()"
@@ -13,7 +19,11 @@
       ></app-logo>
     </ion-buttons>
     <ion-title *ngIf="onMainFeatureTab">
-      <b>{{ !isLargeScreen ? ('HEADER.CURRENT_PAGE.MAIN_SHORT' | translate) : ('HEADER.CURRENT_PAGE.MAIN_LONG' | translate) }}</b>
+      <b>{{
+        !isLargeScreen
+          ? ("HEADER.CURRENT_PAGE.MAIN_SHORT" | translate)
+          : ("HEADER.CURRENT_PAGE.MAIN_LONG" | translate)
+      }}</b>
     </ion-title>
     <ion-title *ngIf="onSettingsTab">
       <ion-title>{{ "SETTINGS.TITLE" | translate }}</ion-title>
@@ -24,7 +34,7 @@
         (click)="goToSettings()"
         (keydown.enter)="goToSettings()"
         (keydown.space)="goToSettings()"
-        title = "{{ 'HEADER.TOOLTIP.GOTO_SETTINGS' | translate }}"
+        title="{{ 'HEADER.TOOLTIP.GOTO_SETTINGS' | translate }}"
         fill="clear"
       >
         <ion-icon name="settings-outline"></ion-icon>
@@ -34,7 +44,7 @@
         (click)="goToMainFeature()"
         (keydown.enter)="goToMainFeature()"
         (keydown.space)="goToMainFeature()"
-        title = "{{ 'HEADER.TOOLTIP.GOTO_MAIN' | translate }}"
+        title="{{ 'HEADER.TOOLTIP.GOTO_MAIN' | translate }}"
         fill="clear"
       >
         <ion-icon name="image-outline"></ion-icon>
@@ -45,7 +55,7 @@
         (click)="openHelpModal()"
         (keydown.enter)="openHelpModal()"
         (keydown.space)="openHelpModal()"
-        title = "{{ 'HEADER.TOOLTIP.OPEN_HELP' | translate }}"
+        title="{{ 'HEADER.TOOLTIP.OPEN_HELP' | translate }}"
       >
         <ion-icon slot="icon-only" name="help-outline"></ion-icon>
       </ion-button>

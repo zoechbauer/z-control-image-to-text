@@ -85,3 +85,11 @@ export enum FileExtension {
   JPEG = 'jpeg',
   PDF = 'pdf',
 }
+
+export enum CopyDataOption {
+  Photo = 'copyPhoto',
+  TitleDescription = 'copyTitleDescription',
+  ExtractedText = 'copyExtractedText',
+  TextStatistics = 'copyTextStatistics',
+  CreatedModifiedTimestamps = 'copyCreatedModifiedTimestamps',
+}

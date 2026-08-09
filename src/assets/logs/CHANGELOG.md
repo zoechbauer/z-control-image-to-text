@@ -12,26 +12,48 @@ This project uses a simplified major.minor versioning scheme:
 
 ## What's Coming Next
 
-- Add copy-to-clipboard support for a photo's extracted text, compressed image, and metadata.
 - Update the Online Help to document History, metadata editing, and related workflows.
+- Compress photos before saving to reduce storage usage.
 - Add a search feature to find saved photos by title, description, or extracted text.
 - Add unit tests for the new services and components.
-- Apply automatic rotation to photos before text extraction and saving to ensure correct orientation.
+
+## [1.5] – 2026-08-08
+
+### ✨ New Features
+
+- Introduced `Copy Data`: copies a photo's extracted text, image, and metadata to the clipboard on web, or shares these data on native devices. Users can select which items to include. Web builds currently support PNG images only; native builds support PNG and JPEG. The app displays a notification when a selected image format is not supported.
+- Added a `Go Back` button in `HeaderComponent` to return to the previous workflow step, improving navigation consistency.
+- Removed the redundant "Back to Previous" button from `FeatureComponent` to avoid duplicate navigation controls.
+- Added a `Delete Photo` action after selecting a photo from the camera or gallery, allowing users to discard unwanted photos before processing. The procedure is the same as deleting a photo from the History workflow, including a confirmation dialog to prevent accidental deletion.
+
+### 🚀 Improvements
+
+- Improved `PhotoInfoModalComponent` layout to present title, description, and image more clearly.
+
+### 🐛 Fixes
+
+- Fixed a history navigation issue where extracted text and statistics did not update when stepping through saved photos.
+
+### 🔧 Internal
+
+- Split long error messages across multiple lines to avoid lint errors and improve readability.
+- Moved workflow functions into the `WorkflowService` to centralize workflow logic and improve maintainability.
+- Updated unit tests with minimal changes to keep the tests running. The tests will be refactored later to better reflect the new workflow logic and improve test coverage.
 
 ## [1.4] – 2026-08-03
 
 ### ✨ New Features
 
-- Save and display creation and last-modified timestamps for each photo and its extracted text, so users can see when an extraction was created and last updated.
-- Add Next and Previous controls to the FeatureComponent for stepping through saved photos and their extracted text.
+- Saved and displayed creation and last-modified timestamps for each photo and its extracted text, so users can see when an extraction was created and last updated.
+- Added Next and Previous controls to the FeatureComponent for stepping through saved photos and their extracted text.
 
 ### 🚀 Improvements
 
 - Show a clear informational message when an image contains no extracted text, explaining that processing completed but no text was detected (or that text recognition was not run).
-- Revise copy in the Get Mobile component (`get-mobile-app`) to remove leftover Ionic Setup phrasing and provide a clearer app description.
-- Refine the layout of the extracted text and statistics in `FeatureResultComponent` for improved readability and visual balance.
-- Disable the Save button in `PhotoInfoModalComponent` when neither title nor description has changed to prevent unnecessary saves.
-- Improve `PhotoInfoModalComponent` layout to better present title, description, and the image.
+- Revised copy in the Get Mobile component (`get-mobile-app`) to remove leftover Ionic Setup phrasing and provide a clearer app description.
+- Refined the layout of the extracted text and statistics in `FeatureResultComponent` for improved readability and visual balance.
+- Disabled the Save button in `PhotoInfoModalComponent` when neither title nor description has changed to prevent unnecessary saves.
+- Improved `PhotoInfoModalComponent` layout to better present title, description, and the image.
 
 ## [1.3] – 2026-08-02
 

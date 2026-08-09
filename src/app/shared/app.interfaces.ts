@@ -36,3 +36,11 @@ export interface TextStatistics {
   lineCount: number;
   characterCount: number;
 }
+export interface CopyDataOptions {
+  copyPhoto?: boolean;
+  copyTitleDescription?: boolean;
+  copyExtractedText?: boolean;
+  copyTextStatistics?: boolean;
+  copyCreatedModifiedTimestamps?: boolean;
+  copyAll?: boolean;
+}

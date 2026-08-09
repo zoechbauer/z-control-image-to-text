@@ -19,10 +19,21 @@
         "SUBHEADER": "Are you sure you want to delete this photo and the associated data?",
         "MESSAGE": "This action cannot be undone."
       },
+      "COPY_DATA": {
+        "HEADER": "Copy Data",
+        "SUBHEADER": "Photos and associated data will be copied to the clipboard.",
+        "MESSAGE": "Which data would you like to copy?"
+      },
       "OK": "OK",
       "CANCEL": "Cancel",
       "CONFIRM": "Confirm",
-      "DELETE": "Delete"
+      "DELETE": "Delete",
+      "COPY": "Copy",
+      "COPY_PHOTO": "Copy Photo",
+      "COPY_TITLE_DESCRIPTION": "Copy Title and Description",
+      "COPY_EXTRACTED_TEXT": "Copy Extracted Text",
+      "COPY_CREATED_MODIFIED_TIMESTAMPS": "Copy Created and Modified Timestamps",
+      "COPY_TEXT_STATISTICS": "Copy Text Statistics"
     }
   },
   "------ header page": "-------",
@@ -75,6 +86,7 @@
         "CAMERA": "Camera",
         "GALLERY": "Gallery",
         "EXTRACT_TEXT": "Extract Text",
+        "DELETE_IMAGE": "Delete Image",
         "ADD_INFO": "Add Info",
         "CHANGE_INFO": "Change Info",
         "SAVE_DATA": "Save Data",
@@ -82,7 +94,6 @@
         "COPY_DATA": "Copy Data",
         "DELETE_DATA": "Delete Data",
         "DELETE_ALL": "Delete All Data",
-        "BACK_TO_PREVIOUS": "Go Back",
         "NEXT_IMAGE": "Next",
         "PREVIOUS_IMAGE": "Previous"
       }
@@ -115,6 +126,34 @@
         "MODIFIED_AT": "Modified At:"
       }
     },
+    "COPY_DATA": {
+      "TITLE": "z-control Image To Text - Copied Data According to Selection Options",
+      "PHOTO": {
+        "HEADER": "Photo",
+        "PATH": "Path",
+        "FILENAME": "Filename"
+      },
+      "TITLE_DESCRIPTION": {
+        "HEADER": "Photo Information",
+        "TITLE": "Title",
+        "DESCRIPTION": "Description"
+      },
+      "TIMESTAMPS": {
+        "HEADER": "When were the data created and last modified?",
+        "CREATED_AT": "Created At",
+        "MODIFIED_AT": "Modified At"
+      },
+      "EXTRACTED_TEXT": {
+        "HEADER": "Extracted Text",
+        "HEADER_NO_DATA": "No extracted text available!"
+      },
+      "TEXT_STATISTICS": {
+        "HEADER": "Statistics of the Extracted Text",
+        "NUMBER_OF_LINES": "Number of Lines",
+        "NUMBER_OF_WORDS": "Number of Words",
+        "NUMBER_OF_CHARACTERS": "Number of Characters"
+      }
+    },
     "TOAST": {
       "QUOTA_REDUCED": "The text has been extracted and the monthly quota has been reduced.",
       "CONTINGENT_EXCEEDED": "Text recognition quota exceeded. Please try again next month.",
@@ -135,7 +174,14 @@
       "SUCCESS_PHOTO_DELETED": "Photo and associated data have been successfully deleted.",
       "ERROR_DELETING_PHOTO": "Error deleting the photo. Please try again.",
       "ERROR_DELETING_ALL_PHOTOS": "Error deleting all photos. Please try again.",
-      "SUCCESS_ALL_PHOTOS_DELETED": "All photos and associated data have been successfully deleted."
+      "SUCCESS_ALL_PHOTOS_DELETED": "All photos and associated data have been successfully deleted.",
+      "SUCCESS_DATA_COPIED": "Selected data has been copied to the clipboard.",
+      "ERROR_COPYING_DATA": "Error copying data to the clipboard. The data were not copied.",
+      "IMAGE_COPY_NOT_SUPPORTED_WEB": "At this time, only images in PNG format can be copied to the clipboard. This image format is not supported.",
+      "IMAGE_COPY_NOT_SUPPORTED_NATIVE": "At this time, only images in PNG/JPEG format can be copied to the clipboard. This image format is not supported.",
+      "SUCCESS_DATA_SHARED": "Selected data has been shared successfully.",
+      "IMAGE_SHARE_NOT_SUPPORTED": "Image sharing is not supported on this platform. Please use a different device or browser.",
+      "IMAGE_SHARE_NO_FILEPATH": "No file path available for sharing."
     },
     "WORKFLOW_STEPS": {
       "SELECT_PHOTO": "Next step: Select a photo.",

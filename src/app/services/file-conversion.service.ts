@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { UserPhoto } from '../shared/app.interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -46,5 +47,48 @@ export class FileConversionService {
     }
     const byteArray = new Uint8Array(byteNumbers);
     return new Blob([byteArray], { type: mime });
+  }
+
+  async getImageDataUrl(photo: UserPhoto): Promise<string> {
+    const imageUrl = photo.webviewPath || '';
+    if (!imageUrl) return '';
+
+    if (imageUrl.startsWith('data:image/')) {
+      return imageUrl;
+    }
+
+    try {
+      const response = await fetch(imageUrl);
+      if (!response.ok) {
+        throw new Error(`Failed to load image: ${response.status}`);
+      }
+
+      const blob = await response.blob();
+      const dataUrl = await this.blobToDataUrl(blob);
+
+      if (!dataUrl.startsWith('data:image/')) {
+        throw new Error('Converted value is not a valid image data URL');
+      }
+
+      return dataUrl;
+    } catch (err) {
+      console.error('Failed to convert image to data URL', err);
+      return '';
+    }
+  }
+
+ dataUrlToBlobSync(dataUrl: string): Blob {
+    const [header, base64Data] = dataUrl.split(',');
+    const mimeMatch = header.match(/data:(.*?);base64/);
+    const mimeType = mimeMatch?.[1] || 'image/png';
+
+    const binary = atob(base64Data);
+    const bytes = new Uint8Array(binary.length);
+
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+
+    return new Blob([bytes], { type: mimeType });
   }
 }

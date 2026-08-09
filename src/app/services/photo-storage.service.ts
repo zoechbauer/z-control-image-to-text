@@ -45,25 +45,6 @@ export class PhotoStorageService {
   }
 
   /**
-   * Gets the path to the documents directory for the current file.
-   *
-   * @returns The path to the documents directory.
-   */
-  async getDocumentsPath(): Promise<string> {
-    const result = await this.filesystem.getUri({
-      path: this.fileName,
-      directory: Directory.Documents,
-    });
-
-    // Remove the "file://" prefix
-    let path = result.uri;
-    if (path.startsWith('file://')) {
-      path = path.slice(7);
-    }
-    return path;
-  }
-
-  /**
    * Saves a photo to the filesystem.
    *
    * @param photo The photo to save.
@@ -81,6 +62,7 @@ export class PhotoStorageService {
     // write file to data directory
     const fileName = this.filePathService.getFileName(
       FileNamePrefix.ImageToText,
+      photo.format
     );
     const savedFile = await this.filesystem.writeFile({
       path: fileName,
@@ -120,7 +102,7 @@ export class PhotoStorageService {
    * @param photo The photo to read as a base64 string.
    * @returns The photo as a base64 string.
    */
-  private async readAsBase64(photo: Photo) {
+  private async readAsBase64(photo: Photo): Promise<string> {
     if (Capacitor.isNativePlatform()) {
       // read file into base64
       const file = await this.filesystem.readFile({
@@ -247,9 +229,7 @@ export class PhotoStorageService {
       return false;
     }
 
-    const filename = this.filePathService.getFilenameFromFilepath(
-      photo.filepath,
-    );
+    const filename = this.filePathService.getFilenameFromFilepath(photo.filepath);
     try {
       await this.filesystem.deleteFile({
         path: filename,
@@ -412,7 +392,7 @@ export class PhotoStorageService {
       photoInfo.createdAt = existingInfo.createdAt ?? new Date().toISOString();
     } else {
       photoInfo.modifiedAt = new Date().toISOString();
-    };
+    }
 
     const updatedPhoto: UserPhoto = {
       ...photo,
@@ -431,17 +411,21 @@ export class PhotoStorageService {
 
   /**
    * Returns a user-friendly message indicating that no text has been extracted from the photo.
-   * If the photo has no metadata, the user did not extract text from the photo. 
+   * If the photo has no metadata, the user did not extract text from the photo.
    * If the photo has metadata but no extracted text, the photo has no extracted text.
    * @param photo The photo to check.
    * @returns The translated message to display to the user.
    */
   getNoExtractedTextInfo(photo: UserPhoto): string {
     if (!photo.photoInfo) {
-      return this.translate.instant('FEATURE.CARD.LABEL.NO_EXTRACTED_TEXT_NO_METADATA_INFO');
+      return this.translate.instant(
+        'FEATURE.CARD.LABEL.NO_EXTRACTED_TEXT_NO_METADATA_INFO',
+      );
     }
     if (!photo.photoInfo?.extractedText) {
-      return this.translate.instant('FEATURE.CARD.LABEL.NO_EXTRACTED_TEXT_FOUND');
+      return this.translate.instant(
+        'FEATURE.CARD.LABEL.NO_EXTRACTED_TEXT_FOUND',
+      );
     }
     return '';
   }

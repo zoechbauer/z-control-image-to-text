@@ -104,15 +104,16 @@ export class ToastService {
         'ToastController flow timed out',
       );
     } catch (error) {
-      console.error(
-        'Toast presentation failed. Ionic ToastController may still be affected by a production/runtime issue. UI fallback is intentionally disabled to preserve consistent Ionic UI.',
-        {
-          error,
-          message: toastOptions?.message,
-          position: toastOptions?.position,
-          positionAnchor: toastOptions?.positionAnchor,
-        },
-      );
+      const errorMessage =
+        'Toast presentation failed. ' +
+        'Ionic ToastController may still be affected by a production/runtime issue. ' +
+        'UI fallback is intentionally disabled to preserve consistent Ionic UI.';
+      console.error(errorMessage, {
+        error,
+        message: toastOptions?.message,
+        position: toastOptions?.position,
+        positionAnchor: toastOptions?.positionAnchor,
+      });
     }
   }
 
@@ -187,7 +188,6 @@ export class ToastService {
         });
     });
   }
-
 
   /**
    * Gets the preferred toast position based on the platform.

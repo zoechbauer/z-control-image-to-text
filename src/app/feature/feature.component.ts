@@ -13,7 +13,6 @@ import {
   IonRow,
   IonCol,
   IonImg,
-  ModalController,
 } from '@ionic/angular/standalone';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Photo } from '@capacitor/camera';
@@ -36,6 +35,7 @@ import { PhotoService } from '../services/photo.service';
 import { PhotoStorageService } from '../services/photo-storage.service';
 import { FeatureResultComponent } from '../ui/components/feature-result/feature-result.component';
 import { AlertService } from '../services/alert.service';
+import { ClipboardService } from '../services/clipboard.service';
 
 @Component({
   selector: 'app-feature',
@@ -65,7 +65,6 @@ export class FeatureComponent implements OnInit {
   readonly photoService = inject(PhotoService);
   readonly photoStorageService = inject(PhotoStorageService);
   readonly utilsService = inject(UtilsService);
-  private readonly modalCtrl = inject(ModalController);
   private readonly toastService = inject(ToastService);
   private readonly firestoreUtilsService = inject(
     FirebaseFirestoreUtilsService,
@@ -74,6 +73,7 @@ export class FeatureComponent implements OnInit {
   private readonly workflowService = inject(WorkflowService);
   private readonly imageCompressionService = inject(ImageCompressionService);
   private readonly alertService = inject(AlertService);
+  private readonly clipboardService = inject(ClipboardService);
 
   selectedPhoto?: UserPhoto;
   selectedHistoryPhoto?: UserPhoto;
@@ -93,21 +93,10 @@ export class FeatureComponent implements OnInit {
 
   /**
    * Get the card title based on the current workflow step.
-   * If the workflow step is one of the initial steps (SelectPhoto, ExtractText, DisplayExtractedText, AddPhotoInfo),
-   * the title will be "Extract Text from Image". Otherwise, it will be "Manage History".
    * @returns The card title as a translated string.
    */
   get cardTitle(): string {
-    if (
-      this.workflowStep === WorkflowStep.SelectPhoto ||
-      this.workflowStep === WorkflowStep.ExtractText ||
-      this.workflowStep === WorkflowStep.DisplayExtractedText ||
-      this.workflowStep === WorkflowStep.AddPhotoInfo
-    ) {
-      return this.translate.instant('FEATURE.CARD.TITLE');
-    } else {
-      return this.translate.instant('FEATURE.CARD.TITLE-HISTORY');
-    }
+    return this.workflowService.getCardTitle(this.workflowStep);
   }
 
   /**
@@ -126,6 +115,17 @@ export class FeatureComponent implements OnInit {
 
     this.photoStorageService.photos$.subscribe((photos) => {
       this.selectedPhoto = photos[0];
+    });
+
+    this.utilsService.backButtonClicked$.subscribe((clicked) => {
+      if (clicked) {
+        this.initFormControls();
+        // call wf with button name 'go-back' to handle the back navigation
+        this.workflowStep = this.workflowService.getNextWorkflowStep(
+          this.workflowStep,
+          { target: { getAttribute: () => 'go-back' } },
+        );
+      }
     });
   }
 
@@ -301,15 +301,40 @@ export class FeatureComponent implements OnInit {
   /**
    * Deletes the selected photo from the photo storage service if the user
    * confirms the deletion through an alert. A toast notification is shown
+   * to inform the user that the photo has been deleted.
+   * The workflow step is updated accordingly.
+   * @param event The event that triggered the delete action.
+   * @returns A promise that resolves when the operation is complete.
+   */
+  async deletePhoto(event: any): Promise<void> {
+    return await this.deleteTextAndPhotoExec(event, this.selectedPhoto as UserPhoto);
+  }
+
+  /**
+   * Deletes the selected photo from the photo storage service if the user
+   * confirms the deletion through an alert. A toast notification is shown
    * to inform the user that all photos have been deleted..
    * The workflow step is updated accordingly.
    * @param event The event that triggered the delete action.
    * @returns A promise that resolves when the operation is complete.
    */
   async deleteTextAndPhoto(event: any): Promise<void> {
+    return await this.deleteTextAndPhotoExec(event, this.selectedHistoryPhoto as UserPhoto);
+  }
+
+  /**
+   * Deletes the specified photo from the photo storage service if the user
+   * confirms the deletion through an alert. A toast notification is shown
+   * to inform the user that the photo has been deleted.
+   * The workflow step is updated accordingly.
+   * @param event The event that triggered the delete action.
+   * @param photo The photo to be deleted.
+   * @returns A promise that resolves when the operation is complete.
+   */
+  private async deleteTextAndPhotoExec(event: any, photo: UserPhoto): Promise<void> {
     if (
       !(await this.alertService.confirmDeletePhotoAlert(
-        this.selectedHistoryPhoto as UserPhoto,
+        photo,
       ))
     ) {
       return;
@@ -318,7 +343,7 @@ export class FeatureComponent implements OnInit {
     this.isLoading = true;
     try {
       const photoDeleted = await this.photoStorageService.deletePhoto(
-        this.selectedHistoryPhoto as UserPhoto,
+        photo,
       );
 
       if (photoDeleted) {
@@ -467,25 +492,19 @@ export class FeatureComponent implements OnInit {
    * Copy the extracted text, compressed photo, and statistics to the clipboard
    * and update the workflow step accordingly.
    */
-  copyData() {
-    this.toastService.showToast(
-      this.translate.instant('APP.UNDER_CONSTRUCTION'),
-      ToastAnchor.MainPage,
+  async copyData() {
+    const selectedCopyDataOptions = await this.alertService.showCopyAlert(
+      this.selectedHistoryPhoto!.filepath,
+    );
+
+    this.clipboardService.copyDataToClipboard(
+      this.selectedHistoryPhoto as UserPhoto,
+      this.textStatistics,
+      selectedCopyDataOptions,
     );
 
     this.workflowStep = this.workflowService.getNextWorkflowStep(
       this.workflowStep,
-    );
-  }
-
-  /**
-   * Navigate back to the history view and update the workflow step accordingly.
-   * @param event The event that triggered the navigation back to history.
-   */
-  backToHistory(event: any) {
-    this.workflowStep = this.workflowService.getNextWorkflowStep(
-      this.workflowStep,
-      event,
     );
   }
 
@@ -498,9 +517,10 @@ export class FeatureComponent implements OnInit {
       this.selectedHistoryPhoto as UserPhoto,
     );
     if (nextPhoto) {
-      this.selectedHistoryPhoto = nextPhoto;
+      this.updateDisplayedData(nextPhoto);
       this.hasNextImage = !!this.photoStorageService.getNextPhoto(nextPhoto);
-      this.hasPreviousImage = !!this.photoStorageService.getPreviousPhoto(nextPhoto);
+      this.hasPreviousImage =
+        !!this.photoStorageService.getPreviousPhoto(nextPhoto);
     } else {
       this.hasNextImage = false;
       this.hasPreviousImage = !!this.photoStorageService.getPreviousPhoto(
@@ -518,9 +538,11 @@ export class FeatureComponent implements OnInit {
       this.selectedHistoryPhoto as UserPhoto,
     );
     if (previousPhoto) {
-      this.selectedHistoryPhoto = previousPhoto;
-      this.hasNextImage = !!this.photoStorageService.getNextPhoto(previousPhoto);
-      this.hasPreviousImage = !!this.photoStorageService.getPreviousPhoto(previousPhoto);
+      this.updateDisplayedData(previousPhoto);
+      this.hasNextImage =
+        !!this.photoStorageService.getNextPhoto(previousPhoto);
+      this.hasPreviousImage =
+        !!this.photoStorageService.getPreviousPhoto(previousPhoto);
     } else {
       this.hasPreviousImage = false;
       this.hasNextImage = !!this.photoStorageService.getNextPhoto(
@@ -529,18 +551,14 @@ export class FeatureComponent implements OnInit {
     }
   }
 
-
   /**
-   * Clear the current form controls and update the workflow step accordingly.
-   * @param event The event that triggered the clear action.
+   * Update the displayed data with the provided photo.
+   * @param photo The photo to display.
    */
-  clear(event: any): void {
-    this.initFormControls();
-
-    this.workflowStep = this.workflowService.getNextWorkflowStep(
-      this.workflowStep,
-      event,
-    );
+  updateDisplayedData(photo: UserPhoto) {
+    this.selectedHistoryPhoto = photo;
+    this.extractedText = photo.photoInfo?.extractedText || '';
+    this.displayTextStatistics();
   }
 
   /**

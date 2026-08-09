@@ -117,18 +117,6 @@ export class PhotoInfoComponent implements OnInit {
   }
 
   /**
-   * Sets the hideImageWhenEditingOnMobile flag to true on mobile devices.
-   * On mobile devices the image would hide the input fields when the keyboard is open, 
-   * so this method hides the image when the user is editing the photo information.
-   * 
-   */
-  setHideImageWhenEditingOnMobile() {
-    if (this.utilsService.isNative && !this.hideImageWhenEditingOnMobile) {
-      this.hideImageWhenEditingOnMobile = true;
-    }
-  }
-
-  /**
    * Checks if the photo information has changed compared to the initial values.
    * @returns True if the title or description has changed, false otherwise.
    */

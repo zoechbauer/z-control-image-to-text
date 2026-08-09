@@ -176,10 +176,17 @@ ion-header ion-toolbar:first-of-type {
 }
 
 // alert border styling - must be global like modal
+.copy-data-alert .alert-wrapper,
 .copy-success-alert .alert-wrapper,
 .show-mobile-web-email-options .alert-wrapper {
   border: 2px solid var(--ion-color-medium);
   border-radius: 10px;
+}
+
+.copy-data-alert {
+  .alert-checkbox-group {
+    max-height: 100%;
+  }
 }
 
 ion-title {

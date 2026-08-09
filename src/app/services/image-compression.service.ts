@@ -22,10 +22,9 @@ export class ImageCompressionService {
   private readonly fileConversionService = inject(FileConversionService);
   private readonly pica = pica();
 
-
   /**
    * Compress an image input, either from a file path or a base64 string.
-   * For native platforms, it uses the Capacitor Image Manipulator plugin. 
+   * For native platforms, it uses the Capacitor Image Manipulator plugin.
    * For web platforms, it uses the Pica library for resizing and compression.
    * Falls back to web compression if native compression fails due to plugin issues.
    * @param input The image input to compress
@@ -33,75 +32,78 @@ export class ImageCompressionService {
    * @returns The result of the compression, including the compressed image data
    */
   async compress(
-  input: ImageCompressionInput,
-  options: ImageCompressionOptions = {},
-): Promise<ImageCompressionResult> {
-  const {
-    maxWidth = 1200,
-    maxHeight = 1200,
-    quality = 0.8,
-    mimeType = 'image/jpeg',
-    forceResize = false,
-  } = options;
+    input: ImageCompressionInput,
+    options: ImageCompressionOptions = {},
+  ): Promise<ImageCompressionResult> {
+    const {
+      maxWidth = 1200,
+      maxHeight = 1200,
+      quality = 0.8,
+      mimeType = 'image/jpeg',
+      forceResize = false,
+    } = options;
 
-  const { main, webview } = this.filePathService.resolveImageSource(input);
-  const safeSource = webview || main;
+    const { main, webview } = this.filePathService.resolveImageSource(input);
+    const safeSource = webview || main;
 
-  const originalBytes = await this.filePathService.getSourceBytes(safeSource);
-  const { width: srcW, height: srcH } =
-    await this.filePathService.getDimensions(safeSource);
+    const originalBytes = await this.filePathService.getSourceBytes(safeSource);
+    const { width: srcW, height: srcH } =
+      await this.filePathService.getDimensions(safeSource);
 
-  const pixels = srcW * srcH;
-  const effQuality = pixels > 12_000_000 ? Math.min(quality, 0.75) : quality;
-  const shouldResize = forceResize || srcW > maxWidth || srcH > maxHeight;
+    const pixels = srcW * srcH;
+    const effQuality = pixels > 12_000_000 ? Math.min(quality, 0.75) : quality;
+    const shouldResize = forceResize || srcW > maxWidth || srcH > maxHeight;
 
-  const resizeOptions = {
-    maxWidth,
-    maxHeight,
-    quality: effQuality,
-    mimeType,
-    shouldResize,
-    originalBytes,
-  };
+    const resizeOptions = {
+      maxWidth,
+      maxHeight,
+      quality: effQuality,
+      mimeType,
+      shouldResize,
+      originalBytes,
+    };
 
-  if (!Capacitor.isNativePlatform()) {
-    return this.compressWeb(safeSource, resizeOptions);
-  }
-
-  try {
-    return await this.compressNative(main, resizeOptions);
-  } catch (error) {
-    console.error('[ImageCompressionService] Native compression failed', error);
-    if (!this.isNativeImageManipulatorFailure(error)) {
-      throw error;
+    if (!Capacitor.isNativePlatform()) {
+      return this.compressWeb(safeSource, resizeOptions);
     }
 
-    console.warn(
-      '[ImageCompressionService] Native compression failed, fallback to web compression',
-      error,
-    );
+    try {
+      return await this.compressNative(main, resizeOptions);
+    } catch (error) {
+      console.error(
+        '[ImageCompressionService] Native compression failed',
+        error,
+      );
+      if (!this.isNativeImageManipulatorFailure(error)) {
+        throw error;
+      }
 
-    return this.compressWeb(safeSource, resizeOptions);
+      console.warn(
+        '[ImageCompressionService] Native compression failed, fallback to web compression',
+        error,
+      );
+
+      return this.compressWeb(safeSource, resizeOptions);
+    }
   }
-}
 
-private isNativeImageManipulatorFailure(error: unknown): boolean {
-  const message = String((error as any)?.message ?? '').toLowerCase();
-  const stack = String((error as any)?.stack ?? '').toLowerCase();
-  const payload = `${message} ${stack}`;
+  private isNativeImageManipulatorFailure(error: unknown): boolean {
+    const message = String((error as any)?.message ?? '').toLowerCase();
+    const stack = String((error as any)?.stack ?? '').toLowerCase();
+    const payload = `${message} ${stack}`;
 
-  const markers = [
-    'noclassdeffounderror',
-    'classnotfoundexception',
-    'image manipulator',
-    'imagemanipulator',
-    'getdimensions',
-    'plugin not implemented',
-    'plugin unavailable',
-  ];
+    const markers = [
+      'noclassdeffounderror',
+      'classnotfoundexception',
+      'image manipulator',
+      'imagemanipulator',
+      'getdimensions',
+      'plugin not implemented',
+      'plugin unavailable',
+    ];
 
-  return markers.some((m) => payload.includes(m));
-}
+    return markers.some((m) => payload.includes(m));
+  }
 
   /**
    * Build a Vision OCR request from a compressed image.
@@ -152,7 +154,11 @@ private isNativeImageManipulatorFailure(error: unknown): boolean {
     compressOptions: ImageCompressionOptions = {},
     ocrOptions: OcrBuildOptions = {},
   ): Promise<VisionBatchRequest> {
-    return this.buildVisionOcrRequestFromInput(photo, compressOptions, ocrOptions);
+    return this.buildVisionOcrRequestFromInput(
+      photo,
+      compressOptions,
+      ocrOptions,
+    );
   }
 
   /**
@@ -274,5 +280,49 @@ private isNativeImageManipulatorFailure(error: unknown): boolean {
       compressedBytes: blob.size,
       resized: opts.shouldResize || blob.size < originalBytes,
     };
+  }
+
+  // TODO use it for compressing photos before saving
+  async compressPhoto(photo: UserPhoto): Promise<string | null> {
+    const dataUrl = await this.fileConversionService.getImageDataUrl(photo);
+
+    if (!dataUrl) {
+      console.error('No valid image data URL available');
+      return null;
+    }
+
+    console.log(
+      'Native clipboard image dataUrl prefix:',
+      dataUrl.slice(0, 40),
+      'length:',
+      dataUrl.length,
+    );
+
+    const visionRequest = await this.buildVisionOcrRequestFromPhoto(
+      photo,
+      {
+        maxWidth: 1024,
+        maxHeight: 1024,
+        quality: 0.8,
+        mimeType: 'image/jpeg',
+      },
+      { feature: 'DOCUMENT_TEXT_DETECTION', maxResults: 1 },
+    );
+    const imageBase64 = visionRequest.requests[0].image.content;
+    // png does not work
+    //   const prefix = 'data:image/png;base64,';
+    const prefix = 'data:image/jpeg;base64,';
+    const dataUrlCompressed = imageBase64.startsWith(prefix)
+      ? imageBase64
+      : prefix + imageBase64;
+
+    console.log(
+      'Native clipboard visionRequest :',
+      dataUrlCompressed ? dataUrlCompressed.slice(0, 40) : 'null',
+      'length:',
+      dataUrlCompressed ? dataUrlCompressed.length : 'null',
+    );
+
+    return dataUrlCompressed;
   }
 }

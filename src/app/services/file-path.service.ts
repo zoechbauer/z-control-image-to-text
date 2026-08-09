@@ -11,41 +11,18 @@ export class FilePathService {
   private fileName: string = '';
 
   /**
-   * Gets the path to the documents directory for the current file.
-   *
-   * @returns The path to the documents directory.
-   */
-  async getDocumentsPath(
-    getUri: (args: {
-      path: string;
-      directory: any;
-    }) => Promise<{ uri: string }>,
-    directory: any,
-  ): Promise<string> {
-    const result = await getUri({
-      path: this.fileName,
-      directory,
-    });
-
-    // Remove the "file://" prefix
-    let path = result.uri;
-    if (path.startsWith('file://')) {
-      path = path.slice(7);
-    }
-    return path;
-  }
-
-  /**
    * Generates a file name with the given prefix and extension.
+   * The file name is constructed using the format: {prefix}_{timestamp}.{extension}, with
+   * the timestamp in the format YYYYMMDD_HHMMSS
    * @param filePrefix The prefix for the file name.
-   * @param fileExtension The extension for the file name. Defaults to JPEG.
+   * @param extension The file extension (e.g., 'jpeg', 'png').
    * @returns The generated file name.
    */
   getFileName(
     filePrefix: FileNamePrefix,
-    fileExtension: FileExtension = FileExtension.JPEG,
+    extension: string,
   ): string {
-    this.fileName = `${filePrefix}_${this.generateTimestamp()}.${fileExtension}`;
+    this.fileName = `${filePrefix}_${this.generateTimestamp()}.${extension}`;
     return this.fileName;
   }
 
@@ -60,6 +37,19 @@ export class FilePathService {
     const p = filepath.startsWith('file://') ? filepath.slice(7) : filepath;
     return p.substring(p.lastIndexOf('/') + 1);
   }
+
+
+    /**
+   * Extracts the file extension from a given file path.
+   * @param filepath The full file path.
+   * @returns The extracted file extension.
+   */
+  getFilenameExtension(filepath: string): string {
+    if (!filepath) return '';
+    const lastDotIndex = filepath.lastIndexOf('.');
+    return lastDotIndex !== -1 ? filepath.substring(lastDotIndex + 1) : '';
+  }
+
 
   /**
    * Resolves the image source for different types of input.

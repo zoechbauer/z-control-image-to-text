@@ -2,7 +2,11 @@ import { inject, Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { lastValueFrom } from 'rxjs';
-import { UserPhoto } from '../shared/app.interfaces';
+
+import { CopyDataOptions, UserPhoto } from '../shared/app.interfaces';
+import { CopyDataOption } from '../shared/enums';
+import { FilePathService } from './file-path.service';
+import { Capacitor } from '@capacitor/core';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +17,7 @@ export class AlertService {
 
   private readonly alertController = inject(AlertController);
   private readonly translate = inject(TranslateService);
+  private readonly filePathService = inject(FilePathService);
 
   /**
    * Shows an alert indicating that storage permission is required to save a photo.
@@ -50,23 +55,23 @@ export class AlertService {
     let header, subHeader, message;
     if (photo && photo !== 'all') {
       header = await lastValueFrom(
-        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTO.HEADER')
+        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTO.HEADER'),
       );
       subHeader = await lastValueFrom(
-        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTO.SUBHEADER')
+        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTO.SUBHEADER'),
       );
       message = await lastValueFrom(
-        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTO.MESSAGE')
+        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTO.MESSAGE'),
       );
     } else {
       header = await lastValueFrom(
-        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTOS.HEADER')
+        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTOS.HEADER'),
       );
       subHeader = await lastValueFrom(
-        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTOS.SUBHEADER')
+        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTOS.SUBHEADER'),
       );
       message = await lastValueFrom(
-        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTOS.MESSAGE')
+        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTOS.MESSAGE'),
       );
     }
     return this.confirmDeleteAlert(header, subHeader, message);
@@ -107,5 +112,133 @@ export class AlertService {
 
       await alert.present();
     });
+  }
+
+  /**
+   * Shows an alert for copying data options.
+   * The user can select which data to copy (photo, info, extracted text, or all).
+   * @returns A promise that resolves to the selected copy data options.
+   */
+  async showCopyAlert(filepath: string): Promise<CopyDataOptions> {
+    let { photoLabel, photoChecked, photoDisabled } =
+      this.setValuesForCopyImage(filepath);
+
+    const alert = await this.alertController.create({
+      header: this.translate.instant('APP.ALERT_SERVICE.COPY_DATA.HEADER'),
+      subHeader: this.translate.instant(
+        'APP.ALERT_SERVICE.COPY_DATA.SUBHEADER',
+      ),
+      message: this.translate.instant('APP.ALERT_SERVICE.COPY_DATA.MESSAGE'),
+      cssClass: 'copy-data-alert',
+      inputs: [
+        {
+          name: CopyDataOption.Photo,
+          type: 'checkbox',
+          label: photoLabel,
+          disabled: photoDisabled,
+          checked: photoChecked,
+          value: CopyDataOption.Photo,
+        },
+        {
+          name: CopyDataOption.TitleDescription,
+          type: 'checkbox',
+          checked: true,
+          label: this.translate.instant(
+            'APP.ALERT_SERVICE.COPY_TITLE_DESCRIPTION',
+          ),
+          value: CopyDataOption.TitleDescription,
+        },
+        {
+          name: CopyDataOption.ExtractedText,
+          type: 'checkbox',
+          checked: true,
+          label: this.translate.instant(
+            'APP.ALERT_SERVICE.COPY_EXTRACTED_TEXT',
+          ),
+          value: CopyDataOption.ExtractedText,
+        },
+        {
+          name: CopyDataOption.TextStatistics,
+          type: 'checkbox',
+          checked: true,
+          label: this.translate.instant(
+            'APP.ALERT_SERVICE.COPY_TEXT_STATISTICS',
+          ),
+          value: CopyDataOption.TextStatistics,
+        },
+        {
+          name: CopyDataOption.CreatedModifiedTimestamps,
+          type: 'checkbox',
+          checked: true,
+          label: this.translate.instant(
+            'APP.ALERT_SERVICE.COPY_CREATED_MODIFIED_TIMESTAMPS',
+          ),
+          value: CopyDataOption.CreatedModifiedTimestamps,
+        },
+      ],
+      buttons: [
+        {
+          text: this.translate.instant('APP.ALERT_SERVICE.COPY'),
+          role: 'confirm',
+          handler: (data: string[]) => ({
+            copyPhoto: data.includes(CopyDataOption.Photo),
+            copyTitleDescription: data.includes(
+              CopyDataOption.TitleDescription,
+            ),
+            copyExtractedText: data.includes(CopyDataOption.ExtractedText),
+            copyTextStatistics: data.includes(CopyDataOption.TextStatistics),
+            copyCreatedModifiedTimestamps: data.includes(
+              CopyDataOption.CreatedModifiedTimestamps,
+            ),
+          }),
+        },
+        {
+          text: this.translate.instant('APP.ALERT_SERVICE.CANCEL'),
+          role: 'cancel',
+          handler: () => ({}),
+        },
+      ],
+    });
+
+    await alert.present();
+    const result = await alert.onDidDismiss<CopyDataOptions>();
+
+    return result.data ?? {};
+  }
+
+  private setValuesForCopyImage(filepath: string) {
+    let photoLabel = this.translate.instant('APP.ALERT_SERVICE.COPY_PHOTO');
+    let photoChecked = true;
+    let photoDisabled = false;
+
+    const ext = this.filePathService.getFilenameExtension(filepath);
+    if (
+      Capacitor.isNativePlatform() &&
+      ext !== 'png' &&
+      ext !== 'jpg' &&
+      ext !== 'jpeg'
+    ) {
+      photoLabel +=
+        ' - ' +
+        this.translate.instant(
+          'APP.ALERT_SERVICE.COPY_DATA.PHOTO_FORMAT_NOT_SUPPORTED_NATIVE',
+          { format: ext },
+        );
+      photoChecked = false;
+      photoDisabled = true;
+    }
+
+    if (!Capacitor.isNativePlatform() && ext !== 'png') {
+      photoLabel +=
+        ' - ' +
+        this.translate.instant(
+          'APP.ALERT_SERVICE.COPY_DATA.PHOTO_FORMAT_NOT_SUPPORTED_WEB',
+          { format: ext },
+        );
+      photoChecked = false;
+      photoDisabled = true;
+    }
+
+    return { photoLabel, photoChecked, photoDisabled };
   }
 }

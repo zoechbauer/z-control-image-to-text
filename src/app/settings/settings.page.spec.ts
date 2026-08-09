@@ -20,6 +20,8 @@ import { FeedbackAccordionComponent } from '../ui/components/accordions/feedback
 import { LanguageAccordionComponent } from '../ui/components/accordions/language-accordion.component';
 import { FirebaseFirestoreUtilsService } from '../services/firebase-firestore-utils.service';
 import { SpinnerComponent } from '../ui/components/spinner/spinner.component';
+import { WorkflowService } from '../services/workflow-service';
+import { WorkflowStep } from '../shared/enums';
 
 @Component({
   selector: 'app-language-accordion',
@@ -101,13 +103,21 @@ describe('SettingsPage', () => {
   let utilsServiceSpy: jasmine.SpyObj<UtilsService>;
   let localStorageServiceSpy: jasmine.SpyObj<LocalStorageService>;
 
+  const workflowChangedSub = new Subject<WorkflowStep>();
+
   beforeEach(async () => {
     utilsServiceSpy = jasmine.createSpyObj(
       'UtilsService',
-      ['getDeviceInfo', 'showOrHideIonTabBar', 'openChangelog'],
+      [
+        'getDeviceInfo',
+        'showOrHideIonTabBar',
+        'openChangelog',
+        'workflowChangedSub',
+      ],
       {
         isNative: false,
         logoClicked$: EMPTY,
+        workflowChanged$: workflowChangedSub.asObservable(),
       },
     );
 
@@ -161,6 +171,7 @@ describe('SettingsPage', () => {
           provide: ModalController,
           useValue: modalControllerSpy,
         },
+        { provide: WorkflowService, useValue: {} },
       ],
     })
       .overrideComponent(SettingsPage, {

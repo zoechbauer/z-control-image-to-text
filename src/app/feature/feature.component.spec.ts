@@ -20,6 +20,7 @@ import { OcrService } from '../services/ocr.service';
 import { PhotoService } from '../services/photo.service';
 import { PhotoStorageService } from '../services/photo-storage.service';
 import { ImageCompressionService } from '../services/image-compression.service';
+import { WorkflowService } from '../services/workflow-service';
 
 @Component({
   selector: 'app-user-statistic',
@@ -42,15 +43,18 @@ describe('FeatureComponent', () => {
   let firestoreUtilsServiceSpy: jasmine.SpyObj<FirebaseFirestoreUtilsService>;
   let toastServiceSpy: jasmine.SpyObj<ToastService>;
   let ocrServiceSpy: jasmine.SpyObj<OcrService>;
-  let photoServiceSpy: jasmine.SpyObj<any>;
-  let photoStorageServiceSpy: jasmine.SpyObj<any>;
-  let imageCompressionServiceSpy: jasmine.SpyObj<any>;
-  let modalControllerSpy: jasmine.SpyObj<any>;
+  let photoServiceSpy: jasmine.SpyObj<PhotoService>;
+  let photoStorageServiceSpy: jasmine.SpyObj<PhotoStorageService>;
+  let imageCompressionServiceSpy: jasmine.SpyObj<ImageCompressionService>;
+  let modalControllerSpy: jasmine.SpyObj<ModalController>;
+  let workflowServiceSpy: jasmine.SpyObj<WorkflowService>;
 
   beforeEach(async () => {
     utilsServiceSpy = jasmine.createSpyObj('UtilsService', [
       'showOrHideIonTabBar',
-    ]);
+    ],{
+      backButtonClicked$: of(true),
+    });
     modalControllerSpy = jasmine.createSpyObj('ModalController', ['dismiss']);
     firestoreUtilsServiceSpy = jasmine.createSpyObj(
       'FirebaseFirestoreUtilsService',
@@ -72,6 +76,9 @@ describe('FeatureComponent', () => {
       'loadSavedPhotos',
       'getPhotosFromCache',
       'updatePhotoInfo',
+    ]);
+    workflowServiceSpy = jasmine.createSpyObj('WorkflowService', [
+      'getNextWorkflowStep',
     ]);
 
     await TestBed.configureTestingModule({
@@ -112,6 +119,7 @@ describe('FeatureComponent', () => {
           useValue: imageCompressionServiceSpy,
         },
         { provide: ModalController, useValue: modalControllerSpy },
+        { provide: WorkflowService, useValue: workflowServiceSpy },
       ],
 
     })
@@ -132,23 +140,6 @@ describe('FeatureComponent', () => {
   describe('class logic', () => {
     it('should create', () => {
       expect(component).toBeTruthy();
-    });
-
-    describe('clear', () => {
-      it('should call initFormControls', () => {
-        const initFormControlsSpy = spyOn<any>(component, 'initFormControls');
-        component.clear({} as any);
-        expect(initFormControlsSpy).toHaveBeenCalled();
-      });
-
-      it('should init form controls if initFormControls() is called', () => {
-        (component as any).initFormControls();
-
-        expect(component.selectedPhoto).toBeUndefined();
-        expect(component.extractedText).toBe('');
-        expect((component as any).extractedTextItems).toEqual([]);
-        expect(component.workflowStep).toBe(WorkflowStep.SelectPhoto);
-      });
     });
 
     describe('extractTextFromPhoto', () => {
