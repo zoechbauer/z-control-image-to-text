@@ -76,9 +76,9 @@
     "CARD": {
       "TITLE": "Text aus Bild extrahieren",
       "TITLE-HISTORY": "Historie verwalten",
-      "INFO": "Bitte wählen Sie aus, ob Sie ein Bild aufnehmen oder ein Bild aus der Galerie auswählen möchten. Anschließend wird der Text aus dem Bild extrahiert und angezeigt.",
-      "INFO-2": "Sie können sich auch alle durchgeführten Text-Extraktionen ansehen.",
-      "INFO-3": "Bitte beachten Sie, dass die Texterkennung über die Google Cloud Vision API erfolgt. Das monatliche Kontingent für die Texterkennung ist begrenzt. Sobald das Kontingent aufgebraucht ist, wird das Feature bis zum nächsten Monat ausgesetzt.",
+      "INFO": "Bitte wählen Sie aus, ob Sie ein Bild mit Kamera aufnehmen oder ein Bild aus der Galerie auswählen möchten. Anschließend wird der Text aus dem Bild extrahiert und Sie können Informationen ergänzen oder bearbeiten.",
+      "INFO-2": "Sie können jedes Monat {{limit}} Bild-Verarbeitungen kostenlos durchführen. Sie sehen Ihr aktuelles Kontingent, wenn Sie 'Monatliches Kontingent' aufklappen.",
+      "INFO-3": "Sie können aber immer die bereits verarbeiteten Bilder und deren Informationen einsehen, verwalten und mit anderen teilen.",
       "LABEL": {
         "EXTRACTED_TEXT": "Extrahierter Text",
         "NO_EXTRACTED_TEXT": "Kein extrahierter Text vorhanden.",
@@ -97,7 +97,7 @@
         "ADD_INFO": "Info erfassen",
         "CHANGE_INFO": "Info ändern",
         "SAVE_DATA": "Daten speichern",
-        "LOAD_HISTORY": "Historie laden",
+        "LOAD_HISTORY": "Historie",
         "COPY_DATA": "Daten kopieren",
         "DELETE_DATA": "Daten löschen",
         "DELETE_ALL": "Alle Daten löschen",

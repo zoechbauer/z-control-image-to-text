@@ -12,12 +12,11 @@ This project uses a simplified major.minor versioning scheme:
 
 ## What's Coming Next
 
-- Update the Online Help to document History, metadata editing, and related workflows.
 - Compress photos before saving to reduce storage usage.
 - Add a search feature to find saved photos by title, description, or extracted text.
 - Add unit tests for the new services and components.
 
-## [1.5] – 2026-08-08
+## [1.5] – 2026-08-09
 
 ### ✨ New Features
 
@@ -29,6 +28,8 @@ This project uses a simplified major.minor versioning scheme:
 ### 🚀 Improvements
 
 - Improved `PhotoInfoModalComponent` layout to present title, description, and image more clearly.
+- Improved the user documentation by replacing Ionic setup placeholders with app-specific information and refining the wording, structure, and clarity.
+- Improved the displayed information when no image is selected, providing clearer guidance to the user.
 
 ### 🐛 Fixes
 
@@ -39,6 +40,7 @@ This project uses a simplified major.minor versioning scheme:
 - Split long error messages across multiple lines to avoid lint errors and improve readability.
 - Moved workflow functions into the `WorkflowService` to centralize workflow logic and improve maintainability.
 - Updated unit tests with minimal changes to keep the tests running. The tests will be refactored later to better reflect the new workflow logic and improve test coverage.
+- Added maxFreeFeatureCharsPerMonthForUser to AppConstants which is used in translation strings to display the monthly quota for each user. The value is read from the environment variable.
 
 ## [1.4] – 2026-08-03
 

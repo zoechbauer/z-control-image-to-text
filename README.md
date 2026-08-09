@@ -1,17 +1,19 @@
 # z-control Image to Text
 
-Make a photo or load an image from your device, and the app will extract the text from the image using Optical Character Recognition (OCR) technology. The extracted text together with an entered title and description can be copied or saved to your device. The app also provides statistics about the extracted text, including word count, line count, and character count.
+Make a photo or load an image from your device, and the app will extract the text from the image using Optical Character Recognition (OCR) technology. The extracted text together with an entered title and description can be copied or shared with other users. The app also provides statistics about the extracted text, including word count, line count, and character count.
 
 The app uses the Google Cloud Vision API for OCR. It is built with Ionic 8 and Angular 20, and it can be run as a web app or installed on Android devices.
 
 Google Cloud Vision API usage is limited to 1,000 requests per month for free, shared across all users of the app. The app will display a warning when the quota is close to being reached.
+
+All data is stored locally on the user's device and is not transmitted to any servers. The app does not collect or store any personal data. We manage the quota for the Google Cloud Vision API usage, but we do not have access to any user data or images.
 
 This app was created with the **z-control IONIC Setup** app (https://github.com/zoechbauer/z-control-ionic-setup), which is a starter template and utility for building Ionic applications within the z-control ecosystem. It provides a structured foundation with built-in features like quota management, tab-based navigation, and comprehensive documentation to help developers quickly create and deploy their own Ionic apps.
 
 ## Features
 
 - **Quota management**: Track and display API usage with clear quota limits and warnings
-- **Shared monthly quota**: Free tier with 1,000 requests for text recognition per month shared across all users
+- **Shared monthly quota**: Free tier with 1,000 requests for text recognition per month shared across all users, and 50 requests per user per month
 - **Tab-based navigation**: Clean, intuitive UI with separate tabs for main feature and settings (Text Recognition)
 - **Step-by-step workflow**: Guided process from image selection to text extraction, sharing, and history management
 - **Built-in help**: Help page for step-by-step instructions and FAQs

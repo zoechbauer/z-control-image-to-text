@@ -73,9 +73,9 @@
     "CARD": {
       "TITLE": "Extract Text from Image",
       "TITLE-HISTORY": "Manage History",
-      "INFO": "Please choose whether to take a photo or select an image from the gallery. The text will then be extracted from the image and displayed.",
-      "INFO-2": "You can also view all text extractions performed.",
-      "INFO-3": "Please note that text recognition is performed via the Google Cloud Vision API. The monthly quota for text recognition is limited. Once the quota is used up, the feature will be suspended until the next month.",
+      "INFO": "Please choose whether to take a photo with the camera or select an image from the gallery. The text will then be extracted from the image and can be edited.",
+      "INFO-2": "You can perform {{limit}} image processing operations for free each month. You can see your current quota when you expand 'Monthly Quota'.",
+      "INFO-3": "You can always view, manage, and share the images that have already been processed and their information.",
       "LABEL": {
         "EXTRACTED_TEXT": "Extracted Text",
         "NO_EXTRACTED_TEXT": "No extracted text available.",

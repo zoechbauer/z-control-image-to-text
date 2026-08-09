@@ -2,13 +2,13 @@ import { environment } from '@env/environment';
 
 export class AppConstants {
   public static readonly currentUser: string = 'currentUser';
-  private static readonly _maxFreeFeatureCharsPerMonth = 500000;
 
   static get maxFreeFeatureCharsPerMonth(): number {
-    return (
-      environment.app.maxFreeFeatureCharsPerMonth ??
-      this._maxFreeFeatureCharsPerMonth
-    );
+    return environment.app.maxFreeFeatureCharsPerMonth ?? 0;
+  }
+
+  static get maxFreeFeatureCharsPerMonthForUser(): number {
+    return environment.app.maxFreeFeatureCharsPerMonthForUser ?? 0;
   }
 }
 

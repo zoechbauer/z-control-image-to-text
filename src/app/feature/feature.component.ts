@@ -36,6 +36,7 @@ import { PhotoStorageService } from '../services/photo-storage.service';
 import { FeatureResultComponent } from '../ui/components/feature-result/feature-result.component';
 import { AlertService } from '../services/alert.service';
 import { ClipboardService } from '../services/clipboard.service';
+import { AppConstants } from '../shared/app.constants';
 
 @Component({
   selector: 'app-feature',
@@ -89,6 +90,7 @@ export class FeatureComponent implements OnInit {
   };
   hasNextImage: boolean = true;
   hasPreviousImage: boolean = false;
+  monthlyUserLimit: number = 0;
   private extractedTextItems: string[] = [];
 
   /**
@@ -107,6 +109,7 @@ export class FeatureComponent implements OnInit {
   ngOnInit() {
     this.updateIsContingentExceeded().then(() => {
       this.initFormControls();
+      this.monthlyUserLimit = AppConstants.maxFreeFeatureCharsPerMonthForUser;
       this.workflowStep = WorkflowStep.SelectPhoto;
       this.photoStorageService.loadSavedPhotos().then(() => {
         this.isLoading = false;

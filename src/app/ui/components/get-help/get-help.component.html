@@ -3,7 +3,7 @@
 </ng-container>
 
 <!-- *********************************** -->
-<!-- E N G L I S H   T E M P L A T E -->
+<!-- E N G L I S H   T E M P L A T E     -->
 <!-- *********************************** -->
 
 <ng-template #englishTemplate>
@@ -38,7 +38,7 @@
 
   <ion-content class="ion-padding">
     <div id="toc" class="ion-padding">
-      <h5 class="ion-text-center toc-title">Table of Contents</h5>
+      <h5 class="ion-text-center toc-title">Table of contents</h5>
       <ol class="table-of-contents">
         <li>
           <a
@@ -59,12 +59,12 @@
             href="#"
             (click)="utilsService.scrollTo('web-version', $event)"
             class="toc-link-normal-height"
-            >Mobile Version versus Web Version</a
+            >Mobile version versus web version</a
           >
         </li>
         <li>
           <a href="#" (click)="utilsService.scrollTo('technical-info', $event)"
-            >Technical Information</a
+            >Technical information</a
           >
         </li>
         <li class="toc-increase-margin-top">
@@ -72,242 +72,581 @@
             href="#"
             (click)="utilsService.scrollTo('troubleshooting', $event)"
             class="toc-link-normal-height"
-            >Troubleshooting & Problem Solving</a
+            >Troubleshooting</a
           >
         </li>
       </ol>
     </div>
 
-    <p style="color: var(--ion-color-danger)">
-      This help page is a work in progress - it does not yet fully describe the
-      app.
+    <h3 id="what-can-the-app-do">What can the app do?</h3>
+
+    <p>
+      With <i>z&#8209;control Image to Text</i>, you can take a photo or select
+      an image from your device. The app recognizes the text contained in the
+      image using optical character recognition (OCR) and then displays it.
     </p>
 
-    <h3 id="what-can-the-app-do">What can the app do?</h3>
-    <strong>What is this app for?</strong>
     <p>
-      <strong
-        >Make a photo or load an image from your device, and the app will
-        extract the text from the image using Optical Character Recognition
-        (OCR) technology.</strong
-      >
+      You can add a title and a description to the recognized text. The
+      information can then be copied, pasted into other apps, or shared.
     </p>
+
     <p>
-      The extracted text together with an entered title and description can be
-      copied to clipboard or saved to your device.
+      The following data is automatically stored locally on your device: the
+      image, the recognized text, the title, the description, and the creation
+      and modification dates. The data is not stored in the cloud.
     </p>
+
+    <p>You can view, edit, copy, share, or delete saved entries at any time.</p>
+
     <p>
-      The app also provides statistics about the extracted text, including word
-      count, line count, and character count.
+      The app also provides statistics for the recognized text, including the
+      number of words, lines, and characters.
     </p>
-    <p>You can choose the base language (English or German) in the settings.</p>
-    <p><strong>Highlights:</strong></p>
+
+    <p>You can choose German or English as the app language.</p>
+
+    <p><strong>Features at a glance:</strong></p>
+
     <ul class="no-list-style-inside">
       <li>
-        <strong>Extract text and add information</strong><br />The photo and the
-        extracted text can be displayed, and a title and description can be
-        added and saved on the device.
+        <strong>Recognize text in images</strong><br />
+        Take a photo or select an existing image. The app recognizes the text
+        contained in the image and displays the result.
       </li>
       <li>
-        <strong>Manage history</strong><br />You can view and manage the history
-        of images with the extracted text and the added information.
+        <strong>Add additional information</strong><br />
+        Add a title and a description to the entry.
       </li>
       <li>
-        <strong>Copy captured info, extracted text and photo</strong><br />You
-        can then easily share this information by pasting the copied content
-        into another app.
+        <strong>Manage history</strong><br />
+        View previously processed images and their associated information. You
+        can edit or delete individual entries or the entire history.
       </li>
       <li>
-        <strong>Status indicator</strong><br />This always shows the next
-        processing step.
+        <strong>Copy and share data</strong><br />
+        Choose whether you want to copy or share the image, title, description,
+        recognized text, text statistics, and creation and modification dates.
+      </li>
+      <li>
+        <strong>Status display</strong><br />
+        The status display guides you step by step through the processing
+        procedure.
       </li>
     </ul>
-    <p><strong>Limitations:</strong></p>
+
+    <p><strong>Free quota limitation:</strong></p>
+
     <ul class="no-list-style-inside">
       <li>
         <strong>
           Shared free monthly quota:
           {{ maxFreeFeatureCharsLengthPerMonth | number: "1.0-0" : "de" }}
-          characters for all users
+          image-processing requests for all users
         </strong>
-        If this quota is exceeded,
-        <i>z-control</i> incurs costs.
+
         <p>
-          Therefore, available options are limited to prevent the shared monthly
-          quota from being used up too quickly.
+          Text recognition uses the paid Google Cloud Vision API. Therefore,
+          only a limited free quota is available each month.
+        </p>
+
+        <p>
+          The app informs you in good time when the quota is approaching its
+          limit. Once the available quota for the current month has been used
+          up, no further images can be processed.
+        </p>
+
+        <p>
+          You can still view, edit, copy, share, and delete previously processed
+          images and their associated information.
         </p>
       </li>
     </ul>
 
     <h3 id="how-to-use-the-app">How do I use the app?</h3>
+
     <ul class="no-list-style">
       <li>
         <strong>Opening the app for the first time</strong>
+
         <ul class="no-list-style-inside">
           <li>
-            Describe the settings that must be configured when opening the app
-            for the first time.
+            When you open the app for the first time, it automatically uses your
+            device's system language if it is German or English. You can change
+            the language at any time in the settings.
           </li>
         </ul>
       </li>
+
       <li>
-        <p><strong>Run the app feature</strong></p>
+        <p><strong>Take a photo and recognize text</strong></p>
+
         <ul class="no-list-style-inside">
           <li>
-            Describe the workflow how to run the app feature, e.g. step 1.
+            Tap or click <strong>“Camera”</strong> and take a photo. On a PC or
+            notebook, this works if a camera is connected and access has been
+            granted in the browser.
           </li>
           <li>
-            <b>What does the status indicator do?</b>
-            <p>
-              The app displays a status indicator under the heading "Extract
-              text from image". This feature guides you step by step through the
-              process by always showing the next action to take – for example:
-              select an image, extract text from the image, send it by email, or
-              select, edit, or delete saved data. This helps you keep an
-              overview, and makes the app especially easier and more intuitive
-              for new users.
-            </p>
+            After taking the photo, the image is displayed and the next
+            processing step is shown.
+          </li>
+          <li>
+            Select <strong>“Extract text”</strong> to recognize the text in the
+            image.
+          </li>
+          <li>
+            If you do not want to process the image, select
+            <strong>“Delete image”</strong>. The image is removed and the start
+            page is displayed.
+          </li>
+          <li>
+            After text recognition, the recognized text and the number of lines,
+            words, and characters are displayed.
+          </li>
+          <li>
+            Select <strong>“Add information”</strong> to add a title and a
+            description. You can edit or add this information later in the
+            history.
+          </li>
+          <li>
+            Use the <strong>“Back”</strong> button in the header to return to
+            the previous page.
           </li>
         </ul>
       </li>
+
       <li>
-        <strong>How can I check my monthly feature quota?</strong>
+        <p><strong>Select an image from the gallery</strong></p>
+
+        <ul class="no-list-style-inside">
+          <li>
+            Select <strong>“Gallery”</strong> and then choose an image from your
+            device.
+          </li>
+          <li>
+            The selected image is displayed and the next processing step is
+            shown.
+          </li>
+          <li>
+            The remaining steps are the same as those described for taking a
+            photo with the camera.
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <p><strong>Manage saved entries in the history</strong></p>
+
+        <ul class="no-list-style-inside">
+          <li>
+            Open the <strong>“History”</strong> to view previously processed
+            images.
+          </li>
+          <li>
+            The saved images are displayed in a scrollable list. The number of
+            saved entries is shown in the page title.
+          </li>
+          <li>Tap or click an entry to open and edit it.</li>
+          <li>
+            The saved data is displayed below the image: title, description,
+            recognized text, and creation and modification dates.
+          </li>
+          <li>
+            Select <strong>“Edit information”</strong> to edit the title and
+            description. If no additional information is available yet, the
+            button is called <strong>“Add information”</strong>.
+          </li>
+          <li>
+            Select <strong>“Copy data”</strong> to open the selection of data
+            that can be copied to the clipboard.
+          </li>
+          <li>
+            By default, all available data is selected. You can change the
+            selection by deactivating individual checkboxes.
+          </li>
+          <li>
+            You can choose between the image, title and description, recognized
+            text, text statistics, and creation and modification dates.
+          </li>
+          <li *ngIf="!isNative">
+            In the web version, JPEG images currently cannot be copied to the
+            clipboard. Therefore, the checkbox for the image is disabled. For
+            further information, see the
+            <i>Troubleshooting</i> section.
+          </li>
+          <li>
+            If you select <strong>“Cancel”</strong>, no data is copied to the
+            clipboard.
+          </li>
+          <li *ngIf="isNative">
+            If you select <strong>“OK”</strong>, the selected data is copied to
+            the clipboard. You can then paste it into another app or share it
+            using the sharing function.
+          </li>
+          <li *ngIf="!isNative">
+            If you select <strong>“OK”</strong>, the selected data is copied to
+            the clipboard. You can then use <strong>Ctrl+V</strong> on Windows
+            or <strong>Cmd+V</strong> on macOS to paste it into a document or
+            email.
+          </li>
+          <li>
+            Select <strong>“Delete all data”</strong> to delete the entire
+            history. A confirmation prompt is displayed before the data is
+            deleted.
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <strong>How does the status display work?</strong>
+
+        <p>
+          The app displays the current status of the processing procedure below
+          the heading <i>“Extract text from image”</i>.
+        </p>
+
+        <p>
+          The status display tells you which action is required next. This helps
+          you keep track of the current processing step at all times.
+        </p>
+      </li>
+
+      <li>
+        <strong>How can I check my monthly quota?</strong>
+
         <p><i>On the feature page</i></p>
+
         <p>
-          At the end of the feature page, your current feature quota is shown in
-          the <i>Monthly quota</i> section. You can expand or collapse this
-          section.
+          At the bottom of the feature page, you will find the
+          <i>“Monthly quota”</i> section. You can expand and collapse this
+          section to view the current quota status.
         </p>
+
         <p>
-          If your personal quota or the total quota for all users has been
-          reached, no further features will be performed this month. The quota
-          is automatically reset on the first day of the next month.
+          If your personal quota or the shared quota for all users has been used
+          up, no further images can be processed during the current month. The
+          quota is automatically reset on the first day of the following month.
         </p>
-        <p><i>On the statistics page in settings</i></p>
+
+        <p><i>On the statistics page in the settings</i></p>
+
         <p>
-          Here, you get a detailed overview of the monthly feature quota for all
-          users and their device information. This information is shown in
-          anonymized and aggregated form to protect your privacy.
+          The statistics page provides a more detailed overview of the usage of
+          the shared monthly quota. The device information displayed there is
+          anonymized and aggregated.
         </p>
       </li>
+
       <li>
-        <strong>How do I switch between feature and settings?</strong>
+        <strong>How do I switch between the feature and the settings?</strong>
+
         <ul class="no-list-style-inside">
-          <li>
-            <strong>On mobile devices in portrait mode:</strong> Use the tabs at
-            the bottom of the screen to switch between feature and settings.
+          <li *ngIf="this.utilsService.isShowIonTabBar">
+            <strong>On mobile devices in portrait mode:</strong>
+            Use the tabs at the bottom of the screen.
           </li>
-          <li>
-            <strong>On tablets, desktop PCs or in landscape mode:</strong> Use
-            the button at the top right of the header to switch between feature
-            and settings.
+          <li *ngIf="this.utilsService.isShowIonTabBar">
+            <strong>On tablets, desktop PCs, and in landscape mode:</strong>
+            Use the button in the top-right corner of the header to switch
+            between the feature
+            <ion-icon name="image-outline"></ion-icon>
+            and the settings
+            <ion-icon name="settings-outline"></ion-icon>.
+          </li>
+          <li *ngIf="!this.utilsService.isShowIonTabBar">
+            Use the button in the top-right corner of the header to switch
+            between the feature
+            <ion-icon name="image-outline"></ion-icon>
+            and the settings
+            <ion-icon name="settings-outline"></ion-icon>.
           </li>
         </ul>
       </li>
+
       <li>
-        <strong>How do I change the app's language?</strong>
+        <strong>How do I change the app language?</strong>
+
         <p>
-          In the settings, select the "Select language" option to switch between
-          English and German. The change is applied immediately.
-        </p>
-        <p>
-          When the selected base language is changed, the list of target
-          languages is automatically updated to exclude the base language.
-        </p>
-      </li>
-      <li>
-        <strong>How do I switch between dark and light mode?</strong>
-        <p>
-          The app follows your device's system settings. Change your device's
-          theme ("Dark theme", "Light theme") in the system settings. The change
-          is applied immediately.
+          In the settings, open the
+          <strong>“Select language”</strong> option and choose German or
+          English. The change is applied immediately.
         </p>
       </li>
+
       <li>
-        <strong>How can I give feedback or contact support?</strong>
+        <strong>How do I switch between light and dark mode?</strong>
+
         <p>
-          You can send us feedback, questions, or suggestions via the email link
-          in the settings. Click on the logo in the header to open the feedback
-          area. Use the "z-control Support & Feedback" link to send us an email.
+          By default, the app uses your device's display settings. Change the
+          design in your device's system settings, for example from
+          <i>“Light mode”</i> to <i>“Dark mode”</i>. The change is automatically
+          applied in the app.
+        </p>
+      </li>
+
+      <li>
+        <strong>How can I provide feedback or contact support?</strong>
+
+        <p>
+          You can use the email link in the settings to send feedback, ask
+          questions, or suggest improvements. Open the feedback section by
+          selecting the logo in the header and then choose the link
+          <strong>“z&#8209;control Support &amp; Feedback”</strong>.
         </p>
       </li>
     </ul>
 
-    <div>
-      <h3 id="web-version">Mobile Version versus Web Version</h3>
-      <p><strong>Advantages of the mobile version:</strong></p>
-      <ul class="no-list-style-inside">
-        <li>Describe the advantages of the mobile version here.</li>
-      </ul>
-      <p><strong>Advantages of the web version:</strong></p>
-      <ul class="no-list-style-inside">
-        <li>Describe the advantages of the web version here.</li>
-      </ul>
-      <div *ngIf="isNative">
-        <p><strong>Start the web version</strong></p>
-        <p>
-          The web version is available at<br />
-          <a
-            class="external-link"
-            href="https://z-control-ionic-setup.web.app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            https://z-control-ionic-setup.web.app
-            <ion-icon
-              name="open-outline"
-              style="vertical-align: text-bottom; margin-left: 2px"
-            ></ion-icon>
-          </a>
-        </p>
-      </div>
-      <p><strong>IMPORTANT</strong></p>
+    <h3 id="web-version">Mobile version and web version</h3>
+
+    <p><strong>Mobile version / native app</strong></p>
+
+    <ul class="no-list-style-inside">
+      <li>
+        The native app is currently available only as a test version for a
+        limited number of users. Access requires an email request to
+        z&#8209;control.
+      </li>
+      <li>JPEG images can currently only be copied in the native app.</li>
+      <li>Taking photos is generally easier with a mobile device.</li>
+      <li>
+        In the native app, the selected data can be sent directly to another app
+        using the sharing function.
+      </li>
+    </ul>
+
+    <p><strong>Web version</strong></p>
+
+    <ul class="no-list-style-inside">
+      <li>
+        The web version does not need to be installed and can be used directly
+        in a browser.
+      </li>
+      <li>
+        When using the web version on a PC or notebook, PNG images taken with
+        the camera can be copied.
+      </li>
+      <li>
+        When using the web version in a mobile browser, images currently cannot
+        be copied. However, the recognized text, title, description, and
+        creation and modification dates can be copied.
+      </li>
+    </ul>
+
+    <div *ngIf="isNative">
+      <p><strong>Open the web version</strong></p>
+
       <p>
-        When you <strong>open the web version on your phone</strong>, make sure
-        the <strong>app is shown in mobile mode</strong>, not desktop mode. In
-        mobile mode, the web version offers a similar look and behavior to the
-        native app. You can also use your mobile keyboard's voice input.
+        The web version is available at the following link:
+        <br />
+        <a
+          class="external-link"
+          href="https://z-control-image-to-text.web.app"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          z&#8209;control Image to Text
+          <ion-icon
+            name="open-outline"
+            style="vertical-align: text-bottom; margin-left: 2px"
+          ></ion-icon>
+        </a>
       </p>
     </div>
 
-    <h3 id="technical-info">Technical Information</h3>
-    <p>Describe the app's technical functionality here.</p>
+    <p><strong>Important note</strong></p>
 
-    <div>
-      <h3 id="troubleshooting">Troubleshooting & Problem Solving</h3>
-      <ul class="no-list-style">
-        <li *ngIf="isNative">
-          <b
-            >Why do I get "Storage Permission Required" error and how do I fix
-            it?</b
-          >
-          <p>
-            If you see this error when saving or mailing images, you need to
-            grant storage permissions to the app:
-          </p>
-          <p>Solution:</p>
-          <ol>
-            <li>Go to Settings</li>
-            <li>Select Apps</li>
-            <li>Find z-control Image to Text</li>
-            <li>Tap Permissions</li>
-            <li>Enable Storage permission</li>
-          </ol>
-          <p>
-            This error typically occurs on older Android versions (e.g., Android
-            9). When you first start the app, you'll be asked to allow
-            permissions to access photos, media, and files. If you previously
-            denied permissions and selected "Don't ask again", you'll get this
-            error and need to manually enable them in your device settings.
-          </p>
-          <p>
-            On certain devices, such as Samsung Galaxy S8/S9 models, it may
-            still not work despite these settings. In that case, please use the
-            web version of this app.
-          </p>
-        </li>
-      </ul>
-    </div>
+    <p>
+      If you open the web version on a mobile device, make sure that the page is
+      displayed in <strong>mobile mode</strong> and not in desktop mode. In
+      mobile mode, the appearance and operation are similar to those of the
+      native app.
+    </p>
+
+    <h3 id="technical-info">Technical information</h3>
+
+    <p>
+      <i>z&#8209;control Image to Text</i> uses optical character recognition
+      (OCR) to recognize text in images and convert it into machine-readable
+      text. This allows you to process, for example, photos of documents,
+      scanned documents, or other images containing text.
+    </p>
+
+    <p>
+      The app uses the
+      <a
+        class="external-link"
+        href="https://cloud.google.com/vision"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Google Cloud Vision API
+        <ion-icon
+          name="open-outline"
+          style="vertical-align: text-bottom; margin-left: 2px"
+        ></ion-icon>
+      </a>
+      for text recognition. The API supports image formats including JPEG and
+      PNG.
+    </p>
+
+    <p>
+      The app uses the
+      <code>document_text_detection</code> feature to recognize text in
+      documents. This feature is designed for documents and images containing
+      larger amounts of text. It can process complex layouts, multiple text
+      columns, and different fonts.
+    </p>
+
+    <p>
+      The selected or captured image is transmitted to the Google Cloud Vision
+      API for processing. The API analyzes the image and returns the recognized
+      text to the app. The image, the recognized text, and any additional
+      information you provide are then stored locally on your device.
+    </p>
+
+    <p>
+      The stored data is not automatically synchronized with a cloud service.
+      When you copy or share data, you decide which other app or recipient
+      receives the data.
+    </p>
+
+    <p>
+      For more information about text recognition, see the
+      <a
+        class="external-link"
+        href="https://cloud.google.com/vision/docs/ocr"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Google Cloud Vision API documentation
+        <ion-icon
+          name="open-outline"
+          style="vertical-align: text-bottom; margin-left: 2px"
+        ></ion-icon> </a
+      >.
+    </p>
+
+    <p><strong>Costs and free quota</strong></p>
+
+    <p>
+      Use of the Google Cloud Vision API may incur costs depending on the number
+      of images processed and the feature used. The
+      <code>document_text_detection</code> feature includes a limited free
+      quota. Charges may apply after the free quota has been used.
+    </p>
+
+    <p>
+      To help prevent unexpected costs, the app uses a shared monthly quota for
+      all users. The app monitors usage of this quota and prevents further image
+      processing once the available quota for the current month has been
+      exhausted.
+    </p>
+
+    <p>
+      The quota is automatically reset on the first day of the following month.
+      Previously processed images and their associated information remain
+      available locally on your device.
+    </p>
+
+    <p>
+      For current prices and free-quota conditions, see the
+      <a
+        class="external-link"
+        href="https://cloud.google.com/vision/pricing"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Google Cloud Vision API pricing page
+        <ion-icon
+          name="open-outline"
+          style="vertical-align: text-bottom; margin-left: 2px"
+        ></ion-icon> </a
+      >.
+    </p>
+
+    <p>
+      Actual costs may change if Google updates the API's prices, features, or
+      service conditions. To manage costs, monitor your usage and consider
+      setting up billing alerts in Google Cloud.
+    </p>
+
+    <h3 id="troubleshooting">Troubleshooting</h3>
+
+    <ul class="no-list-style">
+      <li *ngIf="!isNative">
+        <p><strong>Why can't I copy the image?</strong></p>
+
+        <p>
+          JPEG images currently cannot be copied to the clipboard in the web
+          version. Therefore, the checkbox for the image is disabled in the
+          selection dialog.
+        </p>
+
+        <p>A JPEG image may be created when you:</p>
+
+        <ul>
+          <li>select a JPEG image from the gallery, or</li>
+          <li>
+            open the web version on a mobile device and take a photo with the
+            camera.
+          </li>
+        </ul>
+
+        <p>
+          If you use the web version on a PC or notebook and take a photo with
+          the camera, a PNG image is normally created. This image can be copied.
+        </p>
+
+        <p>
+          On a mobile device, you can currently only copy and share text
+          information in the web version. However, text recognition itself also
+          works in the web version.
+        </p>
+
+        <p>
+          To use the full range of functions on a mobile device, please use the
+          native app.
+        </p>
+      </li>
+
+      <li *ngIf="isNative">
+        <p>
+          <strong>
+            Why is the error message “Storage permission required” displayed?
+          </strong>
+        </p>
+
+        <p>
+          If this error message appears when saving or sharing an image, the app
+          requires an additional permission.
+        </p>
+
+        <p><strong>How to enable the permission:</strong></p>
+
+        <ol>
+          <li>Open your device's settings.</li>
+          <li>Select “Apps”.</li>
+          <li>Search for “z&#8209;control Image to Text”.</li>
+          <li>Open the “Permissions” section.</li>
+          <li>Allow access to photos or storage.</li>
+        </ol>
+
+        <p>
+          This problem occurs especially on older Android versions. If you
+          previously denied a permission and also selected
+          <i>“Don't ask again”</i>, you must enable the permission manually in
+          your device's settings.
+        </p>
+
+        <p>
+          On some older devices, including certain Samsung Galaxy models, access
+          may still fail despite the correct settings. In this case, please use
+          the web version of the app.
+        </p>
+      </li>
+    </ul>
+
     <p class="empty-last-item"></p>
   </ion-content>
 </ng-template>
@@ -390,260 +729,609 @@
       </ol>
     </div>
 
-    <p style="color: var(--ion-color-danger)">
-      Diese Hilfeseite ist in Arbeit - sie beschreibt die App noch nicht
-      vollständig.
+    <h3 id="what-can-the-app-do-DE">Was kann die App?</h3>
+
+    <p>
+      Mit <i>z&#8209;control Image to Text</i> können Sie ein Foto aufnehmen
+      oder ein Bild von Ihrem Gerät auswählen. Die App erkennt den darin
+      enthaltenen Text mithilfe der optischen Zeichenerkennung (OCR) und zeigt
+      ihn anschließend an.
     </p>
 
-    <h3 id="what-can-the-app-do-DE">Was kann die App?</h3>
-    <strong>Wofür ist diese App gedacht?</strong>
     <p>
-      <strong
-        >Machen Sie ein Foto oder laden Sie ein Bild von Ihrem Gerät, und die
-        App extrahiert den Text aus dem Bild mithilfe der optischen
-        Zeichenerkennung (Optical Character Recognition, OCR).</strong
-      >
+      Zum erkannten Text können Sie einen Titel und eine Beschreibung
+      hinzufügen. Die Informationen können anschließend kopiert, in andere Apps
+      eingefügt oder geteilt werden.
     </p>
+
     <p>
-      Der extrahierte Text kann zusammen mit einem eingegebenen Titel und einer
-      Beschreibung kopiert oder auf Ihrem Gerät gespeichert werden.
+      Die folgenden Daten werden automatisch lokal auf Ihrem Gerät gespeichert:
+      das Bild, der erkannte Text, der Titel, die Beschreibung sowie das
+      Erstellungs- und Änderungsdatum. Die Daten werden nicht in der Cloud
+      gespeichert.
     </p>
+
     <p>
-      Die App bietet außerdem Statistiken zum extrahierten Text, einschließlich
-      Wortanzahl, Zeilenanzahl und Zeichenanzahl.
+      Bereits gespeicherte Einträge können Sie jederzeit anzeigen, bearbeiten,
+      kopieren, teilen oder löschen.
     </p>
+
     <p>
-      Die Basissprache (Englisch oder Deutsch) können Sie in den Einstellungen
-      auswählen.
+      Zusätzlich stellt die App Statistiken zum erkannten Text bereit. Dazu
+      gehören die Anzahl der Wörter, Zeilen und Zeichen.
     </p>
-    <p><strong>Highlights:</strong></p>
+
+    <p>Als App-Sprache können Sie Deutsch oder Englisch auswählen.</p>
+
+    <p><strong>Funktionen im Überblick:</strong></p>
+
     <ul class="no-list-style-inside">
       <li>
-        <strong>Text extrahieren und Informationen ergänzen</strong><br />Das
-        Foto und der extrahierte Text können angezeigt und Titel und
-        Beschreibung ergänzt und auf dem Gerät gespeichert werden.
+        <strong>Text aus Bildern erkennen</strong><br />
+        Nehmen Sie ein Foto auf oder wählen Sie ein vorhandenes Bild aus. Die
+        App erkennt den darin enthaltenen Text und zeigt das Ergebnis an.
       </li>
       <li>
-        <strong>Historie verwalten</strong><br />Sie können die Historie der
-        Bilder mit dem extrahierten Text und den ergänzten Informationen
-        einsehen und verwalten.
+        <strong>Zusätzliche Informationen erfassen</strong><br />
+        Ergänzen Sie den Eintrag um einen Titel und eine Beschreibung.
       </li>
       <li>
-        <strong>Erfasste Info, extrahierten Text und Foto kopieren</strong
-        ><br />Sie können diese Informationen dann sehr einfach teilen, indem
-        Sie die kopierten Informationen in eine andere App einfügen.
+        <strong>Historie verwalten</strong><br />
+        Zeigen Sie bereits verarbeitete Bilder und die zugehörigen Informationen
+        an, bearbeiten oder löschen Sie einzelne Einträge oder die gesamte
+        Historie.
       </li>
       <li>
-        <strong>Statusanzeige</strong><br />Damit wird immer der nächste
-        Verarbeitungsschritt angezeigt.
+        <strong>Daten kopieren und teilen</strong><br />
+        Wählen Sie aus, ob Sie das Bild, den Titel, die Beschreibung, den
+        erkannten Text, die Textstatistiken sowie das Erstellungs- und
+        Änderungsdatum kopieren oder teilen möchten.
+      </li>
+      <li>
+        <strong>Statusanzeige</strong><br />
+        Die Statusanzeige führt Sie Schritt für Schritt durch den
+        Verarbeitungsvorgang.
       </li>
     </ul>
-    <p><strong>Einschränkungen:</strong></p>
+
+    <p><strong>Einschränkung des kostenlosen Kontingents:</strong></p>
+
     <ul class="no-list-style-inside">
       <li>
         <strong>
           Gemeinsames kostenloses Monatskontingent:
           {{ maxFreeFeatureCharsLengthPerMonth | number: "1.0-0" : "de" }}
-          Bild-Verarbeitungen für alle Nutzer
+          Bildverarbeitungen für alle Nutzer
         </strong>
-        Wird dieses Kontingent überschritten, entstehen für
-        <i>z-control</i> Kosten.
+
         <p>
-          Daher ist die Auswahl begrenzt, damit das gemeinsame Monatskontingent
-          nicht zu schnell aufgebraucht wird.
+          Die Texterkennung verwendet die kostenpflichtige Google Cloud Vision
+          API. Deshalb steht jeden Monat nur ein begrenztes kostenloses
+          Kontingent zur Verfügung.
+        </p>
+
+        <p>
+          Die App informiert Sie rechtzeitig, wenn sich das Kontingent dem Limit
+          nähert. Sobald das verfügbare Kontingent im laufenden Monat
+          aufgebraucht ist, können keine weiteren Bilder verarbeitet werden.
+        </p>
+
+        <p>
+          Bereits verarbeitete Bilder und die zugehörigen Informationen können
+          Sie weiterhin anzeigen, bearbeiten, kopieren, teilen und löschen.
         </p>
       </li>
     </ul>
 
     <h3 id="how-to-use-the-app-DE">Wie benutze ich die App?</h3>
+
     <ul class="no-list-style">
       <li>
-        <strong>Erster Aufruf der App</strong>
+        <strong>App zum ersten Mal öffnen</strong>
+
         <ul class="no-list-style-inside">
           <li>
-            Beschreiben Sie hier die Einstellungen, die beim ersten Aufruf der
-            App vorgenommen werden müssen.
+            Beim ersten Öffnen übernimmt die App automatisch die Systemsprache
+            Ihres Geräts, sofern es sich dabei um Deutsch oder Englisch handelt.
+            Die Sprache können Sie jederzeit in den Einstellungen ändern.
           </li>
         </ul>
       </li>
+
       <li>
-        <p><strong>Feature der App ausführen</strong></p>
+        <p><strong>Foto aufnehmen und Text erkennen</strong></p>
+
         <ul class="no-list-style-inside">
           <li>
-            Beschreiben Sie hier den Workflow, wie das Feature der App
-            ausgeführt wird, z.B. Schritt 1,
+            Tippen oder klicken Sie auf <strong>„Kamera“</strong> und nehmen Sie
+            ein Foto auf. Auf einem PC oder Notebook funktioniert dies, wenn
+            eine Kamera angeschlossen und vom Browser freigegeben ist.
           </li>
           <li>
-            <b>Was macht die Statusanzeige?</b>
-            <p>
-              Die App zeigt unterhalbe der Überschrift "Text aus Bild
-              extrahieren" eine Statusanzeige an. Diese Funktion führt Sie
-              Schritt für Schritt durch den Prozess, indem immer der nächste
-              Handlungsschritt angezeigt wird – beispielsweise Bild auswählen,
-              Text aus Bild extrahieren, per E-Mail versenden, gespeicherte
-              Daten auswählen, ändern oder löschen. So behalten Sie stets den
-              Überblick, und die Bedienung wird besonders für neue Nutzer noch
-              einfacher und intuitiver.
-            </p>
+            Nach der Aufnahme wird das Bild angezeigt und der nächste
+            Verarbeitungsschritt eingeblendet.
+          </li>
+          <li>
+            Wählen Sie <strong>„Text extrahieren“</strong>, um den Text aus dem
+            Bild zu erkennen.
+          </li>
+          <li>
+            Wenn Sie das Bild nicht weiterverarbeiten möchten, wählen Sie
+            <strong>„Bild löschen“</strong>. Das Bild wird entfernt und die
+            Startseite wird angezeigt.
+          </li>
+          <li>
+            Nach der Texterkennung werden der erkannte Text sowie die Anzahl der
+            Zeilen, Wörter und Zeichen angezeigt.
+          </li>
+          <li>
+            Wählen Sie <strong>„Info erfassen“</strong>, um einen Titel und eine
+            Beschreibung hinzuzufügen. Diese Informationen können Sie später in
+            der Historie ändern oder ergänzen.
+          </li>
+          <li>
+            Mit der Schaltfläche <strong>„Zurück“</strong> in der Kopfzeile
+            gelangen Sie zur vorherigen Seite.
           </li>
         </ul>
       </li>
+
       <li>
-        <strong
-          >Wie kann ich mein monatliches Featurekontingent überprüfen?</strong
-        >
-        <p><i>Auf der Featureseite</i></p>
+        <p><strong>Bild aus der Galerie auswählen</strong></p>
+
+        <ul class="no-list-style-inside">
+          <li>
+            Wählen Sie <strong>„Galerie“</strong> und anschließend ein Bild von
+            Ihrem Gerät aus.
+          </li>
+          <li>
+            Das ausgewählte Bild wird angezeigt und der nächste
+            Verarbeitungsschritt eingeblendet.
+          </li>
+          <li>
+            Die weiteren Schritte entsprechen dem Ablauf nach einer Aufnahme mit
+            der Kamera.
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <p><strong>Gespeicherte Einträge in der Historie verwalten</strong></p>
+
+        <ul class="no-list-style-inside">
+          <li>
+            Öffnen Sie die <strong>„Historie“</strong>, um bereits verarbeitete
+            Bilder anzuzeigen.
+          </li>
+          <li>
+            Die gespeicherten Bilder werden in einer scrollbaren Liste
+            angezeigt. Die Anzahl der gespeicherten Einträge wird im Titel der
+            Seite angegeben.
+          </li>
+          <li>
+            Tippen oder klicken Sie auf einen Eintrag, um ihn zu öffnen und zu
+            bearbeiten.
+          </li>
+          <li>
+            Unterhalb des Bildes werden die gespeicherten Daten angezeigt:
+            Titel, Beschreibung, erkannter Text sowie Erstellungs- und
+            Änderungsdatum.
+          </li>
+          <li>
+            Mit <strong>„Info ändern“</strong> können Sie den Titel und die
+            Beschreibung bearbeiten. Wenn noch keine zusätzlichen Informationen
+            vorhanden sind, heißt die Schaltfläche
+            <strong>„Info erfassen“</strong>.
+          </li>
+          <li>
+            Mit <strong>„Daten kopieren“</strong> öffnen Sie die Auswahl der
+            Daten, die in die Zwischenablage kopiert werden sollen.
+          </li>
+          <li>
+            Standardmäßig sind alle verfügbaren Daten ausgewählt. Sie können die
+            Auswahl ändern, indem Sie einzelne Kontrollkästchen deaktivieren.
+          </li>
+          <li>
+            Sie können zwischen Bild, Titel und Beschreibung, erkanntem Text,
+            Textstatistiken sowie Erstellungs- und Änderungsdatum auswählen.
+          </li>
+          <li *ngIf="!isNative">
+            In der Web-Version können JPEG-Bilder derzeit nicht in die
+            Zwischenablage kopiert werden. Das Kontrollkästchen für das Bild ist
+            deshalb deaktiviert. Weitere Informationen finden Sie im Abschnitt
+            <i>Fehlerbehebung und Problemlösung</i>.
+          </li>
+          <li>
+            Wenn Sie <strong>„Abbrechen“</strong> wählen, werden keine Daten in
+            die Zwischenablage kopiert.
+          </li>
+          <li *ngIf="isNative">
+            Wenn Sie <strong>„OK“</strong> wählen, werden die ausgewählten Daten
+            in die Zwischenablage kopiert. Anschließend können Sie sie in eine
+            andere App einfügen oder über die Teilen-Funktion weitergeben.
+          </li>
+          <li *ngIf="!isNative">
+            Wenn Sie <strong>„OK“</strong> wählen, werden die ausgewählten Daten
+            in die Zwischenablage kopiert. Sie können sie anschließend mit
+            <strong>Strg+V</strong> unter Windows beziehungsweise
+            <strong>Cmd+V</strong> unter macOS in ein Dokument oder eine E-Mail
+            einfügen.
+          </li>
+          <li>
+            Mit <strong>„Alle Daten löschen“</strong> können Sie die gesamte
+            Historie löschen. Vor dem Löschen wird eine Sicherheitsabfrage
+            angezeigt.
+          </li>
+        </ul>
+      </li>
+
+      <li>
+        <strong>Wie funktioniert die Statusanzeige?</strong>
+
         <p>
-          Am Ende der Feature-Seite wird Ihr aktuelles Featurekontingent im
-          Bereich
-          <i>Monatliches Kontingent</i> angezeigt. Sie können diesen Bereich
-          auf- und zuklappen.
+          Unterhalb der Überschrift <i>„Text aus Bild extrahieren“</i> zeigt die
+          App den aktuellen Status des Verarbeitungsvorgangs an.
         </p>
+
         <p>
-          Wenn Ihr persönliches Kontingent oder das gesamte Kontingent aller
-          Benutzer erreicht ist, werden in diesem Monat keine weiteren Feature
-          Anfragen durchgeführt. Am 1. des nächsten Monats wird das Kontingent
-          automatisch zurückgesetzt und Sie können das Feature wieder normal
-          nutzen.
+          Die Statusanzeige informiert Sie darüber, welche Aktion als Nächstes
+          erforderlich ist. Dadurch behalten Sie jederzeit den Überblick.
         </p>
+      </li>
+
+      <li>
+        <strong>Wie kann ich mein monatliches Kontingent überprüfen?</strong>
+
+        <p><i>Auf der Feature-Seite</i></p>
+
+        <p>
+          Am Ende der Feature-Seite finden Sie den Bereich
+          <i>„Monatliches Kontingent“</i>. Dieser Bereich kann auf- und
+          zugeklappt werden und zeigt den aktuellen Stand des Kontingents an.
+        </p>
+
+        <p>
+          Wenn Ihr persönliches Kontingent oder das gemeinsame Kontingent aller
+          Nutzer aufgebraucht ist, können im laufenden Monat keine weiteren
+          Bilder verarbeitet werden. Am ersten Tag des nächsten Monats wird das
+          Kontingent automatisch zurückgesetzt.
+        </p>
+
         <p><i>Auf der Statistikseite in den Einstellungen</i></p>
+
         <p>
-          Hier erhalten Sie einen detaillierten Überblick über das monatliche
-          Kontingent aller Benutzer sowie deren Geräteinformationen. Diese
-          Informationen werden anonymisiert und aggregiert dargestellt, um Ihre
-          Privatsphäre zu schützen.
+          Auf der Statistikseite erhalten Sie einen detaillierteren Überblick
+          über die Nutzung des gemeinsamen Monatskontingents. Die dort
+          angezeigten Geräteinformationen werden anonymisiert und aggregiert
+          dargestellt.
         </p>
       </li>
+
       <li>
         <strong>Wie wechsle ich zwischen Feature und Einstellungen?</strong>
+
         <ul class="no-list-style-inside">
           <li *ngIf="this.utilsService.isShowIonTabBar">
-            <strong>Auf Mobilgeräten im Hochformat:</strong> Nutzen Sie die Tabs
-            am unteren Bildschirmrand, um zwischen Feature und Einstellungen zu
-            wechseln.
+            <strong>Auf Mobilgeräten im Hochformat:</strong>
+            Verwenden Sie die Tabs am unteren Bildschirmrand.
           </li>
           <li *ngIf="this.utilsService.isShowIonTabBar">
-            <strong>Auf Tablets, Desktop-PCs oder im Querformat:</strong>
+            <strong>Auf Tablets, Desktop-PCs und im Querformat:</strong>
             Verwenden Sie die Schaltfläche oben rechts in der Kopfzeile, um
-            zwischen Feature <ion-icon name="language-outline"></ion-icon> und
-            Einstellungen <ion-icon name="settings-outline"></ion-icon> zu
-            wechseln.
+            zwischen dem Feature
+            <ion-icon name="image-outline"></ion-icon>
+            und den Einstellungen
+            <ion-icon name="settings-outline"></ion-icon>
+            zu wechseln.
           </li>
           <li *ngIf="!this.utilsService.isShowIonTabBar">
             Verwenden Sie die Schaltfläche oben rechts in der Kopfzeile, um
-            zwischen Feature
-            <ion-icon name="language-outline"></ion-icon> und Einstellungen
-            <ion-icon name="settings-outline"></ion-icon> zu wechseln.
+            zwischen dem Feature
+            <ion-icon name="image-outline"></ion-icon>
+            und den Einstellungen
+            <ion-icon name="settings-outline"></ion-icon>
+            zu wechseln.
           </li>
         </ul>
       </li>
+
       <li>
         <strong>Wie ändere ich die App-Sprache?</strong>
+
         <p>
-          Wählen Sie in den Einstellungen die Option "Sprache auswählen", um
-          zwischen Englisch und Deutsch zu wechseln. Die Änderung wird sofort
-          übernommen.
+          Öffnen Sie in den Einstellungen die Option
+          <strong>„Sprache auswählen“</strong> und wählen Sie Deutsch oder
+          Englisch. Die Änderung wird sofort übernommen.
         </p>
       </li>
+
       <li>
-        <strong>Wie wechsle ich zwischen Dunkel- und Hellmodus?</strong>
+        <strong>Wie wechsle ich zwischen Hell- und Dunkelmodus?</strong>
+
         <p>
-          Die App folgt den Systemeinstellungen Ihres Geräts. Ändern Sie das
-          Design Ihres Geräts ("Dunkles Design", "Helles Design") in den
-          Systemeinstellungen. Die Änderung wird sofort übernommen.
+          Die App verwendet standardmäßig die Darstellung Ihres Geräts. Ändern
+          Sie das Design in den Systemeinstellungen, beispielsweise von
+          <i>„Helles Design“</i> zu <i>„Dunkles Design“</i>. Die Änderung wird
+          automatisch in der App übernommen.
         </p>
       </li>
+
       <li>
         <strong
           >Wie kann ich Feedback geben oder den Support kontaktieren?</strong
         >
+
         <p>
-          Sie können uns Feedback, Fragen oder Vorschläge über den E-Mail-Link
-          in den Einstellungen senden. Klicken Sie auf das Logo in der
-          Kopfzeile, um den Feedback-Bereich zu öffnen. Über den Link „z-control
-          Support & Feedback“ können Sie uns eine E-Mail senden.
+          Für Feedback, Fragen oder Verbesserungsvorschläge können Sie den
+          E-Mail-Link in den Einstellungen verwenden. Öffnen Sie den
+          Feedback-Bereich über das Logo in der Kopfzeile und wählen Sie den
+          Link
+          <strong>„z&#8209;control Support &amp; Feedback“</strong>.
         </p>
       </li>
     </ul>
 
-    <div>
-      <h3 id="web-version-DE">Mobile-Version versus Web-Version</h3>
-      <p><strong>Vorteile der mobilen Version:</strong></p>
-      <ul class="no-list-style-inside">
-        <li>Beschreiben Sie hier die Vorteile der mobilen Version.</li>
-      </ul>
-      <p><strong>Vorteile der Web-Version:</strong></p>
-      <ul class="no-list-style-inside">
-        <li>Beschreiben Sie hier die Vorteile der Web-Version.</li>
-      </ul>
-      <div *ngIf="isNative">
-        <p><strong>Web-Version starten</strong></p>
-        <p>
-          Die Web-Version ist erreichbar unter<br />
-          <a
-            class="external-link"
-            href="https://z-control-ionic-setup.web.app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            https://z-control-ionic-setup.web.app
-            <ion-icon
-              name="open-outline"
-              style="vertical-align: text-bottom; margin-left: 2px"
-            ></ion-icon>
-          </a>
-        </p>
-      </div>
-      <p><strong>WICHTIG</strong></p>
+    <h3 id="web-version-DE">Mobile-Version und Web-Version</h3>
+
+    <p><strong>Mobile-Version / native App</strong></p>
+
+    <ul class="no-list-style-inside">
+      <li>
+        Die native App wird derzeit nur als Testversion für eine begrenzte
+        Anzahl von Nutzern angeboten. Für den Zugang ist eine Anfrage per E-Mail
+        an z&#8209;control erforderlich.
+      </li>
+      <li>JPEG-Bilder können derzeit nur in der nativen App kopiert werden.</li>
+      <li>
+        Mit einem mobilen Gerät lassen sich Fotos in der Regel einfacher
+        aufnehmen.
+      </li>
+      <li>
+        In der nativen App können die ausgewählten Daten direkt über die
+        Teilen-Funktion an eine andere App weitergegeben werden.
+      </li>
+    </ul>
+
+    <p><strong>Web-Version</strong></p>
+
+    <ul class="no-list-style-inside">
+      <li>
+        Die Web-Version muss nicht installiert werden und kann direkt im Browser
+        verwendet werden.
+      </li>
+      <li>
+        Bei Verwendung auf einem PC oder Notebook können mit der Kamera
+        aufgenommene PNG-Bilder kopiert werden.
+      </li>
+      <li>
+        Bei Verwendung in einem mobilen Browser können Bilder derzeit nicht
+        kopiert werden. Die erkannten Textinformationen sowie Titel,
+        Beschreibung, Erstellungs- und Änderungsdatum können jedoch kopiert
+        werden.
+      </li>
+    </ul>
+
+    <div *ngIf="isNative">
+      <p><strong>Web-Version öffnen</strong></p>
+
       <p>
-        Wenn Sie die <strong>Web-Version auf dem Handy aufrufen</strong>,
-        stellen Sie sicher, dass die <strong>App im Mobile-Modus</strong> und
-        nicht im Desktop-Modus angezeigt wird. Im Mobile-Modus bietet die
-        Web-Version ein ähnliches Aussehen und Verhalten wie die native App.
+        Die Web-Version ist unter folgendem Link erreichbar:
+        <br />
+        <a
+          class="external-link"
+          href="https://z-control-image-to-text.web.app"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          z&#8209;control Image to Text
+          <ion-icon
+            name="open-outline"
+            style="vertical-align: text-bottom; margin-left: 2px"
+          ></ion-icon>
+        </a>
       </p>
     </div>
 
-    <h3 id="technical-info-DE">Technische Informationen</h3>
-    <p>Beschreiben Sie hier die technische Funktionsweise der App.</p>
+    <p><strong>Wichtiger Hinweis</strong></p>
 
-    <div>
-      <h3 id="troubleshooting-DE">Fehlerbehebung & Problemlösung</h3>
-      <ul class="no-list-style">
-        <li *ngIf="isNative">
-          <b
-            >Warum erhalte ich die Fehlermeldung "Speicherberechtigung
-            erforderlich" und wie behebe ich das?</b
-          >
-          <p>
-            Falls beim Speichern oder Versenden von Bildern dieser Fehler
-            auftritt, müssen Sie der App Speicherberechtigungen erteilen:
-          </p>
-          <p>Lösung:</p>
-          <ol>
-            <li>Gehen Sie zu Einstellungen</li>
-            <li>Wählen Sie Apps</li>
-            <li>Suchen Sie z-control Image to Text</li>
-            <li>Tippen Sie auf Berechtigungen</li>
-            <li>Aktivieren Sie die Speicherberechtigung</li>
-          </ol>
-          <p>
-            Dieser Fehler tritt typischerweise bei älteren Android-Versionen
-            (z.B. Android 9) auf. Beim ersten Start der App werden Sie gefragt,
-            ob Sie Berechtigungen für den Zugriff auf Fotos, Medien und Dateien
-            erteilen möchten. Falls Sie zuvor die Berechtigung verweigert und
-            "Nicht mehr fragen" ausgewählt haben, erhalten Sie diese
-            Fehlermeldung und müssen die Berechtigung manuell in den
-            Geräteeinstellungen aktivieren.
-          </p>
-          <p>
-            Bei bestimmten Geräten, wie zum Beispiel dem Samsung Galaxy S8/S9,
-            kann es vorkommen, dass es trotz korrekter Einstellungen weiterhin
-            nicht funktioniert. In diesem Fall nutzen Sie bitte die Web-Version
-            dieser App.
-          </p>
-        </li>
-      </ul>
-    </div>
+    <p>
+      Wenn Sie die Web-Version auf einem Mobilgerät öffnen, stellen Sie sicher,
+      dass die Seite im <strong>Mobile-Modus</strong> und nicht im Desktop-Modus
+      angezeigt wird. Im Mobile-Modus ähneln Darstellung und Bedienung der
+      nativen App.
+    </p>
+
+    <
+    <h3 id="technical-info-DE">Technische Informationen</h3>
+
+    <p>
+      <i>z&#8209;control Image to Text</i> verwendet optische Zeichenerkennung
+      (OCR), um Text aus Bildern zu erkennen und in maschinenlesbaren Text
+      umzuwandeln. Dadurch können beispielsweise Fotos von Dokumenten, gescannte
+      Unterlagen oder andere Bilder mit enthaltenem Text verarbeitet werden.
+    </p>
+
+    <p>
+      Für die Texterkennung verwendet die App die
+      <a
+        class="external-link"
+        href="https://cloud.google.com/vision"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Google Cloud Vision API
+        <ion-icon
+          name="open-outline"
+          style="vertical-align: text-bottom; margin-left: 2px"
+        ></ion-icon> </a
+      >. Die API unterstützt unter anderem Bilder im JPEG- und PNG-Format.
+    </p>
+
+    <p>
+      Für die Erkennung von Text in Dokumenten verwendet die App die Funktion
+      <code>document_text_detection</code>. Diese Funktion ist für Dokumente und
+      Bilder mit umfangreichen Textinhalten geeignet und kann unter anderem
+      komplexe Layouts, mehrere Textspalten und unterschiedliche Schriftarten
+      verarbeiten.
+    </p>
+
+    <p>
+      Das ausgewählte oder aufgenommene Bild wird zur Verarbeitung an die Google
+      Cloud Vision API übertragen. Die API analysiert das Bild und liefert den
+      erkannten Text an die App zurück. Anschließend werden das Bild, der
+      erkannte Text sowie Ihre zusätzlichen Informationen lokal auf Ihrem Gerät
+      gespeichert.
+    </p>
+
+    <p>
+      Die gespeicherten Daten werden nicht automatisch in einer Cloud
+      synchronisiert. Wenn Sie Daten kopieren oder teilen, entscheiden Sie
+      selbst, an welche andere App oder welchen Empfänger die Daten
+      weitergegeben werden.
+    </p>
+
+    <p>
+      Weitere Informationen zur Texterkennung finden Sie in der
+      <a
+        class="external-link"
+        href="https://cloud.google.com/vision/docs/ocr"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Dokumentation der Google Cloud Vision API
+        <ion-icon
+          name="open-outline"
+          style="vertical-align: text-bottom; margin-left: 2px"
+        ></ion-icon> </a
+      >.
+    </p>
+
+    <p><strong>Kosten und kostenloses Kontingent</strong></p>
+
+    <p>
+      Die Nutzung der Google Cloud Vision API ist abhängig von der Anzahl der
+      verarbeiteten Bilder und der verwendeten Funktion kostenpflichtig. Für die
+      Funktion <code>document_text_detection</code> steht ein begrenztes
+      kostenloses Kontingent zur Verfügung. Nach dessen Verbrauch können Kosten
+      entstehen.
+    </p>
+
+    <p>
+      Um unerwartete Kosten zu vermeiden, verfügt die App über ein begrenztes
+      gemeinsames Monatskontingent für alle Nutzer. Die App überwacht die
+      Nutzung dieses Kontingents und verhindert weitere Bildverarbeitungen,
+      sobald das verfügbare Kontingent im laufenden Monat aufgebraucht ist.
+    </p>
+
+    <p>
+      Das Kontingent wird am ersten Tag des folgenden Monats automatisch
+      zurückgesetzt. Bereits verarbeitete Bilder und die zugehörigen
+      Informationen bleiben weiterhin auf Ihrem Gerät verfügbar.
+    </p>
+
+    <p>
+      Die aktuellen Preise und die Bedingungen des kostenlosen Kontingents
+      finden Sie auf der
+      <a
+        class="external-link"
+        href="https://cloud.google.com/vision/pricing"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Preisseite der Google Cloud Vision API
+        <ion-icon
+          name="open-outline"
+          style="vertical-align: text-bottom; margin-left: 2px"
+        ></ion-icon> </a
+      >.
+    </p>
+
+    <p>
+      Die tatsächlichen Kosten können sich ändern, wenn Google die Preise,
+      Leistungsmerkmale oder Bedingungen der API anpasst. Für die Verwaltung der
+      Kosten empfiehlt es sich, die Nutzung zu überwachen und gegebenenfalls
+      Abrechnungswarnungen in Google Cloud einzurichten.
+    </p>
+
+    <h3 id="troubleshooting-DE">Fehlerbehebung und Problemlösung</h3>
+
+    <ul class="no-list-style">
+      <li *ngIf="!isNative">
+        <p><strong>Warum kann ich das Bild nicht kopieren?</strong></p>
+
+        <p>
+          JPEG-Bilder können in der Web-Version derzeit nicht in die
+          Zwischenablage kopiert werden. Deshalb ist das Kontrollkästchen für
+          das Bild in der Auswahlmaske deaktiviert.
+        </p>
+
+        <p>Ein JPEG-Bild kann entstehen, wenn Sie:</p>
+
+        <ul>
+          <li>ein JPEG-Bild aus der Galerie auswählen oder</li>
+          <li>
+            die Web-Version auf einem Mobilgerät öffnen und dort ein Foto mit
+            der Kamera aufnehmen.
+          </li>
+        </ul>
+
+        <p>
+          Wenn Sie die Web-Version auf einem PC oder Notebook verwenden und dort
+          ein Foto mit der Kamera aufnehmen, wird normalerweise ein PNG-Bild
+          erzeugt. Dieses Bild kann kopiert werden.
+        </p>
+
+        <p>
+          Auf einem Mobilgerät können Sie in der Web-Version derzeit nur die
+          Textinformationen kopieren und teilen. Die Texterkennung selbst
+          funktioniert jedoch auch in der Web-Version.
+        </p>
+
+        <p>
+          Für den vollständigen Funktionsumfang auf einem Mobilgerät verwenden
+          Sie bitte die native App.
+        </p>
+      </li>
+
+      <li *ngIf="isNative">
+        <p>
+          <strong>
+            Warum wird die Fehlermeldung „Speicherberechtigung erforderlich“
+            angezeigt?
+          </strong>
+        </p>
+
+        <p>
+          Wenn beim Speichern oder Teilen eines Bildes diese Fehlermeldung
+          erscheint, benötigt die App eine zusätzliche Berechtigung.
+        </p>
+
+        <p><strong>Berechtigung aktivieren:</strong></p>
+
+        <ol>
+          <li>Öffnen Sie die Einstellungen Ihres Geräts.</li>
+          <li>Wählen Sie „Apps“.</li>
+          <li>Suchen Sie nach „z&#8209;control Image to Text“.</li>
+          <li>Öffnen Sie den Bereich „Berechtigungen“.</li>
+          <li>Erlauben Sie den Zugriff auf Fotos beziehungsweise Speicher.</li>
+        </ol>
+
+        <p>
+          Dieses Problem tritt insbesondere bei älteren Android-Versionen auf.
+          Wenn Sie eine Berechtigung zuvor abgelehnt und zusätzlich
+          <i>„Nicht mehr fragen“</i> ausgewählt haben, müssen Sie sie manuell in
+          den Geräteeinstellungen aktivieren.
+        </p>
+
+        <p>
+          Bei einigen älteren Geräten, beispielsweise bestimmten Samsung-Galaxy-
+          Modellen, kann der Zugriff trotz korrekter Einstellungen weiterhin
+          fehlschlagen. Verwenden Sie in diesem Fall bitte die Web-Version der
+          App.
+        </p>
+      </li>
+    </ul>
+
     <p class="empty-last-item"></p>
   </ion-content>
 </ng-template>
