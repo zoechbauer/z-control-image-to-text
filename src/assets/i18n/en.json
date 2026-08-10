@@ -21,19 +21,24 @@
       },
       "COPY_DATA": {
         "HEADER": "Copy Data",
+        "HEADER_SHARE": "Share Data",
         "SUBHEADER": "Photos and associated data will be copied to the clipboard.",
-        "MESSAGE": "Which data would you like to copy?"
+        "MESSAGE": "Which data would you like to copy?",
+        "MESSAGE_SHARE": "Which data would you like to share?",
+        "PHOTO_FORMAT_NOT_SUPPORTED_WEB": "The format {{format}} is not currently supported. Only png images can be copied.",
+        "PHOTO_FORMAT_NOT_SUPPORTED_NATIVE": "The format {{format}} is not currently supported. Only png/jpeg images can be copied."
       },
       "OK": "OK",
       "CANCEL": "Cancel",
       "CONFIRM": "Confirm",
       "DELETE": "Delete",
       "COPY": "Copy",
-      "COPY_PHOTO": "Copy Photo",
-      "COPY_TITLE_DESCRIPTION": "Copy Title and Description",
-      "COPY_EXTRACTED_TEXT": "Copy Extracted Text",
-      "COPY_CREATED_MODIFIED_TIMESTAMPS": "Copy Created and Modified Timestamps",
-      "COPY_TEXT_STATISTICS": "Copy Text Statistics"
+      "SHARE": "Share",
+      "COPY_PHOTO": "Photo",
+      "COPY_TITLE_DESCRIPTION": "Title and Description",
+      "COPY_EXTRACTED_TEXT": "Extracted Text",
+      "COPY_CREATED_MODIFIED_TIMESTAMPS": "Created and Modified Timestamps",
+      "COPY_TEXT_STATISTICS": "Text Statistics"
     }
   },
   "------ header page": "-------",
@@ -47,7 +52,8 @@
       "OPEN_FEEDBACK": "Open feedback page",
       "OPEN_HELP": "Open help page",
       "GOTO_MAIN": "Go to text recognition page",
-      "GOTO_SETTINGS": "Go to settings page"
+      "GOTO_SETTINGS": "Go to settings page",
+      "GO_BACK": "Go Back"
     }
   },
   "------ footer page": "-------",
@@ -92,6 +98,7 @@
         "SAVE_DATA": "Save Data",
         "LOAD_HISTORY": "Load History",
         "COPY_DATA": "Copy Data",
+        "SHARE_DATA": "Share Data",
         "DELETE_DATA": "Delete Data",
         "DELETE_ALL": "Delete All Data",
         "NEXT_IMAGE": "Next",
@@ -127,7 +134,7 @@
       }
     },
     "COPY_DATA": {
-      "TITLE": "z-control Image To Text - Copied Data According to Selection Options",
+      "TITLE": "Copied Data According to Selection Options",
       "PHOTO": {
         "HEADER": "Photo",
         "PATH": "Path",
@@ -139,7 +146,7 @@
         "DESCRIPTION": "Description"
       },
       "TIMESTAMPS": {
-        "HEADER": "When were the data created and last modified?",
+        "HEADER": "Changes Made",
         "CREATED_AT": "Created At",
         "MODIFIED_AT": "Modified At"
       },

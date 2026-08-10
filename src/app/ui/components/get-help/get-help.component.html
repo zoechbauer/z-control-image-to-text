@@ -125,7 +125,7 @@
       </li>
       <li>
         <strong>Copy and share data</strong><br />
-        Choose whether you want to copy or share the image, title, description,
+        Choose whether you want to copy / share the image, title, description,
         recognized text, text statistics, and creation and modification dates.
       </li>
       <li>
@@ -257,9 +257,13 @@
             description. If no additional information is available yet, the
             button is called <strong>“Add information”</strong>.
           </li>
-          <li>
+          <li *ngIf="!isNative">
             Select <strong>“Copy data”</strong> to open the selection of data
             that can be copied to the clipboard.
+          </li>
+          <li *ngIf="isNative">
+            Select <strong>“Share data”</strong> to open the selection of data
+            that can be shared with other apps.
           </li>
           <li>
             By default, all available data is selected. You can change the
@@ -276,13 +280,14 @@
             <i>Troubleshooting</i> section.
           </li>
           <li>
-            If you select <strong>“Cancel”</strong>, no data is copied to the
-            clipboard.
+            If you select <strong>“Cancel”</strong>, no data is
+            <span *ngIf="!isNative">copied to the clipboard</span
+            ><span *ngIf="isNative">shared</span>.
           </li>
           <li *ngIf="isNative">
-            If you select <strong>“OK”</strong>, the selected data is copied to
-            the clipboard. You can then paste it into another app or share it
-            using the sharing function.
+            If you select <strong>“OK”</strong>, the apps with which the data
+            can be shared are displayed. When you select an app, the selected
+            data is automatically shared using the sharing function.
           </li>
           <li *ngIf="!isNative">
             If you select <strong>“OK”</strong>, the selected data is copied to
@@ -599,7 +604,7 @@
         </p>
 
         <p>
-          On a mobile device, you can currently only copy and share text
+          On a mobile device, you can currently copy / share only text
           information in the web version. However, text recognition itself also
           works in the web version.
         </p>
@@ -785,7 +790,7 @@
         <strong>Daten kopieren und teilen</strong><br />
         Wählen Sie aus, ob Sie das Bild, den Titel, die Beschreibung, den
         erkannten Text, die Textstatistiken sowie das Erstellungs- und
-        Änderungsdatum kopieren oder teilen möchten.
+        Änderungsdatum kopieren / teilen möchten.
       </li>
       <li>
         <strong>Statusanzeige</strong><br />
@@ -923,9 +928,13 @@
             vorhanden sind, heißt die Schaltfläche
             <strong>„Info erfassen“</strong>.
           </li>
-          <li>
+          <li *ngIf="!isNative">
             Mit <strong>„Daten kopieren“</strong> öffnen Sie die Auswahl der
             Daten, die in die Zwischenablage kopiert werden sollen.
+          </li>
+          <li *ngIf="isNative">
+            Mit <strong>„Daten teilen</strong> öffnen Sie die Auswahl der Daten,
+            die mit anderen Apps geteilt werden sollen.
           </li>
           <li>
             Standardmäßig sind alle verfügbaren Daten ausgewählt. Sie können die
@@ -942,13 +951,15 @@
             <i>Fehlerbehebung und Problemlösung</i>.
           </li>
           <li>
-            Wenn Sie <strong>„Abbrechen“</strong> wählen, werden keine Daten in
-            die Zwischenablage kopiert.
+            Wenn Sie <strong>„Abbrechen“</strong> wählen, werden keine Daten
+            <span *ngIf="!isNative">in die Zwischenablage kopiert</span
+            ><span *ngIf="isNative">geteilt</span>.
           </li>
           <li *ngIf="isNative">
-            Wenn Sie <strong>„OK“</strong> wählen, werden die ausgewählten Daten
-            in die Zwischenablage kopiert. Anschließend können Sie sie in eine
-            andere App einfügen oder über die Teilen-Funktion weitergeben.
+            Wenn Sie <strong>„OK“</strong> wählen, werden die Apps mit denen
+            Daten geteilt werden können angezeigt. Bei Auswahl einer App werden
+            die ausgewählten Daten automatisch über die Teilen-Funktion
+            weitergeben.
           </li>
           <li *ngIf="!isNative">
             Wenn Sie <strong>„OK“</strong> wählen, werden die ausgewählten Daten
@@ -1185,7 +1196,7 @@
 
     <p>
       Die gespeicherten Daten werden nicht automatisch in einer Cloud
-      synchronisiert. Wenn Sie Daten kopieren oder teilen, entscheiden Sie
+      synchronisiert. Wenn Sie Daten kopieren / teilen, entscheiden Sie
       selbst, an welche andere App oder welchen Empfänger die Daten
       weitergegeben werden.
     </p>

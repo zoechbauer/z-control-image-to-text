@@ -21,8 +21,10 @@
       },
       "COPY_DATA": {
         "HEADER": "Daten kopieren",
+        "HEADER_SHARE": "Daten teilen",
         "SUBHEADER": "Photos und zugehörige Daten werden in die Zwischenablage kopiert.",
         "MESSAGE": "Welche Daten möchten Sie kopieren?",
+        "MESSAGE_SHARE": "Welche Daten möchten Sie teilen?",
         "PHOTO_FORMAT_NOT_SUPPORTED_WEB": "Das Format {{format}} wird derzeit nicht unterstützt. Nur png-Bilder können kopiert werden.",
         "PHOTO_FORMAT_NOT_SUPPORTED_NATIVE": "Das Format {{format}} wird derzeit nicht unterstützt. Nur png/jpeg-Bilder können kopiert werden."
       },
@@ -31,11 +33,12 @@
       "CONFIRM": "Bestätigen",
       "DELETE": "Löschen",
       "COPY": "Kopieren",
-      "COPY_PHOTO": "Foto kopieren",
-      "COPY_TITLE_DESCRIPTION": "Titel und Beschreibung kopieren",
-      "COPY_EXTRACTED_TEXT": "Extrahierten Text kopieren",
-      "COPY_CREATED_MODIFIED_TIMESTAMPS": "Erstellungs- und Änderungszeiten kopieren",
-      "COPY_TEXT_STATISTICS": "Textstatistiken kopieren"
+      "SHARE": "Teilen",
+      "COPY_PHOTO": "Foto",
+      "COPY_TITLE_DESCRIPTION": "Titel und Beschreibung",
+      "COPY_EXTRACTED_TEXT": "Extrahierten Text",
+      "COPY_CREATED_MODIFIED_TIMESTAMPS": "Erstellungs- und Änderungszeiten",
+      "COPY_TEXT_STATISTICS": "Textstatistiken"
     }
   },
   "------ header page": "-------",
@@ -83,11 +86,7 @@
         "EXTRACTED_TEXT": "Extrahierter Text",
         "NO_EXTRACTED_TEXT": "Kein extrahierter Text vorhanden.",
         "NO_EXTRACTED_TEXT_FOUND": "Das Bild enthält keinen Text.",
-        "NO_EXTRACTED_TEXT_NO_METADATA_INFO": "Sie haben die Texterkennung nicht aufgerufen.",
-        "NUMBER_OF_IMAGES": "Anzahl Bilder",
-        "NUMBER_OF_LINES": "Anzahl Zeilen",
-        "NUMBER_OF_WORDS": "Anzahl Wörter",
-        "NUMBER_OF_CHARACTERS": "Anzahl Zeichen"
+        "NO_EXTRACTED_TEXT_NO_METADATA_INFO": "Sie haben die Texterkennung nicht aufgerufen."
       },
       "BUTTON": {
         "CAMERA": "Kamera",
@@ -99,6 +98,7 @@
         "SAVE_DATA": "Daten speichern",
         "LOAD_HISTORY": "Historie",
         "COPY_DATA": "Daten kopieren",
+        "SHARE_DATA": "Daten teilen",
         "DELETE_DATA": "Daten löschen",
         "DELETE_ALL": "Alle Daten löschen",
         "NEXT_IMAGE": "Nächstes",
@@ -134,7 +134,7 @@
       }
     },
     "COPY_DATA": {
-      "TITLE": "z-control Image To Text - Kopierte Daten lt. Selektionsoptionen",
+      "TITLE": "Kopierte Daten lt. Selektionsoptionen",
       "PHOTO": {
         "HEADER": "Foto",
         "PATH": "Pfad",
@@ -146,7 +146,7 @@
         "DESCRIPTION": "Beschreibung"
       },
       "TIMESTAMPS": {
-        "HEADER": "Wann wurden die Daten erstellt und zuletzt geändert?",
+        "HEADER": "Durchgeführte Änderungen",
         "CREATED_AT": "Erstellt am",
         "MODIFIED_AT": "Geändert am"
       },

@@ -9,6 +9,8 @@ import { CopyDataOptions, UserPhoto } from '../shared/app.interfaces';
 import { ImageCompressionService } from './image-compression.service';
 import { PhotoStorageService } from './photo-storage.service';
 import { UtilsService } from './utils.service';
+import { environment } from 'src/environments/environment';
+import { FilePathService } from './file-path.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +22,7 @@ export class ClipboardService {
   private readonly imageCompressionService = inject(ImageCompressionService);
   private readonly photoStorageService = inject(PhotoStorageService);
   private readonly utilsService = inject(UtilsService);
+  private readonly filePathService = inject(FilePathService);
 
   /**
    * Copies the specified data to the clipboard based on the provided options.
@@ -94,7 +97,7 @@ export class ClipboardService {
       let shareItemData: Record<string, any> = {};
 
       const title =
-        'z-control Image to Text' +
+        environment.app.name +
         (photo.photoInfo?.title ? ' - ' + photo.photoInfo.title : '');
       shareItemData['title'] = title;
 
@@ -209,7 +212,8 @@ export class ClipboardService {
     textStatistics: any,
     options: CopyDataOptions,
   ): string {
-    let data = this.translate.instant('FEATURE.COPY_DATA.TITLE') + '\n\n';
+    let data = environment.app.name + '\n';
+    data += this.translate.instant('FEATURE.COPY_DATA.TITLE') + '\n\n';
 
     if (options.copyTitleDescription) {
       data += this.getTitleDescriptionText(photo);
@@ -228,7 +232,7 @@ export class ClipboardService {
     }
 
     if (options.copyPhoto) {
-      data += this.getPhotoPath(photo);
+      data += this.getPhotoName(photo);
     }
 
     return data;
@@ -305,20 +309,15 @@ export class ClipboardService {
     return `${headerLabel}\n${createdAtLabel}: ${createdAtFormatted}\n${modifiedAtLabel}: ${modifiedAtFormatted}\n\n`;
   }
 
-  private getPhotoPath(photo: UserPhoto): string {
+  private getPhotoName(photo: UserPhoto): string {
     const headerLabel = this.translate.instant(
       'FEATURE.COPY_DATA.PHOTO.HEADER',
-    );
-    const photoPathLabel = this.translate.instant(
-      'FEATURE.COPY_DATA.PHOTO.PATH',
     );
     const filenameLabel = this.translate.instant(
       'FEATURE.COPY_DATA.PHOTO.FILENAME',
     );
-    
-    const photoPath = photo.filepath || '';
-    const pathName = photoPath.startsWith('file://') ? photoPathLabel : filenameLabel;
-    
-    return `${headerLabel}\n${pathName}: ${photoPath}\n\n`;
+    const filename = this.filePathService.getFilenameFromFilepath(photo.filepath);
+
+    return `${headerLabel}\n${filenameLabel}: ${filename}\n\n`;
   }
 }

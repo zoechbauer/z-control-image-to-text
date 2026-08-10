@@ -37,6 +37,7 @@ import { FeatureResultComponent } from '../ui/components/feature-result/feature-
 import { AlertService } from '../services/alert.service';
 import { ClipboardService } from '../services/clipboard.service';
 import { AppConstants } from '../shared/app.constants';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-feature',
@@ -99,6 +100,16 @@ export class FeatureComponent implements OnInit {
    */
   get cardTitle(): string {
     return this.workflowService.getCardTitle(this.workflowStep);
+  }
+
+  /**
+   * Get the label for the copy/share button based on the platform (native or web).
+   * @returns The label for the copy/share button as a translated string.
+   */
+  get copyShareLabel(): string {
+    return Capacitor.isNativePlatform()
+      ? this.translate.instant('FEATURE.CARD.BUTTON.SHARE_DATA')
+      : this.translate.instant('FEATURE.CARD.BUTTON.COPY_DATA');
   }
 
   /**

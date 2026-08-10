@@ -124,11 +124,15 @@ export class AlertService {
       this.setValuesForCopyImage(filepath);
 
     const alert = await this.alertController.create({
-      header: this.translate.instant('APP.ALERT_SERVICE.COPY_DATA.HEADER'),
-      subHeader: this.translate.instant(
-        'APP.ALERT_SERVICE.COPY_DATA.SUBHEADER',
-      ),
-      message: this.translate.instant('APP.ALERT_SERVICE.COPY_DATA.MESSAGE'),
+      header: !Capacitor.isNativePlatform()
+        ? this.translate.instant('APP.ALERT_SERVICE.COPY_DATA.HEADER')
+        : this.translate.instant('APP.ALERT_SERVICE.COPY_DATA.HEADER_SHARE'),
+      subHeader: !Capacitor.isNativePlatform()
+        ? this.translate.instant('APP.ALERT_SERVICE.COPY_DATA.SUBHEADER')
+        : undefined,
+      message: !Capacitor.isNativePlatform()
+        ? this.translate.instant('APP.ALERT_SERVICE.COPY_DATA.MESSAGE')
+        : this.translate.instant('APP.ALERT_SERVICE.COPY_DATA.MESSAGE_SHARE'),
       cssClass: 'copy-data-alert',
       inputs: [
         {
@@ -178,7 +182,9 @@ export class AlertService {
       ],
       buttons: [
         {
-          text: this.translate.instant('APP.ALERT_SERVICE.COPY'),
+          text: !Capacitor.isNativePlatform()
+            ? this.translate.instant('APP.ALERT_SERVICE.COPY')
+            : this.translate.instant('APP.ALERT_SERVICE.SHARE'),
           role: 'confirm',
           handler: (data: string[]) => ({
             copyPhoto: data.includes(CopyDataOption.Photo),
