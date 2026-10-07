@@ -205,70 +205,15 @@ describe('HelpModalComponent', () => {
       expect(component.isNative).toBe(true);
     });
 
-    it('should return email subject help text for native app', () => {
-      spyOnProperty(component, 'isNative', 'get').and.returnValue(true);
-
-      expect(component.isNative).toBe(true);
-      expect(component.emailSubjectHelpText).toBe('Translated Text');
-      expect(mockTranslateService.instant).toHaveBeenCalledWith(
-        'HELP_EMAIL_SUBJECT',
-      );
-    });
-
-    it('should return email subject help text for web app', () => {
-      spyOnProperty(component, 'isNative', 'get').and.returnValue(false);
-
-      expect(component.isNative).toBe(false);
-      expect(component.emailSubjectHelpText).toBe('Translated Text');
-      expect(mockTranslateService.instant).toHaveBeenCalledWith(
-        'HELP_EMAIL_SUBJECT_WEB',
-      );
-    });
-
-    it('should return device text for native app', () => {
-      spyOnProperty(component, 'isNative', 'get').and.returnValue(true);
-
-      expect(component.isNative).toBe(true);
-      expect(component.deviceText).toBe('Translated Text');
-      expect(mockTranslateService.instant).toHaveBeenCalledWith(
-        'HELP_DEVICE_TEXT',
-      );
-    });
-
-    it('should return device text for web app', () => {
-      spyOnProperty(component, 'isNative', 'get').and.returnValue(false);
-
-      expect(component.isNative).toBe(false);
-      expect(component.deviceText).toBe('Translated Text');
-      expect(mockTranslateService.instant).toHaveBeenCalledWith(
-        'HELP_DEVICE_TEXT_WEB',
-      );
-    });
-
-    it('should return language change button help text for native app', () => {
-      spyOnProperty(component, 'isNative', 'get').and.returnValue(true);
-
-      expect(component.isNative).toBe(true);
-      expect(component.languageChangeButtonHelpText).toBe('Translated Text');
-      expect(mockTranslateService.instant).toHaveBeenCalledWith(
-        'HELP_LANGUAGE_CHANGE_BUTTON',
-      );
-    });
-
-    it('should return language change button help text for web app', () => {
-      spyOnProperty(component, 'isNative', 'get').and.returnValue(false);
-
-      expect(component.isNative).toBe(false);
-      expect(component.languageChangeButtonHelpText).toBe('Translated Text');
-      expect(mockTranslateService.instant).toHaveBeenCalledWith(
-        'HELP_LANGUAGE_CHANGE_WEB_BUTTON',
-      );
-    });
-
     it('should return max free feature chars length per month from AppConstants', () => {
       expect(component.maxFreeFeatureCharsLengthPerMonth).toBe(
         AppConstants.maxFreeFeatureCharsPerMonth,
       );
+    });
+
+    it('should return appName and appShortName from environment', () => {
+      expect(component.appName).toBe('z-control Image to Text');
+      expect(component.appShortName).toBe('Image to Text');
     });
   });
 });

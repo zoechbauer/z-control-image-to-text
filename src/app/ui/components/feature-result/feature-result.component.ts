@@ -8,12 +8,10 @@ import {
   IonCardContent,
   IonCardSubtitle,
   IonImg,
-  IonLabel,
   IonItem,
   IonGrid,
   IonRow,
   IonCol,
-  IonButton,
 } from '@ionic/angular/standalone';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
@@ -25,9 +23,7 @@ import { PhotoStorageService } from 'src/app/services/photo-storage.service';
   templateUrl: './feature-result.component.html',
   styleUrls: ['./feature-result.component.scss'],
   imports: [
-    IonButton,
     IonItem,
-    IonLabel,
     IonCardSubtitle,
     IonCard,
     IonCardHeader,

@@ -8,15 +8,12 @@ import {
 } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import {
-  IonGrid,
   IonItem,
   IonLabel,
   IonCard,
   IonCardContent,
   IonButton,
   IonImg,
-  IonCol,
-  IonRow,
   IonTextarea,
   IonInput,
   IonHeader,
@@ -29,7 +26,6 @@ import {
 import { UserPhoto } from 'src/app/shared/app.interfaces';
 import { ToastService } from 'src/app/services/toast.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-photo-info',
@@ -37,16 +33,12 @@ import { NgIf } from '@angular/common';
   styleUrls: ['./photo-info.component.scss'],
   standalone: true,
   imports: [
-    IonCol,
     IonImg,
-    IonGrid,
     IonItem,
     IonLabel,
     IonCard,
     IonCardContent,
     IonButton,
-    IonRow,
-    IonCol,
     IonInput,
     IonTextarea,
     IonHeader,
@@ -56,7 +48,6 @@ import { NgIf } from '@angular/common';
     IonIcon,
     ReactiveFormsModule,
     TranslatePipe,
-    NgIf,
   ],
 })
 export class PhotoInfoComponent implements OnInit {
@@ -96,7 +87,7 @@ export class PhotoInfoComponent implements OnInit {
    * Saves the photo information and dismisses the modal with the updated data.
    * If the form is invalid, shows a toast message indicating the error.
    */
-  save() {
+  async save() {
     if (!this.photoForm.valid) {
       this.toastService.showToast(
         this.translate.instant(
@@ -105,7 +96,7 @@ export class PhotoInfoComponent implements OnInit {
       );
       return;
     }
-    this.modalCtrl.dismiss(this.photoForm.value, 'save');
+    await this.modalCtrl.dismiss(this.photoForm.value, 'save');
   }
 
   /**

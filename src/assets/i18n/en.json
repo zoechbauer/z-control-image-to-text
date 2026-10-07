@@ -72,7 +72,7 @@
   "------ main page": "-------",
   "MAIN": {
     "CARD": {
-      "TITLE": "Main Feature Example"
+      "TITLE": "z-control Text Recognition"
     }
   },
   "FEATURE": {
@@ -86,7 +86,8 @@
         "EXTRACTED_TEXT": "Extracted Text",
         "NO_EXTRACTED_TEXT": "No extracted text available.",
         "NO_EXTRACTED_TEXT_FOUND": "No text found in the image.",
-        "NO_EXTRACTED_TEXT_NO_METADATA_INFO": "You did not perform text recognition."
+        "NO_EXTRACTED_TEXT_NO_METADATA_INFO": "You did not perform text recognition.",
+        "NUMBER_OF_IMAGES": "Number of Images"
       },
       "BUTTON": {
         "CAMERA": "Camera",
@@ -125,7 +126,6 @@
     "STATISTICS": {
       "TITLE": "Statistics",
       "LABEL": {
-        "NUMBER_OF_IMAGES": "Number of Images",
         "NUMBER_OF_LINES": "Number of Lines",
         "NUMBER_OF_WORDS": "Number of Words",
         "NUMBER_OF_CHARACTERS": "Number of Characters",

@@ -72,7 +72,7 @@
   "------ main page": "-------",
   "MAIN": {
     "CARD": {
-      "TITLE": "Beispiel der Hauptfunktion"
+      "TITLE": "z-control Texterkennung"
     }
   },
   "FEATURE": {
@@ -86,7 +86,8 @@
         "EXTRACTED_TEXT": "Extrahierter Text",
         "NO_EXTRACTED_TEXT": "Kein extrahierter Text vorhanden.",
         "NO_EXTRACTED_TEXT_FOUND": "Das Bild enthält keinen Text.",
-        "NO_EXTRACTED_TEXT_NO_METADATA_INFO": "Sie haben die Texterkennung nicht aufgerufen."
+        "NO_EXTRACTED_TEXT_NO_METADATA_INFO": "Sie haben die Texterkennung nicht aufgerufen.",
+        "NUMBER_OF_IMAGES": "Anzahl Bilder"
       },
       "BUTTON": {
         "CAMERA": "Kamera",
@@ -125,7 +126,6 @@
     "STATISTICS": {
       "TITLE": "Statistik",
       "LABEL": {
-        "NUMBER_OF_IMAGES": "Anzahl Bilder",
         "NUMBER_OF_LINES": "Anzahl Zeilen",
         "NUMBER_OF_WORDS": "Anzahl Wörter",
         "NUMBER_OF_CHARACTERS": "Anzahl Zeichen",

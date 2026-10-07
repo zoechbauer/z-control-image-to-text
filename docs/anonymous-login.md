@@ -105,3 +105,14 @@ To improve UID persistence in the web app, the UID assigned by Firebase Anonymou
 - Inform users that their data may be lost if they uninstall the app or clear browser data.
 - Consider offering an upgrade path to a permanent account for users who want persistence.
 - Use anonymous login for onboarding, but encourage registration for long-term or sensitive use cases.
+
+---
+
+## Test with Emulator vs. Production
+
+- **Emulator:** When testing with the Firebase Emulator, anonymous login behavior may differ slightly from production, especially regarding UID persistence and session restoration.
+- **Production:** In production, anonymous login follows the standard behavior described above, with UIDs persisting according to the platform-specific rules.
+- **Recommendation:** Always test both in the emulator and in production to understand how anonymous login behaves in your specific app setup.
+
+- **Firestore initialization:** Call `FirebaseFirestoreService.init()` during app startup. This invokes `authenticateUser()`; without it Firestore requests will be unauthenticated and will fail in production. The emulator may allow access with relaxed rules, which can hide this problem. Check Firebase logs for authentication errors such as `auth: MISSING` or `401 Unauthorized`.
+- **Recommendation:** Always invoke `FirebaseFirestoreService.init()` as part of your app initialization so the user is authenticated before making Firestore requests in production.

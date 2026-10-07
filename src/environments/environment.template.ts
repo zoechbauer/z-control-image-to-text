@@ -10,9 +10,11 @@ export const environment = {
     name: '__APP_NAME__',
     shortName: '__APP_NAME_SHORT__',
     showTabsBar: __SHOW_TABS_BAR__,
-    maxFreeFeatureCharsPerMonthForUser: __MAX_FREE_FEATURE_CHARS_PER_MONTH_FOR_USER__,
+    maxFreeFeatureCharsPerMonthForUser:
+      __MAX_FREE_FEATURE_CHARS_PER_MONTH_FOR_USER__,
     maxFreeFeatureCharsPerMonth: __MAX_FREE_FEATURE_CHARS_PER_MONTH__,
-    maxFreeFeatureCharsBufferPerMonth: __MAX_FREE_FEATURE_CHARS_BUFFER_PER_MONTH__,
+    maxFreeFeatureCharsBufferPerMonth:
+      __MAX_FREE_FEATURE_CHARS_BUFFER_PER_MONTH__,
     useFirebaseEmulator: __USE_FIREBASE_EMULATOR__,
     programmerDevices: {
       updateUsermap: __PROGRAMMER_DEVICES_UPDATE_USERMAP__,
@@ -34,5 +36,15 @@ export const environment = {
     messagingSenderId: __FIREBASE_MESSAGING_SENDER_ID__,
     appId: __FIREBASE_APP_ID__,
     measurementId: __FIREBASE_MEASUREMENT_ID__,
+  },
+  useStagingFunctions: __USE_STAGING_FUNCTIONS__,
+  firebaseStaging: {
+    apiKey: '__FIREBASE_STAGING_API_KEY__',
+    authDomain: '__FIREBASE_STAGING_AUTH_DOMAIN__',
+    projectId: '__FIREBASE_STAGING_PROJECT_ID__',
+    storageBucket: '__FIREBASE_STAGING_STORAGE_BUCKET__',
+    messagingSenderId: '__FIREBASE_STAGING_MESSAGING_SENDER_ID__',
+    appId: '__FIREBASE_STAGING_APP_ID__',
+    measurementId: '__FIREBASE_STAGING_MEASUREMENT_ID__',
   },
 };

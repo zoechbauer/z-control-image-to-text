@@ -28,6 +28,7 @@ import {
 
 import { routes } from './app-routes';
 import { ServicesModule } from './services.module';
+import { FirebaseCredentials } from './services/firebase-credentials';
 import { environment } from '@env/environment';
 
 function isEmulatorEnabled(): boolean {
@@ -98,7 +99,7 @@ export const appConfig: ApplicationConfig = {
       prefix: './assets/i18n/',
       suffix: '.json',
     }),
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirebaseApp(() => initializeApp(FirebaseCredentials.getFirebaseCredentials())),
     provideAuth(() => getAuth()),
     // Firebase service providers (firestore + functions). Emulator wiring is isolated in createFirebaseProviders().
     ...createFirebaseProviders(),

@@ -58,22 +58,6 @@ export class HelpModalComponent implements OnInit, OnDestroy {
     return this.utilsService.isNative;
   }
 
-  get emailSubjectHelpText(): string {
-    const key = this.isNative ? 'HELP_EMAIL_SUBJECT' : 'HELP_EMAIL_SUBJECT_WEB';
-    return this.translate.instant(key);
-  }
-
-  get languageChangeButtonHelpText(): string {
-    const key = this.isNative
-      ? 'HELP_LANGUAGE_CHANGE_BUTTON'
-      : 'HELP_LANGUAGE_CHANGE_WEB_BUTTON';
-    return this.translate.instant(key);
-  }
-  get deviceText(): string {
-    const key = this.isNative ? 'HELP_DEVICE_TEXT' : 'HELP_DEVICE_TEXT_WEB';
-    return this.translate.instant(key);
-  }
-
   get appName(): string {
     return environment.app.name;
   }
@@ -114,8 +98,8 @@ export class HelpModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  dismissModal() {
-    this.modalController.dismiss();
+  async dismissModal() {
+    await this.modalController.dismiss();
   }
 
   scrollToTop() {

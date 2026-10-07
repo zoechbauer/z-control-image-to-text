@@ -73,6 +73,16 @@ function makeEnv(prod = false) {
       appId: v("FIREBASE_APP_ID", ""),
       measurementId: v("FIREBASE_MEASUREMENT_ID", ""),
     },
+    useStagingFunctions: v("USE_STAGING_FUNCTIONS", "false") === "true",
+    firebaseStaging: {
+      apiKey: v("FIREBASE_STAGING_API_KEY", ""),
+      authDomain: v("FIREBASE_STAGING_AUTH_DOMAIN", ""),
+      projectId: v("FIREBASE_STAGING_PROJECT_ID", ""),
+      storageBucket: v("FIREBASE_STAGING_STORAGE_BUCKET", ""),
+      messagingSenderId: v("FIREBASE_STAGING_MESSAGING_SENDER_ID", ""),
+      appId: v("FIREBASE_STAGING_APP_ID", ""),
+      measurementId: v("FIREBASE_STAGING_MEASUREMENT_ID", ""),
+    },
   };
   return `export const environment = ${JSON.stringify(env, null, 2)};\n`;
 }
@@ -95,14 +105,21 @@ try {
   if (fs.existsSync(indexPath)) {
     let index = fs.readFileSync(indexPath, "utf8");
     const placeholder = "__FIREBASE_MEASUREMENT_ID__";
-    const measurementId = v("FIREBASE_MEASUREMENT_ID", "");
+    const isStaging = v("USE_STAGING_FUNCTIONS", "false") === "true";
+    const stagingMeasurementId = v("FIREBASE_STAGING_MEASUREMENT_ID", "");
+    const prodMeasurementId = v("FIREBASE_MEASUREMENT_ID", "");
+    const measurementId = isStaging ? stagingMeasurementId : prodMeasurementId;
     if (index.includes(placeholder) && measurementId) {
-      const replaced = index.replace(
-        new RegExp(placeholder, "g"),
-        measurementId,
-      );
+      const replaced = index.replaceAll(placeholder, measurementId);
       fs.writeFileSync(indexPath, replaced, "utf8");
       console.log("Replaced measurement id placeholder in src/index.html");
+    }
+    if (isStaging) {
+      console.log("Using staging Firebase configuration");
+    }
+    const usingEmulator = v("USE_FIREBASE_EMULATOR", "false").toLowerCase() === "true";
+    if (usingEmulator) {
+      console.log("Using Firebase emulator");
     }
   }
 } catch (e) {
