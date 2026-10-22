@@ -38,17 +38,22 @@ export class FileConversionService {
   base64ToBlob(base64OrDataUrl: string): Blob {
     const parts = base64OrDataUrl.split(',');
     const base64 = parts.length > 1 ? parts[1] : parts[0];
-    const mimeMatch = parts[0]?.match(/data:([^;]+);base64/) || [];
+    const mimeMatch = /data:([^;]+);base64/.exec(parts[0] ?? '') || [];
     const mime = mimeMatch[1] || 'application/octet-stream';
     const byteCharacters = atob(base64);
     const byteNumbers = new Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
+      byteNumbers[i] = byteCharacters.codePointAt(i) ?? 0;
     }
     const byteArray = new Uint8Array(byteNumbers);
     return new Blob([byteArray], { type: mime });
   }
 
+  /**
+   * Retrieves the data URL representation of the specified UserPhoto.
+   * @param photo The UserPhoto object containing the photo data.
+   * @returns A promise that resolves to the data URL of the photo.
+   */
   async getImageDataUrl(photo: UserPhoto): Promise<string> {
     const imageUrl = photo.webviewPath || '';
     if (!imageUrl) return '';
@@ -77,16 +82,21 @@ export class FileConversionService {
     }
   }
 
- dataUrlToBlobSync(dataUrl: string): Blob {
+  /**
+   * Converts a data URL to a Blob object synchronously.
+   * @param dataUrl The data URL to convert.
+   * @returns The Blob representation of the data URL.
+   */
+  dataUrlToBlobSync(dataUrl: string): Blob {
     const [header, base64Data] = dataUrl.split(',');
-    const mimeMatch = header.match(/data:(.*?);base64/);
+    const mimeMatch = /data:(.*?);base64/.exec(header) || [];
     const mimeType = mimeMatch?.[1] || 'image/png';
 
     const binary = atob(base64Data);
     const bytes = new Uint8Array(binary.length);
 
     for (let i = 0; i < binary.length; i++) {
-      bytes[i] = binary.charCodeAt(i);
+      bytes[i] = binary.codePointAt(i) ?? 0;
     }
 
     return new Blob([bytes], { type: mimeType });

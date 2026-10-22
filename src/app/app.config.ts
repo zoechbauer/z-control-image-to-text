@@ -84,6 +84,9 @@ function createFirebaseProviders() {
   return [firestoreProvider, functionsProvider];
 }
 
+/**
+ * Application configuration for the Angular/Ionic app.
+ */
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

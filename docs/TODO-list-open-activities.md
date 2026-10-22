@@ -19,7 +19,8 @@ This document lists open tasks and follow-ups for the z-control Image To Text pr
 - [x] Add copy-to-clipboard action for extracted text, photo, and statistics to improve workflow. At the moment, only PNG images can be copied to the clipboard due to platform limitations. On native platforms, only PNG and JPEG images can be copied to the clipboard. The app will notify users if they attempt to copy an unsupported image format.
 - [x] Refactor and clean up code where appropriate.
 - [x] Update Online Help to document the app's features.
-- [ ] Compress photos before saving to reduce storage usage.
+- [ ] Add unit tests for new services and components. Current Test suite contains **759 specs with 91.3% statement coverage**.
 - [ ] Add a search feature to search for photos by title, description, or extracted text in the history of saved photos.
-- [ ] Add unit tests for new services and components.
+- [ ] Compress photos before saving to reduce storage usage.
 - [ ] Update README.md to document the full project structure.
+- [ ] Migrate camera usage to the new adapter service. See docs/camera-migration.md for detailed instructions.

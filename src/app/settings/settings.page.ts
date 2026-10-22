@@ -9,6 +9,7 @@ import { LogoType, Tab } from '../shared/enums';
 import { FireStoreConstants } from '../shared/app.constants';
 import { LocalStorageService } from '../services/local-storage.service';
 import { UtilsService } from '../services/utils.service';
+import { FirebaseFirestoreUtilsService } from '../services/firebase-firestore-utils.service';
 import { HeaderComponent } from '../ui/components/header/header.component';
 import { LanguageAccordionComponent } from '../ui/components/accordions/language-accordion.component';
 import { FeedbackAccordionComponent } from '../ui/components/accordions/feedback-accordion.component';
@@ -18,7 +19,6 @@ import { PrivacyPolicyAccordionComponent } from '../ui/components/accordions/pri
 import { GetMobileAppAccordionComponent } from '../ui/components/accordions/get-mobile-app-accordion.component';
 import { GetStatisticsAccordionComponent } from '../ui/components/accordions/get-statistics-accordion.component';
 import { SpinnerComponent } from '../ui/components/spinner/spinner.component';
-import { FirebaseFirestoreUtilsService } from '../services/firebase-firestore-utils.service';
 
 // Single source of truth for settings accordion IDs.
 // Add new accordion IDs here when extending the settings page.
@@ -71,10 +71,16 @@ export class SettingsPage implements OnInit, OnDestroy {
   isLoading = true;
   private readonly subscriptions: Subscription[] = [];
 
+  /**
+   * Returns the application name from the environment configuration.
+   */
   get appName(): string {
     return environment.app.name;
   }
 
+  /**
+   * Returns the version information of the application.
+   */
   get versionInfo() {
     const { major, minor, date } = {
       major: environment.version.major,
@@ -84,10 +90,16 @@ export class SettingsPage implements OnInit, OnDestroy {
     return `${major}.${minor} (${date})`;
   }
 
+  /**
+   * Returns whether the application is running in a native environment.
+   */
   get isNative(): boolean {
     return this.utilsService.isNative;
   }
 
+/**
+ * Lifecycle hook that is called after the component has been initialized.
+ */
   ngOnInit() {
     this.isLoading = true;
     this.showAllAccordions = true;
@@ -98,7 +110,7 @@ export class SettingsPage implements OnInit, OnDestroy {
 
   private setupSubscriptions() {
     this.subscriptions.push(
-      this.localStorage.selectedLanguage$.subscribe(async (lang) => {
+      this.localStorage.selectedLanguage$.subscribe(lang => {
         this.translate.use(lang);
         this.translate.setDefaultLang(lang);
         this.selectedLanguage = lang;
@@ -121,6 +133,11 @@ export class SettingsPage implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Handles the change event for the accordion group.
+   * @param event The custom event emitted by the accordion group.
+   * @param content The IonContent associated with the accordion group.
+   */
   onAccordionGroupChange(event: CustomEvent, content: IonContent) {
     const value = this.normalizeAccordionValue(event?.detail?.value);
 
@@ -141,6 +158,11 @@ export class SettingsPage implements OnInit, OnDestroy {
     this.showAllAccordions = this.openAccordion == null;
   }
 
+  /**
+   * Normalizes the raw value emitted by the accordion group.
+   * @param rawValue The raw value emitted by the accordion group.
+   * @returns The normalized accordion value, or null if the accordion is closed, or undefined if the value is invalid.
+   */
   private normalizeAccordionValue(
     rawValue: unknown,
   ): AccordionValue | null | undefined {
@@ -159,24 +181,37 @@ export class SettingsPage implements OnInit, OnDestroy {
     return undefined;
   }
 
-  onLanguageChange(event: any) {
+  /**
+   * Handles the change event for the language selection.
+   * @param event The custom event emitted by the language selection control.
+   */
+  async onLanguageChange(event: any) {
     const lang = event.detail?.value;
     if (lang) {
-      this.localStorage.saveSelectedLanguage(lang);
+      await this.localStorage.saveSelectedLanguage(lang);
       this.translate.use(lang);
       this.translate.setDefaultLang(lang);
     }
   }
 
+  /**
+   * Expands all accordion sections.
+   */
   showAll() {
     this.openAccordion = null;
     this.showAllAccordions = true;
   }
 
+  /**
+   * Opens the changelog modal.
+   */
   async openChangelog() {
-    this.utilsService.openChangelog();
+    await this.utilsService.openChangelog();
   }
 
+  /**
+   * Lifecycle hook that is called when the component is destroyed.
+   */
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }

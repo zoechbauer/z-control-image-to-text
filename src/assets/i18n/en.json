@@ -166,6 +166,7 @@
       "CONTINGENT_EXCEEDED": "Text recognition quota exceeded. Please try again next month.",
       "ERROR_CALLING_FEATURE": "Error calling text recognition via Google Cloud Vision.",
       "ERROR_CREATING_MISSING_CONTINGENT_DATA": "Error creating missing contingent data.",
+      "ERROR_READING_CONTINGENT_DATA": "Error reading contingent data.",
       "ERROR_ADDING_USER": "Error adding user. Please try again.",
       "ERROR_LOADING_USERS": "Error loading users. Please try http://127.0.0.1:4000/  again.",
       "ERROR_UPDATING_PROGRAMMER_DEVICES": "Error updating programmer devices. Please try again.",

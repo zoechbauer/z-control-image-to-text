@@ -25,7 +25,6 @@ import {
 
 import { UserPhoto } from 'src/app/shared/app.interfaces';
 import { ToastService } from 'src/app/services/toast.service';
-import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-photo-info',
@@ -57,13 +56,15 @@ export class PhotoInfoComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly modalCtrl = inject(ModalController);
   private readonly toastService = inject(ToastService);
-  private readonly utilsService = inject(UtilsService);
 
   photoForm!: FormGroup;
   title: string | undefined;
   description: string | undefined;
   hideImageWhenEditingOnMobile = false;
 
+  /**
+   * Gets the title to be displayed in the header of the photo info modal.
+   */
   get headerTitle(): string {
     return this.title
       ? 'FEATURE.PHOTO_INFO_MODAL.TITLE_CHANGE_INFO'
@@ -103,8 +104,8 @@ export class PhotoInfoComponent implements OnInit {
    * Dismisses the modal without saving any changes and returns null as the result.
    * The role 'cancel' is used to indicate that the modal was dismissed without saving.
    */
-  cancel() {
-    this.modalCtrl.dismiss(null, 'cancel');
+  async cancel() {
+    await this.modalCtrl.dismiss(null, 'cancel');
   }
 
   /**

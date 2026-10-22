@@ -10,7 +10,6 @@ import {
 import { ToastService } from './toast.service';
 import { UserPhoto } from './../shared/app.interfaces';
 import { PhotoStorageService } from './photo-storage.service';
-import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,18 +18,6 @@ export class PhotoService {
   private readonly translate = inject(TranslateService);
   private readonly toast = inject(ToastService);
   private readonly photoStorageService = inject(PhotoStorageService);
-  private readonly alertService = inject(AlertService);
-  public photos: UserPhoto[] = [];
-
-  /**
-   * Initializes the PhotoService by subscribing to the photo storage service's photos observable.
-   * This ensures that the service maintains an up-to-date list of photos.
-   */
-  constructor() {
-    this.photoStorageService.photos$.subscribe((photos) => {
-      this.photos = photos;
-    });
-  }
 
   /**
    * Captures a photo using the device camera or selects a photo from the gallery.

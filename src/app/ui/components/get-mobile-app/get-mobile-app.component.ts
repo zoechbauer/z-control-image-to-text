@@ -26,6 +26,9 @@ export class GetMobileAppComponent {
   @Input() appName!: string;
   LogoType = LogoType;
 
+  /**
+   * Gets the maximum number of free image processing allowed per month.
+   */
   get maxFeatureCharsLengthPerMonth(): number {
     return AppConstants.maxFreeFeatureCharsPerMonth;
   }

@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { lastValueFrom } from 'rxjs';
 
 import { CopyDataOptions, UserPhoto } from '../shared/app.interfaces';
 import { CopyDataOption } from '../shared/enums';
@@ -26,18 +25,12 @@ export class AlertService {
    */
   async showStoragePermissionError(): Promise<void> {
     const alert = await this.alertController.create({
-      header: await lastValueFrom(
-        this.translate.get('APP.ALERT_SERVICE.STORAGE_PERMISSION.HEADER'),
-      ),
-      subHeader: await lastValueFrom(
-        this.translate.get('APP.ALERT_SERVICE.STORAGE_PERMISSION.SUBHEADER'),
-      ),
-      message: await lastValueFrom(
-        this.translate.get('APP.ALERT_SERVICE.STORAGE_PERMISSION.MESSAGE'),
-      ),
+      header: this.translate.instant('APP.ALERT_SERVICE.STORAGE_PERMISSION.HEADER'),
+      subHeader: this.translate.instant('APP.ALERT_SERVICE.STORAGE_PERMISSION.SUBHEADER'),
+      message: this.translate.instant('APP.ALERT_SERVICE.STORAGE_PERMISSION.MESSAGE'),
       buttons: [
         {
-          text: await lastValueFrom(this.translate.get('APP.ALERT_SERVICE.OK')),
+          text: this.translate.instant('APP.ALERT_SERVICE.OK'),
           role: 'cancel',
         },
       ],
@@ -54,25 +47,13 @@ export class AlertService {
   async confirmDeletePhotoAlert(photo: UserPhoto | 'all'): Promise<boolean> {
     let header, subHeader, message;
     if (photo && photo !== 'all') {
-      header = await lastValueFrom(
-        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTO.HEADER'),
-      );
-      subHeader = await lastValueFrom(
-        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTO.SUBHEADER'),
-      );
-      message = await lastValueFrom(
-        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTO.MESSAGE'),
-      );
+      header = this.translate.instant('APP.ALERT_SERVICE.DELETE_PHOTO.HEADER');
+      subHeader = this.translate.instant('APP.ALERT_SERVICE.DELETE_PHOTO.SUBHEADER');
+      message = this.translate.instant('APP.ALERT_SERVICE.DELETE_PHOTO.MESSAGE');
     } else {
-      header = await lastValueFrom(
-        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTOS.HEADER'),
-      );
-      subHeader = await lastValueFrom(
-        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTOS.SUBHEADER'),
-      );
-      message = await lastValueFrom(
-        this.translate.get('APP.ALERT_SERVICE.DELETE_PHOTOS.MESSAGE'),
-      );
+      header = this.translate.instant('APP.ALERT_SERVICE.DELETE_PHOTOS.HEADER');
+      subHeader = this.translate.instant('APP.ALERT_SERVICE.DELETE_PHOTOS.SUBHEADER');
+      message = this.translate.instant('APP.ALERT_SERVICE.DELETE_PHOTOS.MESSAGE');
     }
     return this.confirmDeleteAlert(header, subHeader, message);
   }
@@ -89,7 +70,7 @@ export class AlertService {
     subHeader: string,
     message: string,
   ): Promise<boolean> {
-    return new Promise<boolean>(async (resolve) => {
+    try {
       const alert = await this.alertController.create({
         header: header,
         subHeader: subHeader,
@@ -98,12 +79,10 @@ export class AlertService {
           {
             text: this.translate.instant('APP.ALERT_SERVICE.DELETE'),
             role: 'destructive',
-            handler: () => resolve(true),
           },
           {
             text: this.translate.instant('APP.ALERT_SERVICE.CANCEL'),
             role: 'cancel',
-            handler: () => resolve(false),
           },
         ],
         cssClass: 'confirm-delete-alert',
@@ -111,7 +90,15 @@ export class AlertService {
       });
 
       await alert.present();
-    });
+
+      // Wait for the alert to be dismissed and inspect the role of the button that dismissed it.
+      const result = await alert.onDidDismiss();
+      // role is 'destructive' for delete, 'cancel' for cancel
+      return result.role === 'destructive';
+    } catch (err) {
+      console.error('Error showing confirm delete alert', err);
+      return false;
+    }
   }
 
   /**

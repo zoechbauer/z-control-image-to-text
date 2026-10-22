@@ -45,17 +45,23 @@ export class UserStatisticComponent implements OnInit, OnDestroy {
   yearMonth: string = FireStoreConstants.currentYearMonthPath();
   private readonly subscriptions: Subscription[] = [];
 
+  /**
+   * Determines whether the column should be hidden based on the device orientation and platform.
+   */
   get hideColumn(): boolean {
     return this.utilsService.isPortrait && this.utilsService.isNative;
   }
 
+  /**
+   * Initializes the component by updating the contingent status and translation statistics.
+   */
   ngOnInit() {
-    this.updateIsContingentExceeded();
-    this.updateTranslationStatistics();
+    void this.updateIsContingentExceeded();
+    void this.updateTranslationStatistics();
     this.subscriptions.push(
       this.firestoreUtilsService.statisticsRefresh$.subscribe(() => {
-        this.updateIsContingentExceeded();
-        this.updateTranslationStatistics();
+        void this.updateIsContingentExceeded();
+        void this.updateTranslationStatistics();
       }),
     );
   }
@@ -70,6 +76,9 @@ export class UserStatisticComponent implements OnInit, OnDestroy {
       await this.firestoreUtilsService.getDisplayedUserContingentData();
   }
 
+  /**
+   * Cleans up subscriptions when the component is destroyed.
+   */
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }

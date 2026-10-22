@@ -22,16 +22,26 @@ export class LogoComponent implements OnInit, OnChanges {
   rightLogoText: string = '';
   LogoType = LogoType;
 
+  /**
+   * Initializes the component and sets the initial logo text.
+   */
   constructor() {
     window.addEventListener('resize', () => {
       this.setLogoText();
     });
   }
 
+  /**
+   * Lifecycle hook that is called after the component's view has been fully initialized.
+   */
   ngOnInit(): void {
     this.setLogoText();
   }
 
+  /**
+   * Lifecycle hook that is called when any data-bound property of a directive changes.
+   * @param changes The changes object containing the changed properties.
+   */
   ngOnChanges(changes: SimpleChanges) {
     if (changes['type']) {
       this.setLogoText();

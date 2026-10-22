@@ -256,7 +256,7 @@ describe('FirebaseFirestoreService', () => {
 
       expect(result).toEqual({});
       expect(toastServiceMock.showToast).toHaveBeenCalledWith(
-        'Error reading contingent data.',
+        'FEATURE.TOAST.ERROR_READING_CONTINGENT_DATA',
         ToastAnchor.MainPage,
       );
     });
@@ -1523,28 +1523,6 @@ describe('FirebaseFirestoreService', () => {
       expect(unsubSpy).toHaveBeenCalled();
     });
 
-    xit('should resolve via timeout fallback and unsubscribe if callback never fires', async () => {
-      jasmine.clock().install();
-      try {
-        const unsubSpy = jasmine.createSpy('unsub');
-
-        authWrapperMock.onAuthStateChanged.and.callFake(
-          (_auth: any, _cb: Function) => unsubSpy,
-        );
-
-        const waitPromise = (service as any).waitForAuthReady();
-
-        expect(authWrapperMock.onAuthStateChanged).toHaveBeenCalled();
-        expect(unsubSpy).not.toHaveBeenCalled();
-
-        jasmine.clock().tick(3000);
-        await waitPromise;
-
-        expect(unsubSpy).toHaveBeenCalledTimes(1);
-      } finally {
-        jasmine.clock().uninstall();
-      }
-    });
   });
 
   describe('wrapper coverage via public methods', () => {

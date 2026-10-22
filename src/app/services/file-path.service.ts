@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 
 import { UserPhoto, ResolvedImageSource } from '../shared/app.interfaces';
-import { FileExtension, FileNamePrefix } from '../shared/enums';
+import { FileNamePrefix } from '../shared/enums';
 
 @Injectable({
   providedIn: 'root',
@@ -107,10 +107,16 @@ export class FilePathService {
     if (source.startsWith('data:')) {
       const comma = source.indexOf(',');
       const base64 = comma >= 0 ? source.substring(comma + 1) : source;
-      return (
-        Math.floor((base64.length * 3) / 4) -
-        (base64.endsWith('==') ? 2 : base64.endsWith('=') ? 1 : 0)
-      );
+      
+      let padding: number;
+      if (base64.endsWith('==')) {
+        padding = 2;
+      } else if (base64.endsWith('=')) {
+        padding = 1;
+      } else {
+        padding = 0;
+      }
+      return Math.floor((base64.length * 3) / 4) - padding;
     }
 
     const blob = await fetch(source).then((r) => r.blob());

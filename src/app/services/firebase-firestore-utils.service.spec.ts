@@ -591,7 +591,7 @@ describe('FirebaseFirestoreUtilsService', () => {
           await service.getDisplayedUserStatistics(isProgrammerDevice);
         const userFeatureUsageResult = result.userFeatureStatistics;
 
-        expect(userFeatureUsageResult.length).toBe(3);
+        expect(userFeatureUsageResult).toHaveSize(3);
 
         const user1FeatureUsage = userFeatureUsageResult.find(
           (s) => s.userId === 'U-1',
@@ -631,7 +631,7 @@ describe('FirebaseFirestoreUtilsService', () => {
           await service.getDisplayedUserStatistics(isProgrammerDevice);
         const userStatsResult = result.displayedUserStatistics;
 
-        expect(userStatsResult.length).toBe(3);
+        expect(userStatsResult).toHaveSize(3);
 
         const user1Stats = userStatsResult.find((s) => s.userId === 'U-1');
         const user2Stats = userStatsResult.find((s) => s.userId === 'U-2');
@@ -669,7 +669,7 @@ describe('FirebaseFirestoreUtilsService', () => {
           await service.getDisplayedUserStatistics(isProgrammerDevice);
         const usersResult = result.users;
 
-        expect(usersResult.length).toBe(5);
+        expect(usersResult).toHaveSize(5);
 
         const user1Users = usersResult.find((s) => s.userId === 'U-1');
         const user2Users = usersResult.find((s) => s.userId === 'U-2');
@@ -730,7 +730,7 @@ describe('FirebaseFirestoreUtilsService', () => {
           await service.getDisplayedUserStatistics(isProgrammerDevice);
         const programmerDevicesResult = result.programmerDeviceUIDs;
 
-        expect(programmerDevicesResult.length).toBe(2);
+        expect(programmerDevicesResult).toHaveSize(2);
 
         const progDev1Users = programmerDevicesResult.find(
           (s) => s.userId === 'P-1',
@@ -763,7 +763,7 @@ describe('FirebaseFirestoreUtilsService', () => {
           await service.getDisplayedUserStatistics(isProgrammerDevice);
         const programmerDevicesResult = result.programmerDeviceUIDs;
 
-        expect(programmerDevicesResult.length).toBe(0);
+        expect(programmerDevicesResult).toHaveSize(0);
 
         const progDev1Users = programmerDevicesResult.find(
           (s) => s.userId === 'P-1',
@@ -990,7 +990,7 @@ describe('FirebaseFirestoreUtilsService', () => {
       const userTypeRows = result.filter(
         (s) => s.category === StatisticsSummaryCategory.UserType,
       );
-      expect(userTypeRows.length).toBe(2);
+      expect(userTypeRows).toHaveSize(2);
       const userRow = userTypeRows.find(
         (r) => r.name === StatisticsSummaryName.User,
       );
@@ -1026,9 +1026,7 @@ describe('FirebaseFirestoreUtilsService', () => {
       const platformRows = result.filter(
         (s) => s.category === StatisticsSummaryCategory.Platform,
       );
-      expect(platformRows.length)
-        .withContext('platform summary length')
-        .toBe(3);
+      expect(platformRows).withContext('platform Size').toHaveSize(3);
       const nativeRow = platformRows.find(
         (r) => r.name === StatisticsSummaryName.Native,
       );
@@ -1076,7 +1074,7 @@ describe('FirebaseFirestoreUtilsService', () => {
       const modelRows = result.filter(
         (s) => s.category === StatisticsSummaryCategory.Model,
       );
-      expect(modelRows.length).toBe(3);
+      expect(modelRows).toHaveSize(3);
 
       // Assert
       const model1Row = modelRows.find((r) => r.name === 'Model 1');

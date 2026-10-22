@@ -49,10 +49,17 @@ export class UserDetailComponent {
   @Input() displayMode!: DisplayMode;
   DisplayMode = DisplayMode;
 
-  close(): void {
-    this.modalCtrl.dismiss();
+  /**
+   * Closes the user detail modal.
+   */
+  async close(): Promise<void> {
+    await this.modalCtrl.dismiss();
   }
 
+  /**
+   * Gets the application version in the format "major.minor (date)".
+   * @returns The formatted application version string, or an empty string if not available.
+   */
   getAppVersion(): string {
     if (!this.userStatistic?.deviceInfo?.appVersion?.date) {
       return '';
@@ -61,6 +68,11 @@ export class UserDetailComponent {
     return `${v.major}.${v.minor} (${v.date})`;
   }
 
+  /**
+   * Formats the given date and time according to the display mode.
+   * @param dateTime The date and time to format.
+   * @returns The formatted date and time string.
+   */
   getFormatDateTime(dateTime: Date | null): string {
     if (this.displayMode === DisplayMode.Programmer) {
       return this.utilsService.formatDateTimeISO(dateTime);
@@ -69,6 +81,10 @@ export class UserDetailComponent {
     return this.utilsService.formatDateISO(dateTime);
   }
 
+  /**
+   * Gets the platform on which the user is currently running the application.
+   * @returns The displayed platform string.
+   */
   getDisplayedPlatform(): string {
     const platform = this.userStatistic.displayedPlatform;
     return platform === 'native' ? `${platform} - Android App` : platform;

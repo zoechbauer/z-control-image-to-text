@@ -11,12 +11,14 @@ import { createTranslateServiceMock } from '@testing/translate-service.mock';
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
-
+  let utilsService: UtilsService;
+  
   const modalControllerSpy = jasmine.createSpyObj('ModalController', [
     'create',
   ]);
   const logoClickedSub = new Subject<boolean>();
   const workflowChangedSub = new Subject<WorkflowStep>();
+  const backButtonClickedSub = new Subject<void>();
   const _isSmallScreen = false;
   const utilsServiceMock = {
     get isSmallScreen() {
@@ -32,6 +34,8 @@ describe('HeaderComponent', () => {
     logoClicked$: logoClickedSub.asObservable(),
     workflowChangedSub,
     workflowChanged$: workflowChangedSub.asObservable(),
+    backButtonClickedSub,
+    backButtonClicked$: backButtonClickedSub.asObservable(),
   };
 
   beforeEach(waitForAsync(() => {
@@ -47,6 +51,7 @@ describe('HeaderComponent', () => {
 
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
+    utilsService = TestBed.inject(UtilsService);
     fixture.detectChanges();
   }));
 
@@ -55,13 +60,11 @@ describe('HeaderComponent', () => {
   });
 
   it('should call utilsService.openHelpModal', async () => {
-    const utilsService = TestBed.inject(UtilsService);
     await component.openHelpModal();
     expect(utilsService.openHelpModal).toHaveBeenCalled();
   });
 
   it('should call utilsService.navigateToTab with Tab.MainFeature and Tab.Settings', () => {
-    const utilsService = TestBed.inject(UtilsService);
     component.goToMainFeature();
     expect(utilsService.navigateToTab).toHaveBeenCalledWith(Tab.MainFeature);
 
@@ -77,9 +80,9 @@ describe('HeaderComponent', () => {
   });
 
   it('should navigate to Tab.Settings with params and emit logoClickedSub after 500ms', (done) => {
-    const utilsService = TestBed.inject(UtilsService);
     spyOn(utilsService.logoClickedSub, 'next');
     component.goToSettingsAndOpenFeedback();
+
     expect(utilsService.navigateToTabWithParams).toHaveBeenCalledWith(
       Tab.Settings,
       { open: 'z-control' },
@@ -91,20 +94,17 @@ describe('HeaderComponent', () => {
   });
 
   it('should return true for isLargeScreen if utilsService.isSmallScreen is false', () => {
-    const utilsService = TestBed.inject(UtilsService);
     Object.defineProperty(utilsService, 'isSmallScreen', { get: () => false });
     expect(component.isLargeScreen).toBeTrue();
   });
 
   it('should return false for isLargeScreen if utilsService.isSmallScreen is true', () => {
-    const utilsService = TestBed.inject(UtilsService);
     Object.defineProperty(utilsService, 'isSmallScreen', { get: () => true });
     expect(component.isLargeScreen).toBeFalse();
   });
 
   describe('showBackButton', () => {
     it('should set showBackButton to true when workflowChanged$ emits a relevant workflow step', () => {
-      const utilsService = TestBed.inject(UtilsService);
       const relevantSteps: WorkflowStep[] = [
         WorkflowStep.DisplayExtractedText,
         WorkflowStep.DisplayResultsFromStorage,
@@ -113,12 +113,12 @@ describe('HeaderComponent', () => {
 
       relevantSteps.forEach((step: WorkflowStep) => {
         utilsService.workflowChangedSub.next(step);
+
         expect(component.showBackButton).toBeTrue();
       });
     });
 
     it('should set showBackButton to false when workflowChanged$ emits a non-relevant workflow step', () => {
-      const utilsService = TestBed.inject(UtilsService);
       const nonRelevantSteps: WorkflowStep[] = [
         WorkflowStep.SelectPhoto,
         WorkflowStep.AddPhotoInfo,
@@ -127,8 +127,16 @@ describe('HeaderComponent', () => {
 
       nonRelevantSteps.forEach((step: WorkflowStep) => {
         utilsService.workflowChangedSub.next(step);
+
         expect(component.showBackButton).toBeFalse();
       });
     });
+  });
+
+  it('should emit backButtonClicked$ when the back button is clicked', () => {
+    const spy = spyOn(utilsService.backButtonClickedSub, 'next');
+    component.goBack(new Event('click'));
+    
+    expect(spy).toHaveBeenCalledWith(true);
   });
 });

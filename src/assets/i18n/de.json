@@ -166,6 +166,7 @@
       "CONTINGENT_EXCEEDED": "Texterkennungs-Kontingent überschritten. Bitte versuchen Sie es nächsten Monat erneut.",
       "ERROR_CALLING_FEATURE": "Fehler beim Aufruf der Texterkennung mittels Google Cloud Vision.",
       "ERROR_CREATING_MISSING_CONTINGENT_DATA": "Fehler beim Erstellen fehlender Kontingentdaten.",
+      "ERROR_READING_CONTINGENT_DATA": "Fehler beim Lesen der Kontingentdaten.",
       "ERROR_ADDING_USER": "Fehler beim Hinzufügen des Benutzers. Bitte versuchen Sie es erneut.",
       "ERROR_LOADING_USERS": "Fehler beim Laden der Benutzer. Bitte versuchen Sie es erneut.",
       "ERROR_UPDATING_PROGRAMMER_DEVICES": "Fehler beim Aktualisieren der Programmiergeräte. Bitte versuchen Sie es erneut.",

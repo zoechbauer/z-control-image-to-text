@@ -1,3 +1,5 @@
+# Script to back up non-committed files for the Ionic project
+
 $source = "C:\SOURCE-ACTIVE\ionic\z-control-ionic-setup"
 $backup = "C:\SOURCE-ACTIVE\BACKUP_NON_COMMITTED_FILES\z-control-ionic-setup"
 

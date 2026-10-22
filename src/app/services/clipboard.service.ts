@@ -6,7 +6,6 @@ import { Share } from '@capacitor/share';
 import { ToastService } from './toast.service';
 import { FileConversionService } from './file-conversion.service';
 import { CopyDataOptions, UserPhoto } from '../shared/app.interfaces';
-import { ImageCompressionService } from './image-compression.service';
 import { PhotoStorageService } from './photo-storage.service';
 import { UtilsService } from './utils.service';
 import { environment } from 'src/environments/environment';
@@ -19,7 +18,6 @@ export class ClipboardService {
   private readonly translate = inject(TranslateService);
   private readonly toastService = inject(ToastService);
   private readonly fileConversionService = inject(FileConversionService);
-  private readonly imageCompressionService = inject(ImageCompressionService);
   private readonly photoStorageService = inject(PhotoStorageService);
   private readonly utilsService = inject(UtilsService);
   private readonly filePathService = inject(FilePathService);
@@ -158,7 +156,6 @@ export class ClipboardService {
 
       if (this.isPhotoOptionSelected(options)) {
         imageBlob = this.fileConversionService.dataUrlToBlobSync(dataUrl);
-        console.log('Image Blob:', imageBlob);
         clipboardItemData[imageBlob.type || 'image/png'] = imageBlob;
       }
 

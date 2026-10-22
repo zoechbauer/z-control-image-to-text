@@ -80,10 +80,17 @@ addIcons({
   'volume-high-outline': volumeHighOutline,
 });
 
-// Register PWA Components like Camera, File, etc. for use in the application on Web
-defineCustomElements(window);
+/**
+ * Register PWA Components like Camera, File, etc. for use in the application on Web
+ */
+void defineCustomElements(window);
 
-// Register German locale data for number/date pipes
+/**
+ * Registers the German locale data for number and date pipes.
+ */
 registerLocaleData(localeDe);
 
-bootstrapApplication(AppComponent, appConfig);
+/**
+ * Bootstraps the Angular/Ionic application with the root component and application configuration.
+ */
+void bootstrapApplication(AppComponent, appConfig);

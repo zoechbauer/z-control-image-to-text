@@ -189,7 +189,7 @@ export class FirebaseFirestoreService {
         );
       }
     }
-    this.saveUserIdToLocalStorage(this.user.uid);
+    await this.saveUserIdToLocalStorage(this.user.uid);
   }
 
   /**
@@ -491,7 +491,9 @@ export class FirebaseFirestoreService {
     } catch (error) {
       console.error('Error reading contingent data:', error);
       this.toastService.showToast(
-        'Error reading contingent data.',
+        this.translate.instant(
+          'FEATURE.TOAST.ERROR_READING_CONTINGENT_DATA',
+        ),
         ToastAnchor.MainPage,
       );
       return {};
@@ -586,12 +588,19 @@ export class FirebaseFirestoreService {
         const allMonths =
           this.utilsService.getAllFirestoreSearchStringsForMonth();
 
-        for (const month of allMonths) {
-          if (month !== AllMonthsOption.localStorageValue) {
-            const statsForMonth =
-              await this.getAllUserFeatureUsageStatisticsForMonth(month);
-            result = result.concat(statsForMonth);
-          }
+        const monthsToFetch = allMonths.filter(
+          (m) => m !== AllMonthsOption.localStorageValue,
+        );
+        if (monthsToFetch.length > 0) {
+          const statsArrays = await Promise.all(
+            monthsToFetch.map((month) =>
+              this.getAllUserFeatureUsageStatisticsForMonth(month),
+            ),
+          );
+          result = statsArrays.reduce(
+            (acc, arr) => acc.concat(arr),
+            [] as UserFeatureUsageStatistics[],
+          );
         }
       } else {
         result =

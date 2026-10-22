@@ -282,6 +282,11 @@ export class ImageCompressionService {
     };
   }
 
+  /**
+   * Compress a photo before saving.
+   * @param photo The UserPhoto object containing the photo data.
+   * @returns A promise that resolves to the compressed image data URL or null if compression fails.
+   */
   // TODO use it for compressing photos before saving
   async compressPhoto(photo: UserPhoto): Promise<string | null> {
     const dataUrl = await this.fileConversionService.getImageDataUrl(photo);
@@ -290,13 +295,6 @@ export class ImageCompressionService {
       console.error('No valid image data URL available');
       return null;
     }
-
-    console.log(
-      'Native clipboard image dataUrl prefix:',
-      dataUrl.slice(0, 40),
-      'length:',
-      dataUrl.length,
-    );
 
     const visionRequest = await this.buildVisionOcrRequestFromPhoto(
       photo,
@@ -315,13 +313,6 @@ export class ImageCompressionService {
     const dataUrlCompressed = imageBase64.startsWith(prefix)
       ? imageBase64
       : prefix + imageBase64;
-
-    console.log(
-      'Native clipboard visionRequest :',
-      dataUrlCompressed ? dataUrlCompressed.slice(0, 40) : 'null',
-      'length:',
-      dataUrlCompressed ? dataUrlCompressed.length : 'null',
-    );
 
     return dataUrlCompressed;
   }

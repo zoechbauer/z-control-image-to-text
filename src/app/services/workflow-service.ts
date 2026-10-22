@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 import { WorkflowStep } from '../shared/enums';
@@ -25,56 +24,30 @@ export class WorkflowService {
     event?: any,
     selectedPhoto?: UserPhoto,
   ): WorkflowStep {
-    let nextStep: WorkflowStep;
-
     const target = event?.target as HTMLElement | null;
     const buttonName = target?.getAttribute('name') ?? null;
 
+    let nextStep: WorkflowStep;
+
     switch (currentStep) {
       case WorkflowStep.SelectPhoto:
-        if (buttonName === 'load-data') {
-          nextStep = WorkflowStep.DisplayResultsFromStorage;
-        } else {
-          nextStep = WorkflowStep.ExtractText;
-        }
+        nextStep = this.nextForSelectPhoto(buttonName);
         break;
 
       case WorkflowStep.ExtractText:
-        if (buttonName === 'delete-photo') {
-          nextStep = WorkflowStep.SelectPhoto;
-        } else {
-          nextStep = WorkflowStep.DisplayExtractedText;
-        }
+        nextStep = this.nextForExtractText(buttonName);
         break;
 
       case WorkflowStep.DisplayExtractedText:
-        if (buttonName === 'go-back') {
-          nextStep = WorkflowStep.SelectPhoto;
-        } else {
-          nextStep = WorkflowStep.DisplayExtractedText;
-        }
+        nextStep = this.nextForDisplayExtractedText(buttonName);
         break;
 
       case WorkflowStep.DisplayResultsFromStorage:
-        if (selectedPhoto) {
-          nextStep = WorkflowStep.ManageHistory;
-        } else if (buttonName === 'go-back') {
-          nextStep = WorkflowStep.SelectPhoto;
-        } else {
-          nextStep = WorkflowStep.DisplayResultsFromStorage;
-        }
+        nextStep = this.nextForDisplayResultsFromStorage(selectedPhoto, buttonName);
         break;
 
       case WorkflowStep.ManageHistory:
-        if (
-          buttonName === 'back-to-history' ||
-          buttonName === 'delete-data' ||
-          buttonName === 'go-back'
-        ) {
-          nextStep = WorkflowStep.DisplayResultsFromStorage;
-        } else {
-          nextStep = WorkflowStep.ManageHistory;
-        }
+        nextStep = this.nextForManageHistory(buttonName);
         break;
 
       default:
@@ -86,6 +59,43 @@ export class WorkflowService {
 
     this.utilsService.workflowChangedSub.next(nextStep);
     return nextStep;
+  }
+
+  private nextForSelectPhoto(buttonName: string | null): WorkflowStep {
+    return buttonName === 'load-data'
+      ? WorkflowStep.DisplayResultsFromStorage
+      : WorkflowStep.ExtractText;
+  }
+
+  private nextForExtractText(buttonName: string | null): WorkflowStep {
+    return buttonName === 'delete-photo'
+      ? WorkflowStep.SelectPhoto
+      : WorkflowStep.DisplayExtractedText;
+  }
+
+  private nextForDisplayExtractedText(buttonName: string | null): WorkflowStep {
+    return buttonName === 'go-back'
+      ? WorkflowStep.SelectPhoto
+      : WorkflowStep.DisplayExtractedText;
+  }
+
+  private nextForDisplayResultsFromStorage(
+    selectedPhoto: UserPhoto | undefined,
+    buttonName: string | null,
+  ): WorkflowStep {
+    if (selectedPhoto) {
+      return WorkflowStep.ManageHistory;
+    }
+    return buttonName === 'go-back'
+      ? WorkflowStep.SelectPhoto
+      : WorkflowStep.DisplayResultsFromStorage;
+  }
+
+  private nextForManageHistory(buttonName: string | null): WorkflowStep {
+    const backActions = new Set(['back-to-history', 'delete-data', 'go-back']);
+    return backActions.has(buttonName ?? '')
+      ? WorkflowStep.DisplayResultsFromStorage
+      : WorkflowStep.ManageHistory;
   }
 
   /**

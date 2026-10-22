@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -15,7 +15,6 @@ import {
   IonImg,
 } from '@ionic/angular/standalone';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { Photo } from '@capacitor/camera';
 
 import type {
   PhotoInfo,
@@ -38,6 +37,7 @@ import { AlertService } from '../services/alert.service';
 import { ClipboardService } from '../services/clipboard.service';
 import { AppConstants } from '../shared/app.constants';
 import { Capacitor } from '@capacitor/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-feature',
@@ -61,7 +61,7 @@ import { Capacitor } from '@capacitor/core';
     FeatureResultComponent,
   ],
 })
-export class FeatureComponent implements OnInit {
+export class FeatureComponent implements OnInit, OnDestroy {
   translate = inject(TranslateService);
   localStorage = inject(LocalStorageService);
   readonly photoService = inject(PhotoService);
@@ -82,7 +82,7 @@ export class FeatureComponent implements OnInit {
   extractedText: string = '';
   WorkflowStep = WorkflowStep;
   workflowStep = WorkflowStep.SelectPhoto;
-  isLoading = false;
+  isLoading = true;
   isContingentExceeded: boolean = false;
   textStatistics: TextStatistics = {
     wordCount: 0,
@@ -92,7 +92,7 @@ export class FeatureComponent implements OnInit {
   hasNextImage: boolean = true;
   hasPreviousImage: boolean = false;
   monthlyUserLimit: number = 0;
-  private extractedTextItems: string[] = [];
+  private readonly subscriptions: Subscription[] = [];
 
   /**
    * Get the card title based on the current workflow step.
@@ -118,29 +118,41 @@ export class FeatureComponent implements OnInit {
    * The selected photo is set to the first photo in the loaded photos.
    */
   ngOnInit() {
-    this.updateIsContingentExceeded().then(() => {
-      this.initFormControls();
-      this.monthlyUserLimit = AppConstants.maxFreeFeatureCharsPerMonthForUser;
-      this.workflowStep = WorkflowStep.SelectPhoto;
-      this.photoStorageService.loadSavedPhotos().then(() => {
+    this.setupSubscriptions();
+
+    this.updateIsContingentExceeded()
+      .then(() => {
+        this.initFormControls();
+        this.monthlyUserLimit = AppConstants.maxFreeFeatureCharsPerMonthForUser;
+        this.workflowStep = WorkflowStep.SelectPhoto;
+        return this.photoStorageService.loadSavedPhotos();
+      })
+      .then(() => {
+        this.isLoading = false;
+      })
+      .catch((err) => {
+        console.error('Feature initialization failed', err);
         this.isLoading = false;
       });
-    });
+  }
 
-    this.photoStorageService.photos$.subscribe((photos) => {
-      this.selectedPhoto = photos[0];
-    });
+  private setupSubscriptions() {
+    this.subscriptions.push(
+      this.photoStorageService.photos$.subscribe((photos) => {
+        this.selectedPhoto = photos[0];
+      }),
 
-    this.utilsService.backButtonClicked$.subscribe((clicked) => {
-      if (clicked) {
-        this.initFormControls();
-        // call wf with button name 'go-back' to handle the back navigation
-        this.workflowStep = this.workflowService.getNextWorkflowStep(
-          this.workflowStep,
-          { target: { getAttribute: () => 'go-back' } },
-        );
-      }
-    });
+      this.utilsService.backButtonClicked$.subscribe((clicked) => {
+        if (clicked) {
+          this.initFormControls();
+          // call wf with button name 'go-back' to handle the back navigation
+          this.workflowStep = this.workflowService.getNextWorkflowStep(
+            this.workflowStep,
+            { target: { getAttribute: () => 'go-back' } },
+          );
+        }
+      }),
+    );
   }
 
   /**
@@ -205,7 +217,7 @@ export class FeatureComponent implements OnInit {
    * Select a photo from the history and update the selected history photo.
    * @param photo The photo to select from the history.
    */
-  async selectHistoryPhoto(photo: UserPhoto) {
+  selectHistoryPhoto(photo: UserPhoto) {
     this.initFormControls();
     this.selectedHistoryPhoto = photo;
     this.extractedText = photo.photoInfo?.extractedText || '';
@@ -220,17 +232,26 @@ export class FeatureComponent implements OnInit {
 
   /**
    * Select photos from storage and update the workflow step accordingly.
+   * If loading photos fails, the error is logged and the workflow step is not advanced.
    * @param event The event triggering the selection from storage.
    */
   async selectPhotosFromStorage(event: any) {
     this.isLoading = true;
-    await this.photoStorageService.getPhotosFromCache();
+    try {
+      await this.photoStorageService.getPhotosFromCache();
 
-    this.workflowStep = this.workflowService.getNextWorkflowStep(
-      this.workflowStep,
-      event,
-    );
-    this.isLoading = false;
+      this.workflowStep = this.workflowService.getNextWorkflowStep(
+        this.workflowStep,
+        event,
+      );
+    } catch (error) {
+      console.error('Error selecting photos from storage:', error);
+      this.toastService.showToast(
+        this.translate.instant('FEATURE.TOAST.ERROR_LOADING_PHOTOS'),
+      );
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   /**
@@ -321,7 +342,10 @@ export class FeatureComponent implements OnInit {
    * @returns A promise that resolves when the operation is complete.
    */
   async deletePhoto(event: any): Promise<void> {
-    return await this.deleteTextAndPhotoExec(event, this.selectedPhoto as UserPhoto);
+    return await this.deleteTextAndPhotoExec(
+      event,
+      this.selectedPhoto as UserPhoto,
+    );
   }
 
   /**
@@ -333,7 +357,10 @@ export class FeatureComponent implements OnInit {
    * @returns A promise that resolves when the operation is complete.
    */
   async deleteTextAndPhoto(event: any): Promise<void> {
-    return await this.deleteTextAndPhotoExec(event, this.selectedHistoryPhoto as UserPhoto);
+    return await this.deleteTextAndPhotoExec(
+      event,
+      this.selectedHistoryPhoto as UserPhoto,
+    );
   }
 
   /**
@@ -345,20 +372,17 @@ export class FeatureComponent implements OnInit {
    * @param photo The photo to be deleted.
    * @returns A promise that resolves when the operation is complete.
    */
-  private async deleteTextAndPhotoExec(event: any, photo: UserPhoto): Promise<void> {
-    if (
-      !(await this.alertService.confirmDeletePhotoAlert(
-        photo,
-      ))
-    ) {
+  private async deleteTextAndPhotoExec(
+    event: any,
+    photo: UserPhoto,
+  ): Promise<void> {
+    if (!(await this.alertService.confirmDeletePhotoAlert(photo))) {
       return;
     }
 
     this.isLoading = true;
     try {
-      const photoDeleted = await this.photoStorageService.deletePhoto(
-        photo,
-      );
+      const photoDeleted = await this.photoStorageService.deletePhoto(photo);
 
       if (photoDeleted) {
         this.toastService.showToast(
@@ -511,7 +535,7 @@ export class FeatureComponent implements OnInit {
       this.selectedHistoryPhoto!.filepath,
     );
 
-    this.clipboardService.copyDataToClipboard(
+    await this.clipboardService.copyDataToClipboard(
       this.selectedHistoryPhoto as UserPhoto,
       this.textStatistics,
       selectedCopyDataOptions,
@@ -530,17 +554,15 @@ export class FeatureComponent implements OnInit {
     const nextPhoto = this.photoStorageService.getNextPhoto(
       this.selectedHistoryPhoto as UserPhoto,
     );
-    if (nextPhoto) {
-      this.updateDisplayedData(nextPhoto);
+    if (nextPhoto?.filepath) {
+      this.updateDisplayedData(nextPhoto); // update selectedHistoryPhoto
       this.hasNextImage = !!this.photoStorageService.getNextPhoto(nextPhoto);
-      this.hasPreviousImage =
-        !!this.photoStorageService.getPreviousPhoto(nextPhoto);
     } else {
       this.hasNextImage = false;
-      this.hasPreviousImage = !!this.photoStorageService.getPreviousPhoto(
-        this.selectedHistoryPhoto as UserPhoto,
-      );
     }
+    this.hasPreviousImage = !!this.photoStorageService.getPreviousPhoto(
+      this.selectedHistoryPhoto as UserPhoto,
+    );
   }
 
   /**
@@ -551,18 +573,16 @@ export class FeatureComponent implements OnInit {
     const previousPhoto = this.photoStorageService.getPreviousPhoto(
       this.selectedHistoryPhoto as UserPhoto,
     );
-    if (previousPhoto) {
+    if (previousPhoto?.filepath) {
       this.updateDisplayedData(previousPhoto);
-      this.hasNextImage =
-        !!this.photoStorageService.getNextPhoto(previousPhoto);
       this.hasPreviousImage =
         !!this.photoStorageService.getPreviousPhoto(previousPhoto);
     } else {
       this.hasPreviousImage = false;
-      this.hasNextImage = !!this.photoStorageService.getNextPhoto(
-        this.selectedHistoryPhoto as UserPhoto,
-      );
     }
+    this.hasNextImage = !!this.photoStorageService.getNextPhoto(
+      this.selectedHistoryPhoto as UserPhoto,
+    );
   }
 
   /**
@@ -601,19 +621,24 @@ export class FeatureComponent implements OnInit {
    * Display statistics about the extracted text, including word count, line count,
    * and character count.
    * The extracted text is split into lines and filtered to remove empty lines.
+   * Leading and trailing whitespaces are counted as characters, but newlines not.
    */
   private displayTextStatistics() {
-    this.extractedTextItems = this.extractedText
+    const lineItems: string[] = this.extractedText
       .split('\n')
       .filter((line) => line.trim() !== '');
 
+    const wordItems: string[] = this.extractedText
+      .replaceAll('\n', ' ')
+      .split(' ')
+      .filter((word) => word.trim() !== '');
+
+    const chars: string = this.extractedText.replaceAll('\n', '');
+
     this.textStatistics = {
-      wordCount: this.extractedText
-        .replaceAll('\n', ' ')
-        .split(' ')
-        .filter((word) => word.trim() !== '').length,
-      lineCount: this.extractedTextItems.length,
-      characterCount: this.extractedText.length,
+      wordCount: wordItems.length,
+      lineCount: lineItems.length,
+      characterCount: chars.length,
     };
   }
 
@@ -625,6 +650,9 @@ export class FeatureComponent implements OnInit {
     this.selectedPhoto = undefined;
     this.selectedHistoryPhoto = undefined;
     this.extractedText = '';
-    this.extractedTextItems = [];
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

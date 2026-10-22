@@ -51,22 +51,39 @@ export class MarkdownViewerComponent implements OnInit {
   markdown: string = '';
   showSpinner: boolean = true;
 
+  /**
+   * Determines if the application is running in a native environment.
+   * @returns True if running natively, false otherwise.
+   */
   get isNative(): boolean {
     return this.utilsService.isNative;
   }
 
+  /**
+   * Lifecycle hook that is called after the component has been initialized.
+   * Loads the markdown changelog.
+   */
   ngOnInit() {
     this.loadMarkdownChangelog();
   }
 
-  closeModal() {
-    this.modalController.dismiss();
+  /**
+   * Closes the modal containing the markdown viewer.
+   */
+  async closeModal() {
+    await this.modalController.dismiss();
   }
 
-  scrollToTop() {
-    this.content.scrollToTop(300);
+  /**
+   * Scrolls the content to the top.
+   */
+  async scrollToTop() {
+    await this.content.scrollToTop(300);
   }
 
+  /**
+   * Loads the markdown changelog from the specified path.
+   */
   private loadMarkdownChangelog() {
     this.http.get(this.fullChangeLogPath, { responseType: 'text' }).subscribe({
       next: (data) => {

@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Capacitor } from '@capacitor/core';
 import { Directory } from '@capacitor/filesystem';
@@ -22,7 +21,6 @@ export class PhotoStorageService {
   private readonly translate = inject(TranslateService);
   private readonly storage = inject(Storage);
   private readonly alertService = inject(AlertService);
-  private readonly loadingCtrl = inject(LoadingController);
   private readonly toastService = inject(ToastService);
   private readonly fileConversionService = inject(FileConversionService);
   private readonly filePathService = inject(FilePathService);
@@ -52,7 +50,7 @@ export class PhotoStorageService {
    */
   async savePhoto(photo: Photo): Promise<UserPhoto> {
     if (!(await this.checkAndRequestFilesystemPermission())) {
-      this.alertService.showStoragePermissionError();
+      await this.alertService.showStoragePermissionError();
       throw new Error('Storage permission denied');
     }
     let savedPhoto: UserPhoto;
@@ -62,7 +60,7 @@ export class PhotoStorageService {
     // write file to data directory
     const fileName = this.filePathService.getFileName(
       FileNamePrefix.ImageToText,
-      photo.format
+      photo.format,
     );
     const savedFile = await this.filesystem.writeFile({
       path: fileName,
@@ -128,42 +126,41 @@ export class PhotoStorageService {
    * On web, photos are stored in localStorage.
    */
   async loadSavedPhotos() {
-    const loading = await this.loadingCtrl.create({
-      message: this.translate.instant('FEATURE.LOADING.LOADING_PHOTOS'),
-    });
-    await loading.present();
+    try {
+      await this.getPhotosFromCache();
 
-    await this.getPhotosFromCache();
-
-    if (!Capacitor.isNativePlatform()) {
-      let loadingErrorOccurred = false;
-      for (let photo of this.photos) {
-        try {
-          if (!photo.webviewPath?.startsWith('data:')) {
-            continue;
-          }
-          if (photo.webviewPath?.startsWith('blob:')) {
-            // blob URLs are not persistent — log and clear or set placeholder
-            console.warn(
-              'Blob URL not persistent; image not available after reload',
-              photo.webviewPath,
-            );
-          }
-        } catch (error) {
-          console.error('photo.webviewPath is not available or invalid', error);
-          loadingErrorOccurred = true;
-        }
+      if (!Capacitor.isNativePlatform()) {
+        this.checkWebviewPathOfphotos();
+        this.photosSubject.next(this.photos);
       }
-      if (loadingErrorOccurred) {
-        const errorMessage = this.translate.instant(
-          'TOAST.ERROR_LOADING_PHOTOS',
-        );
-        this.toastService.showToast(errorMessage);
-      }
-      this.photosSubject.next(this.photos);
+    } catch (error) {
+      console.error('photo.webviewPath is not available or invalid', error);
+      const errorMessage = this.translate.instant('TOAST.ERROR_LOADING_PHOTOS');
+      this.toastService.showToast(errorMessage);
     }
+  }
 
-    loading.dismiss();
+  /**
+   * Checks the webview paths of the photos and logs warnings for non-persistent blob URLs.
+   * This is relevant for web platforms where blob URLs are not persistent across reloads.
+   *
+   * @returns void
+   */
+  private checkWebviewPathOfphotos() {
+    for (const photo of this.photos) {
+      const webviewPath = photo.webviewPath;
+
+      if (typeof webviewPath !== 'string') {
+        continue;
+      }
+
+      if (webviewPath.startsWith('blob:')) {
+        console.warn(
+          'Blob URL not persistent; image not available after reload',
+          webviewPath,
+        );
+      }
+    }
   }
 
   /**
@@ -194,24 +191,25 @@ export class PhotoStorageService {
       this.photosSubject.next(this.photos);
     } catch (error) {
       console.error('Error loading photos from storage:', error);
+      throw error;
     }
   }
 
   /**
    * Deletes all photos from the filesystem and clears the cache.
-   * This method checks for necessary permissions before attempting deletion.
+   * This method checks for necessary permissions before attempting deletion,
+   * and shows an alert if permissions are not granted.
    */
   public async deleteAllPhotos(): Promise<boolean> {
     // check permissions
     if (!(await this.checkFilesystemPermission())) {
       console.warn('Storage permission not granted, skipping file deletion');
-      this.alertService.showStoragePermissionError();
+      await this.alertService.showStoragePermissionError();
       return false;
     }
-    const numberOfPhotos = this.photos.length;
-    for (let i = 0; i < numberOfPhotos; i++) {
-      await this.deletePhoto(this.photos[0]);
-    }
+
+    const promises = this.photos.map((p) => this.deletePhoto(p));
+    await Promise.all(promises);
     return true;
   }
 
@@ -225,11 +223,13 @@ export class PhotoStorageService {
     // check permissions
     if (!(await this.checkFilesystemPermission())) {
       console.warn('Storage permission not granted, skipping file deletion');
-      this.alertService.showStoragePermissionError();
+      await this.alertService.showStoragePermissionError();
       return false;
     }
 
-    const filename = this.filePathService.getFilenameFromFilepath(photo.filepath);
+    const filename = this.filePathService.getFilenameFromFilepath(
+      photo.filepath,
+    );
     try {
       await this.filesystem.deleteFile({
         path: filename,
@@ -256,7 +256,7 @@ export class PhotoStorageService {
   async saveFile(fileName: string, data: string) {
     if (Capacitor.isNativePlatform()) {
       if (!(await this.checkAndRequestFilesystemPermission())) {
-        this.alertService.showStoragePermissionError();
+        await this.alertService.showStoragePermissionError();
         throw new Error('Storage permission denied');
       }
       // use Capacitor Filesystem API for mobiles
@@ -268,7 +268,7 @@ export class PhotoStorageService {
         });
       } catch (error) {
         console.error('Error saving file:', error);
-        this.alertService.showStoragePermissionError();
+        await this.alertService.showStoragePermissionError();
       }
     } else {
       // for Desktop/Web: create a download link
@@ -311,7 +311,7 @@ export class PhotoStorageService {
       return true;
     } catch (error) {
       console.error('Error saving file in downloadFile:', error);
-      this.alertService.showStoragePermissionError();
+      await this.alertService.showStoragePermissionError();
       return false;
     }
   }
@@ -360,7 +360,7 @@ export class PhotoStorageService {
 
         if (requestResult.publicStorage !== 'granted') {
           console.error('Storage permission denied by user');
-          this.alertService.showStoragePermissionError();
+          await this.alertService.showStoragePermissionError();
           return false;
         } else {
           return true;
@@ -387,25 +387,26 @@ export class PhotoStorageService {
     photoInfo: Partial<PhotoInfo>,
   ): Promise<UserPhoto> {
     const existingInfo = photo.photoInfo ?? {};
-    // update createdAt and modifiedAt timestamps
-    if (!existingInfo.createdAt) {
-      photoInfo.createdAt = existingInfo.createdAt ?? new Date().toISOString();
+    const mergedInfo: Partial<PhotoInfo> = {
+      ...existingInfo,
+      ...photoInfo,
+    };
+
+    if (!mergedInfo.createdAt) {
+      mergedInfo.createdAt = new Date().toISOString();
     } else {
-      photoInfo.modifiedAt = new Date().toISOString();
+      mergedInfo.modifiedAt = new Date().toISOString();
     }
 
     const updatedPhoto: UserPhoto = {
       ...photo,
-      photoInfo: {
-        ...existingInfo,
-        ...photoInfo,
-      },
+      photoInfo: mergedInfo as PhotoInfo,
     };
 
     this.photos = this.photos.map((p) =>
       p.filepath === updatedPhoto.filepath ? updatedPhoto : p,
     );
-    this.cachePhotos();
+    await this.cachePhotos();
     return updatedPhoto;
   }
 
@@ -433,30 +434,30 @@ export class PhotoStorageService {
   /**
    * Returns the next photo in the list relative to the current photo.
    * @param currentPhoto The current photo.
-   * @returns The next photo, or null if there is no next photo.
+   * @returns The next photo, or undefined if there is no next photo.
    */
-  getNextPhoto(currentPhoto: UserPhoto): UserPhoto | null {
+  getNextPhoto(currentPhoto: UserPhoto): UserPhoto | undefined {
     const currentIndex = this.photos.findIndex(
       (photo) => photo.filepath === currentPhoto.filepath,
     );
     if (currentIndex >= 0 && currentIndex < this.photos.length - 1) {
       return this.photos[currentIndex + 1];
     }
-    return null;
+    return undefined;
   }
 
   /**
    * Returns the previous photo in the list relative to the current photo.
    * @param currentPhoto The current photo.
-   * @returns The previous photo, or null if there is no previous photo.
+   * @returns The previous photo, or undefined if there is no previous photo.
    */
-  getPreviousPhoto(currentPhoto: UserPhoto): UserPhoto | null {
+  getPreviousPhoto(currentPhoto: UserPhoto): UserPhoto | undefined {
     const currentIndex = this.photos.findIndex(
       (photo) => photo.filepath === currentPhoto.filepath,
     );
     if (currentIndex > 0) {
       return this.photos[currentIndex - 1];
     }
-    return null;
+    return undefined;
   }
 }

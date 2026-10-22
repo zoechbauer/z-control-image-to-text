@@ -1,5 +1,8 @@
 import { of } from 'rxjs';
 
+/**
+ * Creates a mock for the translation service.
+ */
 export function createTranslateServiceMock() {
   return {
     instant: jasmine.createSpy('instant').and.callFake((key: any) => key),

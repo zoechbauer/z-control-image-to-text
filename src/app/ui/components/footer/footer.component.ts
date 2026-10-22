@@ -14,6 +14,9 @@ export class FooterComponent {
 
   showDetails = false;
 
+  /**
+   * Gets the mailto link with the subject pre-filled for the feedback email.
+   */
   get mailtoLink() {
     return 'mailto:zcontrol.app.qr@gmail.com?subject=z-control%20Multi%20Translator%20App%20Feedback';
   }

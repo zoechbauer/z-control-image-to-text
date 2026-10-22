@@ -1,6 +1,6 @@
 <ion-card>
   <ion-card-header class="ion-text-center">
-    <ion-card-title> {{ cardTitle }}</ion-card-title>
+    <ion-card-title> {{ cardTitle }} </ion-card-title>
     <ion-card-subtitle>
       {{ "FEATURE.WORKFLOW_STEPS." + workflowStep | translate }}
     </ion-card-subtitle>
@@ -13,7 +13,7 @@
             {{ "FEATURE.CARD.INFO" | translate }}
           </p>
           <p class="ion-padding-horizontal">
-            {{ "FEATURE.CARD.INFO-2" | translate:{ limit: monthlyUserLimit } }}
+            {{ "FEATURE.CARD.INFO-2" | translate: { limit: monthlyUserLimit } }}
           </p>
           <p class="ion-padding">
             {{ "FEATURE.CARD.INFO-3" | translate }}
@@ -21,6 +21,7 @@
         </div>
         <app-spinner *ngIf="isLoading"></app-spinner>
         <ion-button
+          name="camera"
           fill="clear"
           [disabled]="isLoading"
           (click)="makePhoto()"
@@ -29,6 +30,7 @@
           {{ "FEATURE.CARD.BUTTON.CAMERA" | translate }}</ion-button
         >
         <ion-button
+          name="gallery"
           fill="clear"
           [disabled]="isLoading"
           (click)="selectPhotoFromGallery()"
@@ -37,6 +39,7 @@
           {{ "FEATURE.CARD.BUTTON.GALLERY" | translate }}</ion-button
         >
         <ion-button
+          *ngIf="(photoStorageService.photos$ | async)!.length > 0"
           name="load-data"
           fill="clear"
           [disabled]="isLoading"
@@ -65,9 +68,9 @@
           {{ "FEATURE.CARD.BUTTON.EXTRACT_TEXT" | translate }}</ion-button
         >
         <ion-button
+          name="delete-photo"
           fill="clear"
           [disabled]="isLoading"
-          name="delete-photo"
           (click)="deletePhoto($event)"
           (keydown.enter)="deletePhoto($event)"
           ><ion-icon name="trash-bin-outline" slot="start"></ion-icon>
@@ -86,6 +89,7 @@
         <app-spinner *ngIf="isLoading"></app-spinner>
         <div>
           <ion-button
+            name="add-info"
             fill="clear"
             [disabled]="isLoading"
             (click)="addInfo()"
@@ -101,13 +105,13 @@
       >
         <div>
           {{ "FEATURE.CARD.LABEL.NUMBER_OF_IMAGES" | translate }}:
-          {{ photoService.photos.length }}
+          {{ (photoStorageService.photos$ | async)!.length }}
         </div>
         <ion-grid>
           <ion-row>
             <ion-col
               size="12"
-              *ngFor="let photo of photoService.photos; let position = index"
+              *ngFor="let photo of photoStorageService.photos$ | async; let position = index"
             >
               <ion-img
                 [src]="photo.webviewPath"
@@ -119,7 +123,8 @@
         </ion-grid>
         <app-spinner *ngIf="isLoading"></app-spinner>
         <ion-button
-          *ngIf="photoService.photos.length > 0"
+          *ngIf="(photoStorageService.photos$ | async)!.length > 0"
+          name="delete-all"
           fill="clear"
           [disabled]="isLoading"
           (click)="deleteAllPhotos()"
@@ -131,9 +136,9 @@
       <ng-container *ngIf="workflowStep === WorkflowStep.ManageHistory">
         <div class="photo-iterator">
           <ion-button
-            size="small"
             *ngIf="hasPreviousImage"
             name="previous-image"
+            size="small"
             fill="clear"
             (click)="getPreviousImage()"
             (keydown.enter)="getPreviousImage()"
@@ -178,9 +183,9 @@
           {{ copyShareLabel }}</ion-button
         >
         <ion-button
+          name="delete-data"
           fill="clear"
           [disabled]="isLoading"
-          name="delete-data"
           (click)="deleteTextAndPhoto($event)"
           (keydown.enter)="deleteTextAndPhoto($event)"
           ><ion-icon name="trash-bin-outline" slot="start"></ion-icon>

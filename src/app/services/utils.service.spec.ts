@@ -4,14 +4,14 @@ import { Capacitor } from '@capacitor/core';
 import { ModalController } from '@ionic/angular';
 
 import { UtilsService } from './utils.service';
+import { DisplayedUserStatistics } from '../shared/firebase-firestore.interfaces';
 import { DisplayMode, Tab } from '../shared/enums';
 import { environment } from '@env/environment';
 import { HelpModalComponent } from '../ui/components/get-help/get-help.component';
 import { MarkdownViewerComponent } from '../ui/components/markdown-viewer/markdown-viewer.component';
 import { UserDetailComponent } from '../ui/components/user-detail/user-detail.component';
-import { DisplayedUserStatistics } from '../shared/firebase-firestore.interfaces';
-import { createTranslateServiceMock } from '../testing/translate-service.mock';
-import { TranslateService } from '@ngx-translate/core';
+import { PhotoInfoComponent } from '../ui/components/photo-info/photo-info.component';
+import { UserPhoto } from '../shared/app.interfaces';
 
 describe('UtilsService', () => {
   let service: UtilsService;
@@ -21,16 +21,15 @@ describe('UtilsService', () => {
   const originalShowTabsBar = environment.app.showTabsBar;
 
   beforeEach(() => {
-    modalControllerSpy = jasmine.createSpyObj('ModalController', ['create']);
+    modalControllerSpy = jasmine.createSpyObj('ModalController', [
+      'create',
+      'onWillDismiss',
+    ]);
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     TestBed.configureTestingModule({
       providers: [
         UtilsService,
-        {
-          provide: TranslateService,
-          useValue: createTranslateServiceMock(),
-        },
         { provide: ModalController, useValue: modalControllerSpy },
         { provide: Router, useValue: routerSpy },
       ],
@@ -56,6 +55,9 @@ describe('UtilsService', () => {
     (modal as any).present = jasmine
       .createSpy('present')
       .and.resolveTo(undefined);
+    (modal as any).onWillDismiss = jasmine
+      .createSpy('onWillDismiss')
+      .and.resolveTo({ data: undefined, role: undefined });
     return modal;
   };
 
@@ -103,6 +105,7 @@ describe('UtilsService', () => {
       spyOnProperty(globalThis, 'innerHeight', 'get').and.returnValue(800);
       spyOnProperty(globalThis, 'innerWidth', 'get').and.returnValue(700);
       spyOnProperty(service, 'isPortrait', 'get').and.returnValue(true);
+
       expect(service.isSmallDevice).toBeFalse();
     });
 
@@ -110,6 +113,7 @@ describe('UtilsService', () => {
       spyOnProperty(globalThis, 'innerHeight', 'get').and.returnValue(640);
       spyOnProperty(globalThis, 'innerWidth', 'get').and.returnValue(768);
       spyOnProperty(service, 'isPortrait', 'get').and.returnValue(true);
+
       expect(service.isSmallDevice).toBeTrue();
     });
 
@@ -187,6 +191,7 @@ describe('UtilsService', () => {
       document.body.appendChild(tabBar);
       spyOnProperty(service, 'isShowIonTabBar', 'get').and.returnValue(true);
       service.showOrHideIonTabBar();
+
       expect(tabBar.classList.contains('hide-ion-tab-bar')).toBeFalse();
     });
 
@@ -195,6 +200,7 @@ describe('UtilsService', () => {
       document.body.appendChild(tabBar);
       spyOnProperty(service, 'isShowIonTabBar', 'get').and.returnValue(false);
       service.showOrHideIonTabBar();
+
       expect(tabBar.classList.contains('hide-ion-tab-bar')).toBeTrue();
     });
   });
@@ -208,6 +214,7 @@ describe('UtilsService', () => {
         'setModalLandscapeClasses',
       ).and.callThrough();
       await service.openHelpModal();
+
       expect(modalControllerSpy.create).toHaveBeenCalledWith({
         component: HelpModalComponent,
       });
@@ -224,6 +231,7 @@ describe('UtilsService', () => {
       ).and.callThrough();
       await service.openHelpModal();
       globalThis.dispatchEvent(new Event('orientationchange'));
+
       expect(classSpy).toHaveBeenCalledTimes(2);
     });
 
@@ -231,6 +239,7 @@ describe('UtilsService', () => {
       const modal = createModalMock(MarkdownViewerComponent);
       modalControllerSpy.create.and.resolveTo(modal);
       await service.openChangelog();
+
       expect(modalControllerSpy.create).toHaveBeenCalledWith({
         component: MarkdownViewerComponent,
         componentProps: {
@@ -245,6 +254,7 @@ describe('UtilsService', () => {
       modalControllerSpy.create.and.resolveTo(modal);
       const userStatistic = {} as DisplayedUserStatistics;
       await service.openUserDetail('en', userStatistic, DisplayMode.User);
+
       expect(modalControllerSpy.create).toHaveBeenCalledWith({
         component: UserDetailComponent,
         componentProps: {
@@ -256,6 +266,58 @@ describe('UtilsService', () => {
       expect((modal as any).present).toHaveBeenCalled();
     });
 
+    it('should open photo info modal and pass component props', async () => {
+      const modal = createModalMock(PhotoInfoComponent);
+      modalControllerSpy.create.and.resolveTo(modal);
+      const classSpy = spyOn(
+        service,
+        'setModalLandscapeClasses',
+      ).and.callThrough();
+      (modal as any).onWillDismiss = jasmine
+        .createSpy('onWillDismiss')
+        .and.resolveTo({ data: undefined, role: 'cancel' });
+      const photo = {} as UserPhoto;
+      await service.openPhotoInfoModal(photo);
+
+      expect(modalControllerSpy.create).toHaveBeenCalledWith({
+        component: PhotoInfoComponent,
+        componentProps: {
+          photo,
+        },
+      });
+      expect((modal as any).present).toHaveBeenCalled();
+      expect(classSpy).toHaveBeenCalledWith(modal);
+    });
+
+    it('should open photo info modal and return values when save button clicked', async () => {
+      const modal = createModalMock(PhotoInfoComponent);
+      modalControllerSpy.create.and.resolveTo(modal);
+      const classSpy = spyOn(
+        service,
+        'setModalLandscapeClasses',
+      ).and.callThrough();
+      let photo = {} as UserPhoto;
+      (modal as any).onWillDismiss = jasmine
+        .createSpy('onWillDismiss')
+        .and.resolveTo({
+          data: { title: 'sample title', description: 'sample description' },
+          role: 'save',
+        });
+      await service.openPhotoInfoModal(photo);
+
+      expect(modalControllerSpy.create).toHaveBeenCalledWith({
+        component: PhotoInfoComponent,
+        componentProps: {
+          photo,
+        },
+      });
+      expect((modal as any).present).toHaveBeenCalled();
+      expect(classSpy).toHaveBeenCalledWith(modal);
+      expect(photo).toEqual({
+        photoInfo: { title: 'sample title', description: 'sample description' },
+      } as any as UserPhoto);
+    });
+
     it('should apply change-log, desktop and landscape classes for markdown modal', fakeAsync(() => {
       const modal = createModalMock(MarkdownViewerComponent);
       modal.classList.add('manual-instructions-modal', 'desktop', 'landscape');
@@ -263,6 +325,7 @@ describe('UtilsService', () => {
       spyOnProperty(service, 'isPortrait', 'get').and.returnValue(false);
       service.setModalLandscapeClasses(modal);
       tick(11);
+
       expect(modal.classList.contains('manual-instructions-modal')).toBeFalse();
       expect(modal.classList.contains('change-log-modal')).toBeTrue();
       expect(modal.classList.contains('desktop')).toBeTrue();
@@ -274,6 +337,7 @@ describe('UtilsService', () => {
       const consoleErrorSpy = spyOn(console, 'error');
       service.setModalLandscapeClasses(modal);
       tick(11);
+
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Unknown modal component for setting landscape class',
       );
@@ -290,6 +354,7 @@ describe('UtilsService', () => {
         scrollIntoView,
       } as unknown as HTMLElement);
       service.scrollTo('target', event);
+
       expect(event.preventDefault).toHaveBeenCalled();
       expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
     });
@@ -301,6 +366,7 @@ describe('UtilsService', () => {
       spyOn(document, 'getElementById').and.returnValue(null);
       const warnSpy = spyOn(console, 'warn');
       service.scrollTo('missing-id', event);
+
       expect(event.preventDefault).toHaveBeenCalled();
       expect(warnSpy).toHaveBeenCalledWith(
         "Element with id 'missing-id' not found",
@@ -313,6 +379,7 @@ describe('UtilsService', () => {
         scrollIntoView,
       } as unknown as HTMLElement);
       service.scrollToElement('target');
+
       expect(scrollIntoView).toHaveBeenCalledWith({
         behavior: 'smooth',
         block: 'start',
@@ -327,6 +394,7 @@ describe('UtilsService', () => {
         scrollTo,
       } as unknown as HTMLElement);
       service.scrollToElementUsingTabBar('target');
+
       expect(scrollTo).toHaveBeenCalledWith({
         top: 196,
         behavior: 'smooth',
@@ -457,6 +525,7 @@ describe('UtilsService', () => {
     it('returns current month in YYYY-MM format', () => {
       const result = service.getCurrentMonth();
       const expected = new Date().toISOString().slice(0, 7);
+
       expect(result).toBe(expected);
     });
   });
@@ -474,7 +543,8 @@ describe('UtilsService', () => {
       jasmine.clock().mockDate(new Date(2026, 3, 15));
 
       const result: string[] = service.getAllFirestoreSearchStringsForMonth();
-      expect(result.length).toBe(4);
+
+      expect(result).toHaveSize(4);
       expect(result[0]).toBe('2026-02');
       expect(result[1]).toBe('2026-03');
       expect(result[2]).toBe('2026-04');
@@ -487,7 +557,8 @@ describe('UtilsService', () => {
       jasmine.clock().mockDate(new Date(2027, 1, 15));
 
       const result: string[] = service.getAllFirestoreSearchStringsForMonth();
-      expect(result.length).toBe(14);
+
+      expect(result).toHaveSize(14);
       expect(result[0]).toBe('2026-02');
       expect(result[12]).toBe('2027-02');
       expect(result[13]).toBe(

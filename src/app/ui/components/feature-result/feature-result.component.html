@@ -1,4 +1,4 @@
-<div *ngIf="selectedHistoryPhoto">
+<div *ngIf="selectedHistoryPhoto" class="feature-result-container">
   <!-- display image -->
   <ion-img
     [src]="selectedHistoryPhoto.webviewPath"
@@ -7,25 +7,23 @@
   />
 
   <!-- display title and description -->
-  <ion-card
-    *ngIf="selectedHistoryPhoto.photoInfo?.title"
-    class="ion-text-center"
-  >
-    <ion-card-header class="ion-text-center">
+  <ion-card *ngIf="selectedHistoryPhoto.photoInfo?.title" class="feature-result-card-title-desc ion-text-center">
+
+    <ion-card-header class="ion-text-center photo-info-title">
       <ion-card-subtitle>
         {{ selectedHistoryPhoto.photoInfo!.title }}</ion-card-subtitle
       >
     </ion-card-header>
     <ion-card-content
       *ngIf="selectedHistoryPhoto.photoInfo!.description"
-      class="ion-text-left"
+      class="ion-text-left photo-info-description"
     >
       <p>{{ selectedHistoryPhoto!.photoInfo!.description }}</p>
     </ion-card-content>
   </ion-card>
 
   <!-- display extracted text -->
-  <ion-card *ngIf="extractedText" class="ion-text-center">
+  <ion-card *ngIf="extractedText" class="ion-text-center feature-result-card-extracted-text">
     <ion-card-header class="ion-text-center">
       <ion-card-title>
         {{ "FEATURE.CARD.LABEL.EXTRACTED_TEXT" | translate }}</ion-card-title
@@ -39,7 +37,7 @@
   </ion-card>
 
   <!-- display no extracted text info-->
-  <ion-card *ngIf="!extractedText" class="ion-text-center">
+  <ion-card *ngIf="!extractedText" class="ion-text-center feature-result-card-no-extracted-text">
     <ion-card-header class="ion-text-center">
       <ion-card-title>
         {{ "FEATURE.CARD.LABEL.NO_EXTRACTED_TEXT" | translate }}</ion-card-title
@@ -54,7 +52,7 @@
   </ion-card>
 
   <!-- display statistics -->
-  <ion-card  *ngIf="selectedHistoryPhoto.photoInfo">
+  <ion-card  *ngIf="selectedHistoryPhoto.photoInfo" class="feature-result-card-statistics">
     <ion-card-content class="ion-text-left">
       <div class="statistics">
         <ion-grid class="extracted-text-statistic" *ngIf="extractedText">

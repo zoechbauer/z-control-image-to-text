@@ -93,3 +93,9 @@ export enum CopyDataOption {
   TextStatistics = 'copyTextStatistics',
   CreatedModifiedTimestamps = 'copyCreatedModifiedTimestamps',
 }
+
+export enum LocalStorage {
+  SelectedLanguage = 'selectedLanguage',
+  StatisticsDisplayMode = 'statisticsDisplayMode',
+  StatisticsSelectedMonth = 'statisticsSelectedMonth',
+}

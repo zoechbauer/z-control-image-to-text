@@ -50,10 +50,16 @@ export class MainPage implements OnInit, OnDestroy {
 
   private readonly subscriptions: Subscription[] = [];
 
+  /**
+   * Returns the name of the application as defined in the environment configuration.
+   */
   get appName(): string {
     return environment.app.name;
   }
 
+  /**
+   * Initializes the component by setting up event listeners and subscriptions.
+   */
   ngOnInit() {
     this.utilsService.showOrHideIonTabBar();
     this.setupEventListeners();
@@ -75,6 +81,13 @@ export class MainPage implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * Handles the change event for the accordion group.
+   * Requests a statistics refresh if an accordion is expanded.
+   *
+   * @param event The custom event triggered by the accordion group.
+   * @param content The IonContent component associated with the accordion group.
+   */
   onAccordionGroupChange(event: CustomEvent, content: IonContent) {
     const accordionValue = event?.detail?.value;
     if (accordionValue) {
@@ -82,6 +95,9 @@ export class MainPage implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Cleans up resources and unsubscribes from all subscriptions when the component is destroyed.
+   */
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }

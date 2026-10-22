@@ -31,6 +31,9 @@ export class ChangeLogAccordionComponent {
   @Input() appName!: string;
   @Output() ionChange = new EventEmitter<void>();
 
+  /**
+   * Opens the changelog accordion.
+   */
   openChangelog() {
     this.ionChange.emit();
   }

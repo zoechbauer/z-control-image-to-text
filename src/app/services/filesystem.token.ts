@@ -11,6 +11,9 @@ export interface FilesystemLike {
   requestPermissions(): Promise<any>;
 }
 
+/**
+ * Injection token for the Capacitor Filesystem plugin.
+ */
 export const FILESYSTEM = new InjectionToken<FilesystemLike>('Filesystem', {
   providedIn: 'root',
   factory: () => CapacitorFilesystem,

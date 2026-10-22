@@ -29,9 +29,12 @@ export class AppComponent implements OnInit {
 
   isNativeApp = Capacitor.isNativePlatform();
   showTabsBar = environment.app.showTabsBar;
-
+  
+  /**
+   * Initializes the application when the component is created.
+   */
   ngOnInit() {
-    this.initializeApp();
+    void this.initializeApp();
   }
 
   /**
@@ -47,7 +50,7 @@ export class AppComponent implements OnInit {
       await this.capacitorPlatformService.setStatusBarOverlay(false);
       this.safeAreaInsets.setSafeAreaInsetsFix();
 
-      const isDarkMode = await this.systemBars.getCurrentIsDarkMode();
+      const isDarkMode = this.systemBars.getCurrentIsDarkMode();
       await this.systemBars.setBars(isDarkMode);
 
       await this.capacitorPlatformService.showStatusBar();

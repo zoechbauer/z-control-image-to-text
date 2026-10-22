@@ -3,23 +3,21 @@ import { Capacitor } from '@capacitor/core';
 import type { WorkflowStep } from '../shared/enums';
 import { ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
 import { AllMonthsOption, DisplayMode, Tab } from '../shared/enums';
-import { MarkdownViewerComponent } from '../ui/components/markdown-viewer/markdown-viewer.component';
-import { environment } from '@env/environment';
+import { UserPhoto } from '../shared/app.interfaces';
 import { DisplayedUserStatistics } from '../shared/firebase-firestore.interfaces';
+import { environment } from '@env/environment';
+import { MarkdownViewerComponent } from '../ui/components/markdown-viewer/markdown-viewer.component';
 import { UserDetailComponent } from '../ui/components/user-detail/user-detail.component';
 import { HelpModalComponent } from '../ui/components/get-help/get-help.component';
 import { PhotoInfoComponent } from '../ui/components/photo-info/photo-info.component';
-import { UserPhoto } from '../shared/app.interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilsService {
-  private readonly translate = inject(TranslateService);
   private readonly modalController = inject(ModalController);
   private readonly router = inject(Router);
 
@@ -117,8 +115,8 @@ export class UtilsService {
    * Navigates to the specified tab.
    * @param tab The tab to navigate to
    */
-  navigateToTab(tab: Tab): void {
-    this.router.navigate([`/tabs/${tab}`]);
+  async navigateToTab(tab: Tab): Promise<void> {
+    await this.router.navigate([`/tabs/${tab}`]);
   }
 
   /**
@@ -126,8 +124,8 @@ export class UtilsService {
    * @param tab The tab to navigate to
    * @param params Query parameters to include
    */
-  navigateToTabWithParams(tab: Tab, params: any): void {
-    this.router.navigate([`/tabs/${tab}`], { queryParams: params });
+  async navigateToTabWithParams(tab: Tab, params: any): Promise<void> {
+    await this.router.navigate([`/tabs/${tab}`], { queryParams: params });
   }
 
   /**

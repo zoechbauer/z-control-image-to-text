@@ -50,18 +50,30 @@ export class HelpModalComponent implements OnInit, OnDestroy {
   isPortrait = this.utilsService.isPortrait;
   private langSub?: Subscription;
 
+  /**
+   * Gets the maximum number of free feature characters allowed per month.
+   */
   get maxFreeFeatureCharsLengthPerMonth() {
     return AppConstants.maxFreeFeatureCharsPerMonth;
   }
 
+  /**
+   * Checks if the app is running in a native environment.
+   */
   get isNative(): boolean {
     return this.utilsService.isNative;
   }
 
+  /**
+   * Gets the name of the app.
+   */
   get appName(): string {
     return environment.app.name;
   }
 
+  /**
+   * Gets the short name of the app.
+   */
   get appShortName(): string {
     return environment.app.shortName;
   }
@@ -98,10 +110,16 @@ export class HelpModalComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Dismisses the help modal.
+   */
   async dismissModal() {
     await this.modalController.dismiss();
   }
 
+  /**
+   * Scrolls to the top of the help content.
+   */
   scrollToTop() {
     this.utilsService.scrollToElement(this.scrollToTopObj.id);
   }

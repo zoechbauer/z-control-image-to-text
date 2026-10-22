@@ -2,15 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { BehaviorSubject } from 'rxjs';
 
-import { AllMonthsOption, DisplayMode } from '../shared/enums';
+import { AllMonthsOption, DisplayMode, LocalStorage } from '../shared/enums';
 import { UtilsService } from './utils.service';
 import { AppConstants } from '../shared/app.constants';
-
-enum LocalStorage {
-  SelectedLanguage = 'selectedLanguage',
-  StatisticsDisplayMode = 'statisticsDisplayMode',
-  StatisticsSelectedMonth = 'statisticsSelectedMonth',
-}
 
 @Injectable({
   providedIn: 'root',
@@ -81,16 +75,16 @@ export class LocalStorageService {
       await this.loadFirestoreUid();
     } catch (error) {
       console.error('App initialization failed:', error);
-      await this.initializeWithDefaults(translate);
+      this.initializeWithDefaults(translate);
     }
   }
 
   /**
    * Fallback: sets default language to 'en' in TranslateService
    */
-  private async initializeWithDefaults(
+  private initializeWithDefaults(
     translate: import('@ngx-translate/core').TranslateService,
-  ): Promise<void> {
+  ): void {
     try {
       translate.setDefaultLang('en');
       translate.use('en');

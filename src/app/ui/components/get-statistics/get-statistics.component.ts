@@ -110,10 +110,18 @@ export class GetStatisticsComponent implements OnInit, OnDestroy {
   private _statisticsData: StatisticsData | null = null;
   private isPortrait = true;
 
+  /**
+   * Gets the statistics data.
+   * @returns The current statistics data or null if not available.
+   */
   get statisticsData(): StatisticsData | null {
     return this._statisticsData;
   }
 
+  /**
+   * Sets the statistics data and updates the displayed user statistics rows accordingly.
+   * @param value The new statistics data or null if not available.
+   */
   set statisticsData(value: StatisticsData | null) {
     this._statisticsData = value;
     this.allUserStatsRows = (value?.displayedUserStatistics ?? []).map(
@@ -128,38 +136,62 @@ export class GetStatisticsComponent implements OnInit, OnDestroy {
     this.applyUserStatsFilter();
   }
 
+  /**
+   * Gets a value indicating whether the column should be hidden based on the current orientation.
+   * @returns True if the column should be hidden, false otherwise.
+   */
   get hideColumn(): boolean {
     return this.isPortrait;
   }
 
+  /**
+   * Gets a value indicating whether the column should be hidden based on the current orientation
+   * or if the display mode is set to user.
+   * @returns True if the column should be hidden, false otherwise.
+   */
   get hideColumnIfUserOrPortrait(): boolean {
     return this.isPortrait || this.displayMode === DisplayMode.User;
   }
 
+  /**
+   * Gets a value indicating whether the application is running in a native environment.
+   * @returns True if the application is running natively, false otherwise.
+   */
   get isNative(): boolean {
     return this.utilsService.isNative;
   }
 
+  /**
+   * Gets a value indicating whether the application is running in a Firebase emulator environment.
+   * @returns True if the application is running in a Firebase emulator, false otherwise.
+   */
   get isFirebaseEmulator(): boolean {
     return environment.app.useFirebaseEmulator;
   }
 
+  /**
+   * Gets a value indicating whether all months are selected in the filter.
+   * @returns True if all months are selected, false otherwise.
+   */
   get isAllMonthsSelected(): boolean {
     return this.filterSelectedMonth === AllMonthsOption.SelectOptionValue;
   }
 
+  /**
+   * Sets up the component by initializing subscriptions, event listeners, and other necessary data.
+   */
   ngOnInit(): void {
     this.setupSubscriptions();
     this.setupEventListeners();
-    this.init();
+    void this.init();
   }
 
   private setupSubscriptions(): void {
     this.subscriptions.push(
-      this.firestoreUtilsService.statisticsRefresh$.subscribe(() => {
+      this.firestoreUtilsService.statisticsRefresh$.subscribe(async () => {
         // Only reload if not currently loading
         if (!this.isLoading) {
-          this.init();
+          await this.init();
         }
       }),
       this.firestoreService.programmerDeviceRefresh$.subscribe(() => {
@@ -182,6 +214,9 @@ export class GetStatisticsComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Initializes the component by setting up necessary data and state.
+   */
   async init() {
     this.isLoading = true;
     this.searchTerm = '';
@@ -242,11 +277,21 @@ export class GetStatisticsComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Handles changes to the search term input by updating the search term and applying the filter.
+   * @param value The new search term value.
+   */
   onSearchTermChange(value: string | null | undefined): void {
     this.searchTerm = value ?? '';
     this.applyUserStatsFilter();
   }
 
+  /**
+   * Tracks user statistics rows by their unique user ID.
+   * @param index The index of the row in the list.
+   * @param userStat The user statistics row.
+   * @returns The unique user ID for the row.
+   */
   trackByUserId(index: number, userStat: DisplayedUserStatisticsRow): string {
     return userStat.userId;
   }
@@ -297,6 +342,11 @@ export class GetStatisticsComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * Gets the section header text for the given translation key, including the selected month.
+   * @param translationKey The translation key for the section header.
+   * @returns The formatted section header text.
+   */
   getSectionHeader(translationKey: string): string {
     let selectedMonth: string;
 
@@ -326,6 +376,10 @@ export class GetStatisticsComponent implements OnInit, OnDestroy {
     this.selectedMonthForStatisticsSections = this.filterSelectedMonth;
   }
 
+  /**
+   * Handles the event when the user applies the filter settings.
+   * Stores the selected month and display mode in local storage and triggers a data reload.
+   */
   async onFilterData(): Promise<void> {
     this.selectedMonthForStatisticsSections = this.filterSelectedMonth;
     this.displayMode = this.selectedDisplayMode;
@@ -346,17 +400,32 @@ export class GetStatisticsComponent implements OnInit, OnDestroy {
     await this.init();
   }
 
+  /**
+   * Checks if the given user ID corresponds to the current user.
+   * @param userId The user ID to check.
+   * @returns True if the user ID matches the current user's ID, false otherwise.
+   */
   isCurrentUser(userId: string): boolean {
     return userId === this.currentUserUid;
   }
 
+  /**
+   * Shows detailed information for the specified user statistics.
+   * @param lang The language to use for displaying the details.
+   * @param userStatistic The user statistics to display in detail.
+   */
   async showDetailInfos(
     lang: string,
     userStatistic: DisplayedUserStatistics,
   ): Promise<void> {
-    this.utilsService.openUserDetail(lang, userStatistic, this.displayMode);
+    await this.utilsService.openUserDetail(lang, userStatistic, this.displayMode);
   }
 
+  /**
+   * Formats the given date and time according to the current display mode.
+   * @param dateTime The date and time to format.
+   * @returns The formatted date and time string.
+   */
   getFormatDateTime(dateTime: Date | null): string {
     if (this.displayMode === DisplayMode.Programmer) {
       return this.utilsService.formatDateTimeISO(dateTime);
@@ -365,6 +434,9 @@ export class GetStatisticsComponent implements OnInit, OnDestroy {
     return this.utilsService.formatDateISO(dateTime);
   }
 
+  /**
+   * Cleans up resources and unsubscribes from all subscriptions when the component is destroyed.
+   */
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }

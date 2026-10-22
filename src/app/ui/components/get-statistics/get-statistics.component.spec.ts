@@ -402,7 +402,7 @@ describe('GetStatisticsComponent', () => {
         });
       }
 
-      function createStatiticsData(): DisplayedUserStatisticsRow[] {
+      function createStatisticsData(): DisplayedUserStatisticsRow[] {
         statisticsData = [];
         addStatisticsData(
           'U-1',
@@ -453,7 +453,7 @@ describe('GetStatisticsComponent', () => {
       }
 
       beforeEach(() => {
-        statisticsData = createStatiticsData();
+        statisticsData = createStatisticsData();
         component['statisticsData'] = {
           displayedUserStatistics: statisticsData,
           userFeatureStatistics: [],
@@ -478,19 +478,19 @@ describe('GetStatisticsComponent', () => {
         const expectedIds = statisticsData.map((r) => r.userId);
 
         component.onSearchTermChange('');
-        expect(component.filteredUserStatsRows.length).toBe(5);
+        expect(component.filteredUserStatsRows).toHaveSize(statisticsData.length);
         expect(component.filteredUserStatsRows.map((r) => r.userId)).toEqual(
           expectedIds,
         );
 
         component.onSearchTermChange(undefined);
-        expect(component.filteredUserStatsRows.length).toBe(5);
+        expect(component.filteredUserStatsRows).toHaveSize(5);
         expect(component.filteredUserStatsRows.map((r) => r.userId)).toEqual(
           expectedIds,
         );
 
         component.onSearchTermChange(null);
-        expect(component.filteredUserStatsRows.length).toBe(5);
+        expect(component.filteredUserStatsRows).toHaveSize(5);
         expect(component.filteredUserStatsRows.map((r) => r.userId)).toEqual(
           expectedIds,
         );
@@ -745,6 +745,7 @@ describe('GetStatisticsComponent', () => {
       it('should handle empty subscriptions array on destroy', () => {
         (component as any).subscriptions = [];
         (component as any).ngOnDestroy();
+        expect((component as any).subscriptions).toHaveSize(0);
         // No errors should occur, and the test will pass if it reaches this point without throwing
       });
 
@@ -1025,7 +1026,7 @@ describe('GetStatisticsComponent', () => {
         fixture.detectChanges();
 
         const spinners = fixture.nativeElement.querySelectorAll('app-spinner');
-        expect(spinners.length).toBe(1);
+        expect(spinners).toHaveSize(1);
       });
 
       const TEST_NAME =
@@ -1041,7 +1042,7 @@ describe('GetStatisticsComponent', () => {
         fixture.detectChanges();
 
         const spinners = fixture.nativeElement.querySelectorAll('app-spinner');
-        expect(spinners.length).toBe(2);
+        expect(spinners).toHaveSize(2);
       });
     });
 
@@ -1419,7 +1420,7 @@ describe('GetStatisticsComponent', () => {
           '.user-stat-details ion-row.detail-row',
         );
 
-        expect(rows.length).toBe(2);
+        expect(rows).toHaveSize(2);
         expect(
           rows[0].classList.contains('user-contingent-exceeded'),
         ).toBeTrue();
@@ -1435,7 +1436,7 @@ describe('GetStatisticsComponent', () => {
           '.user-stat-details ion-row.detail-row',
         );
 
-        expect(rows.length).toBe(2);
+        expect(rows).toHaveSize(2);
         expect(rows[0].classList.contains('my-device')).toBeFalse();
         expect(rows[1].classList.contains('my-device')).toBeTrue();
       });
@@ -1543,7 +1544,7 @@ describe('GetStatisticsComponent', () => {
         );
 
         expect(languageHeaderIcon).toBeNull();
-        expect(detailCols.length).toBe(5);
+        expect(detailCols).toHaveSize(5);
       });
 
       it('should hide the feature-date column in portrait mode', () => {

@@ -102,6 +102,7 @@ describe('SettingsPage', () => {
   let fixture: ComponentFixture<SettingsPage>;
   let utilsServiceSpy: jasmine.SpyObj<UtilsService>;
   let localStorageServiceSpy: jasmine.SpyObj<LocalStorageService>;
+  let firestoreUtilsServiceSpy: jasmine.SpyObj<FirebaseFirestoreUtilsService>;
 
   const workflowChangedSub = new Subject<WorkflowStep>();
 
@@ -129,7 +130,7 @@ describe('SettingsPage', () => {
       },
     );
 
-    const firebaseFirestoreUtilsServiceSpy = jasmine.createSpyObj(
+    firestoreUtilsServiceSpy = jasmine.createSpyObj(
       'FirebaseFirestoreUtilsService',
       ['requestStatisticsRefresh'],
     );
@@ -165,7 +166,7 @@ describe('SettingsPage', () => {
         },
         {
           provide: FirebaseFirestoreUtilsService,
-          useValue: firebaseFirestoreUtilsServiceSpy,
+          useValue: firestoreUtilsServiceSpy,
         },
         {
           provide: ModalController,
@@ -421,6 +422,7 @@ describe('SettingsPage', () => {
       it('should handle empty subscriptions array on destroy', () => {
         (component as any).subscriptions = [];
         (component as any).ngOnDestroy();
+        expect((component as any).subscriptions).toHaveSize(0);
         // No errors should occur, and the test will pass if it reaches this point without throwing
       });
 
@@ -525,6 +527,42 @@ describe('SettingsPage', () => {
     });
 
     describe('accordion visibility flow', () => {
+      let languageAccordion: HTMLElement;
+      let feedbackAccordion: HTMLElement;
+      let statisticsAccordion: HTMLElement;
+      let privacyAccordion: HTMLElement;
+      let changeLogAccordion: HTMLElement;
+      let mobileAppAccordion: HTMLElement;
+      let sourceAccordion: HTMLElement;
+      let closeButtonArea: HTMLElement;
+
+      function queryAccordionsAndCloseButton() {
+        languageAccordion = fixture.nativeElement.querySelector(
+          'app-language-accordion',
+        );
+        feedbackAccordion = fixture.nativeElement.querySelector(
+          'app-feedback-accordion',
+        );
+        statisticsAccordion = fixture.nativeElement.querySelector(
+          'app-get-statistics-accordion',
+        );
+        privacyAccordion = fixture.nativeElement.querySelector(
+          'app-privacy-policy-accordion',
+        );
+        changeLogAccordion = fixture.nativeElement.querySelector(
+          'app-change-log-accordion',
+        );
+        mobileAppAccordion = fixture.nativeElement.querySelector(
+          'app-get-mobile-app-accordion',
+        );
+        sourceAccordion = fixture.nativeElement.querySelector(
+          'app-get-source-accordion',
+        );
+        closeButtonArea = fixture.nativeElement.querySelector(
+          '.accordion-close-button',
+        );
+      }
+
       beforeEach(() => {
         component.isLoading = false;
         component.selectedLanguage = 'de';
@@ -535,34 +573,16 @@ describe('SettingsPage', () => {
       });
 
       it('should render all accordion components when no accordion is open', () => {
-        const languageAccordion = fixture.nativeElement.querySelector(
-          'app-language-accordion',
-        );
-        const feedbackAccordion = fixture.nativeElement.querySelector(
-          'app-feedback-accordion',
-        );
-        const statisticsAccordion = fixture.nativeElement.querySelector(
-          'app-get-statistics-accordion',
-        );
-        const privacyAccordion = fixture.nativeElement.querySelector(
-          'app-privacy-policy-accordion',
-        );
-        const changeLogAccordion = fixture.nativeElement.querySelector(
-          'app-change-log-accordion',
-        );
-        const sourceAccordion = fixture.nativeElement.querySelector(
-          'app-get-source-accordion',
-        );
-        const closeButtonArea = fixture.nativeElement.querySelector(
-          '.accordion-close-button',
-        );
+        queryAccordionsAndCloseButton();
 
         expect(languageAccordion).toBeTruthy();
         expect(feedbackAccordion).toBeTruthy();
         expect(statisticsAccordion).toBeTruthy();
         expect(privacyAccordion).toBeTruthy();
         expect(changeLogAccordion).toBeTruthy();
+        expect(mobileAppAccordion).toBeTruthy();
         expect(sourceAccordion).toBeTruthy();
+
         expect(closeButtonArea).toBeNull();
       });
 
@@ -571,19 +591,17 @@ describe('SettingsPage', () => {
         component.showAllAccordions = false;
         fixture.detectChanges();
 
-        const languageAccordion = fixture.nativeElement.querySelector(
-          'app-language-accordion',
-        );
-        const feedbackAccordion = fixture.nativeElement.querySelector(
-          'app-feedback-accordion',
-        );
-        const closeButtonArea = fixture.nativeElement.querySelector(
-          '.accordion-close-button',
-        );
+        queryAccordionsAndCloseButton();
 
         expect(languageAccordion).toBeTruthy();
-        expect(feedbackAccordion).toBeNull();
         expect(closeButtonArea).toBeTruthy();
+
+        expect(feedbackAccordion).toBeNull();
+        expect(statisticsAccordion).toBeNull();
+        expect(privacyAccordion).toBeNull();
+        expect(changeLogAccordion).toBeNull();
+        expect(mobileAppAccordion).toBeNull();
+        expect(sourceAccordion).toBeNull();
       });
 
       it('should switch to single-accordion mode when ionValueChange emits selected accordion value', () => {
@@ -609,7 +627,8 @@ describe('SettingsPage', () => {
         expect(closeButtonArea).toBeTruthy();
       });
 
-      it('should show all accordions again when close button is clicked', () => {
+      it('should show all accordions closed again when close button is clicked', () => {
+        // Arrange: language accordion is open and single-accordion mode is active
         component.openAccordion = 'language';
         component.showAllAccordions = false;
         fixture.detectChanges();
@@ -619,19 +638,23 @@ describe('SettingsPage', () => {
         ) as HTMLElement;
         expect(closeButton).toBeTruthy();
 
+        // Act: click the close button to exit single-accordion mode
         closeButton.dispatchEvent(new Event('click'));
         fixture.detectChanges();
 
-        expect(component.openAccordion).toBeNull();
-        expect(component.showAllAccordions).toBeTrue();
+        queryAccordionsAndCloseButton();
 
-        const feedbackAccordion = fixture.nativeElement.querySelector(
-          'app-feedback-accordion',
-        );
-        const closeButtonArea = fixture.nativeElement.querySelector(
-          '.accordion-close-button',
-        );
+        // Assert: all accordions are shown as closed and close button is not visible
+        expect(component.showAllAccordions).toBeTrue();
+        expect(component.openAccordion).toBeNull();
+
         expect(feedbackAccordion).toBeTruthy();
+        expect(statisticsAccordion).toBeTruthy();
+        expect(privacyAccordion).toBeTruthy();
+        expect(changeLogAccordion).toBeTruthy();
+        expect(mobileAppAccordion).toBeTruthy();
+        expect(sourceAccordion).toBeTruthy();
+
         expect(closeButtonArea).toBeNull();
       });
     });
