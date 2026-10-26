@@ -4,7 +4,6 @@ import { FilePathService } from './file-path.service';
 import { FileNamePrefix } from '../shared/enums';
 import { UserPhoto } from '../shared/app.interfaces';
 import { Capacitor } from '@capacitor/core';
-import { type } from 'os';
 
 describe('FilePathService', () => {
   let service: FilePathService;
@@ -304,9 +303,6 @@ describe('FilePathService', () => {
       // Because the actual image size is not stored on the img element as a visible “size”
       // property you can read from the raw DOM object dump.
       const img = await (service as any).loadImage(src);
-      // console.log('image loaded', img);
-      // console.log('img.naturalWidth', img.naturalWidth);
-      // console.log('img.naturalHeight', img.naturalHeight);
 
       const dimensions = await (service as any).getDimensions(src);
       expect(dimensions).toEqual({

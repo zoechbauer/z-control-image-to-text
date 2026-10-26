@@ -12,12 +12,11 @@ This project uses a simplified major.minor versioning scheme:
 
 ## What's Coming Next
 
-- Complete unit tests for the new services.
 - Add a search feature to find saved photos by title, description, or extracted text.
 - Compress photos before saving to reduce storage usage.
 - Migrate camera usage to the new adapter service.
 
-## [1.7] – 2026-10-22
+## [1.7] – 2026-10-26
 
 ### 🚀 Improvements
 
@@ -31,8 +30,9 @@ This project uses a simplified major.minor versioning scheme:
 - Refactored loadSavedPhotos (checking webview paths of photos) to improve maintainability and handle non-persistent blob URLs more effectively.
 - Improved the code base to fix lint errors and SonarQube issues.
 - Added function documentation where it was missing to improve clarity and maintainability.
+- Updated README.md to reflect the latest project structure and feature changes.
 - Added unit tests for the new services and components.
-- Test suite contains **759 specs with 91.3% statement coverage**.
+- Test suite contains **800 specs with 99.3% statement coverage**.
 
 ## [1.6] – 2026-10-07
 

@@ -49,20 +49,30 @@ Download now for free and use it to create your own Ionic apps!
 
 ```text
 z-control-image-to-text/
-├── src/                         # Angular/Ionic frontend source
-│   ├── app/                     # Pages, components, services, shared code
-│   ├── assets/                  # Static assets, logs, language files
-│   ├── environments/            # Environment configuration
-│   └── theme/                   # Global theme variables
-├── docs/                        # Project and architecture documentation
-│   └── unit-tests/              # Testing tutorials and quick references
-├── tools/                       # Utility scripts and templates
-├── resources/                   # App icons, splash screens, platform resources
-├── www/                         # Built web output (hosting target)
-├── angular.json                 # Angular workspace config
-├── capacitor.config.ts          # Capacitor app config
-├── firebase.json                # Firebase hosting/functions config
-└── package.json                 # Frontend scripts and dependencies
+├── src/                              # Angular/Ionic frontend source
+│   ├── app/                          # app code
+│   │   ├── feature/                  # Feature component
+│   │   ├── main/                     # Main app component
+│   │   ├── feature/                  # Feature component
+│   │   ├── services/                 # Services for the app
+│   │   ├── settings/                 # Settings feature component
+│   │   ├── shared/                   # constants, interfaces and enums
+│   │   ├── tabs/                     # Tabs feature component
+│   │   ├── testing/                  # Testing feature component
+│   │   └── ui/                       # UI feature components
+│   ├── assets/                       # Static assets, logs, language files
+│   ├── environments/                 # Environment configuration
+│   └── theme/                        # Global theme variables
+├── docs/                             # Project and architecture documentation
+│   ├── unit-tests/                   # Testing tutorials and quick references
+│   └── upload-to-google-playstore/   # Uploading the app to Google Play Store instructions
+├── tools/                            # Utility scripts and templates
+├── resources/                        # App icons, splash screens, platform resources
+├── www/                              # Built web output (hosting target)
+├── angular.json                      # Angular workspace config
+├── capacitor.config.ts               # Capacitor app config
+├── firebase.json                     # Firebase hosting/functions config
+└── package.json                      # Frontend scripts and dependencies
 
 ```
 
@@ -100,6 +110,7 @@ npm run test:watch
 # Run tests with code coverage
 npm run test:coverage
 ```
+
 #### Backend Tests (Vitest + Istanbul)
 
 See [z-control Backend Functions](https://github.com/zoechbauer/z-control-backend-functions) repository documentation for backend testing instructions, as the backend code and tests are maintained there.

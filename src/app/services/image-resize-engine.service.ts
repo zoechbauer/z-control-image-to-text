@@ -5,11 +5,9 @@ import pica from 'pica';
 
 import type { ResizeOptions, ImageSize } from '../shared/image-compression.interfaces';
 import { FileConversionService } from './file-conversion.service';
-import { PhotoStorageService } from './photo-storage.service';
 
 @Injectable({ providedIn: 'root' })
 export class ImageResizeEngineService {
-  private readonly photoStorageService = inject(PhotoStorageService);
   private readonly fileConversionService = inject(FileConversionService);
   private readonly pica = pica();
 

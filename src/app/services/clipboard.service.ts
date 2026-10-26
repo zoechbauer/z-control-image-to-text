@@ -5,7 +5,7 @@ import { Share } from '@capacitor/share';
 
 import { ToastService } from './toast.service';
 import { FileConversionService } from './file-conversion.service';
-import { CopyDataOptions, UserPhoto } from '../shared/app.interfaces';
+import { CopyDataOptions, TextStatistics, UserPhoto } from '../shared/app.interfaces';
 import { PhotoStorageService } from './photo-storage.service';
 import { UtilsService } from './utils.service';
 import { environment } from 'src/environments/environment';
@@ -31,7 +31,7 @@ export class ClipboardService {
    */
   async copyDataToClipboard(
     photo: UserPhoto,
-    textStatistics: any,
+    textStatistics: TextStatistics,
     options: CopyDataOptions,
   ): Promise<void> {
     if (
@@ -86,13 +86,20 @@ export class ClipboardService {
    */
   private async shareImageAndTextNative(
     photo: UserPhoto,
-    textStatistics: any,
+    textStatistics: TextStatistics,
     options: CopyDataOptions,
   ): Promise<void> {
     try {
       let shareText = '';
       let filePath: string | undefined;
       let shareItemData: Record<string, any> = {};
+
+      if (
+        !this.isPhotoOptionSelected(options) &&
+        !this.areTextOptionsSelected(options)
+      ) {
+        return new Promise<void>((resolve) => resolve());
+      }
 
       const title =
         environment.app.name +
@@ -109,7 +116,7 @@ export class ClipboardService {
           this.toastService.showToast(
             this.translate.instant('FEATURE.TOAST.IMAGE_SHARE_NO_FILEPATH'),
           );
-          return;
+          return new Promise<void>((resolve) => resolve());
         }
 
         shareItemData['url'] = filePath;
@@ -125,11 +132,13 @@ export class ClipboardService {
       this.toastService.showToast(
         this.translate.instant('FEATURE.TOAST.SUCCESS_DATA_SHARED'),
       );
+      return new Promise<void>((resolve) => resolve());
     } catch (err) {
       console.error('Share failed', err);
       this.toastService.showToast(
         this.translate.instant('FEATURE.TOAST.IMAGE_SHARE_NOT_SUPPORTED'),
       );
+      return new Promise<void>((resolve) => resolve());
     }
   }
 
@@ -140,9 +149,9 @@ export class ClipboardService {
    * @param options The CopyDataOptions specifying what data to copy.
    * @returns A Promise that resolves when the copy operation is complete.
    */
-  async copyImageAndTextWeb(
+  private async copyImageAndTextWeb(
     photo: UserPhoto,
-    textStatistics: any,
+    textStatistics: TextStatistics,
     options: CopyDataOptions,
   ): Promise<void> {
     try {
@@ -182,10 +191,6 @@ export class ClipboardService {
       console.error('Failed to copy data to clipboard', err);
       const isNotallowedError = String(err).includes('NotAllowedError');
       if (isNotallowedError) {
-        (Capacitor.isNativePlatform()) ?
-        this.toastService.showToast(
-          this.translate.instant('FEATURE.TOAST.IMAGE_COPY_NOT_SUPPORTED_NATIVE'),
-        ) : 
         this.toastService.showToast(
           this.translate.instant('FEATURE.TOAST.IMAGE_COPY_NOT_SUPPORTED_WEB'),
         );
@@ -239,12 +244,16 @@ export class ClipboardService {
     const headerLabel = this.translate.instant(
       'FEATURE.COPY_DATA.TITLE_DESCRIPTION.HEADER',
     );
-    const titleLabel = this.translate.instant('FEATURE.COPY_DATA.TITLE_DESCRIPTION.TITLE');
-    const descriptionLabel = this.translate.instant('FEATURE.COPY_DATA.TITLE_DESCRIPTION.DESCRIPTION');
-    
+    const titleLabel = this.translate.instant(
+      'FEATURE.COPY_DATA.TITLE_DESCRIPTION.TITLE',
+    );
+    const descriptionLabel = this.translate.instant(
+      'FEATURE.COPY_DATA.TITLE_DESCRIPTION.DESCRIPTION',
+    );
+
     const title = photo.photoInfo?.title || '';
     const description = photo.photoInfo?.description || '';
-    
+
     return `${headerLabel}\n${titleLabel}: ${title}\n${descriptionLabel}: ${description}\n\n`;
   }
 
@@ -255,17 +264,19 @@ export class ClipboardService {
    */
   private getExtractedText(photo: UserPhoto): string {
     const extractedText = photo.photoInfo?.extractedText || '';
-    
+
     const headerLabel = extractedText
       ? this.translate.instant('FEATURE.COPY_DATA.EXTRACTED_TEXT.HEADER')
-      : this.translate.instant('FEATURE.COPY_DATA.EXTRACTED_TEXT.HEADER_NO_DATA');
+      : this.translate.instant(
+          'FEATURE.COPY_DATA.EXTRACTED_TEXT.HEADER_NO_DATA',
+        );
     const extractedTextLabel =
       extractedText || this.photoStorageService.getNoExtractedTextInfo(photo);
 
     return `${headerLabel}\n${extractedTextLabel}\n\n`;
   }
 
-  private getTextStatisticsText(textStatistics: any): string {
+  private getTextStatisticsText(textStatistics: TextStatistics): string {
     const headerLabel = this.translate.instant(
       'FEATURE.COPY_DATA.TEXT_STATISTICS.HEADER',
     );
@@ -278,13 +289,15 @@ export class ClipboardService {
     const characterCountLabel = this.translate.instant(
       'FEATURE.COPY_DATA.TEXT_STATISTICS.NUMBER_OF_CHARACTERS',
     );
-    
+
     const wordCount = textStatistics?.wordCount || 0;
     const lineCount = textStatistics?.lineCount || 0;
     const characterCount = textStatistics?.characterCount || 0;
 
-    return `${headerLabel}\n${wordCountLabel}: ${wordCount}\n${lineCountLabel}: ${lineCount}\n` + 
-    `${characterCountLabel}: ${characterCount}\n\n`;
+    return (
+      `${headerLabel}\n${wordCountLabel}: ${wordCount}\n${lineCountLabel}: ${lineCount}\n` +
+      `${characterCountLabel}: ${characterCount}\n\n`
+    );
   }
 
   private getTimestampsText(photo: UserPhoto): string {
@@ -300,9 +313,13 @@ export class ClipboardService {
 
     const createdAt = photo.photoInfo?.createdAt || '';
     const modifiedAt = photo.photoInfo?.modifiedAt || '';
-    const createdAtFormatted = createdAt ? this.utilsService.formatDateTimeISO(new Date(createdAt)) : '';
-    const modifiedAtFormatted = modifiedAt ? this.utilsService.formatDateTimeISO(new Date(modifiedAt)) : '';
-    
+    const createdAtFormatted = createdAt
+      ? this.utilsService.formatDateTimeISO(new Date(createdAt))
+      : '';
+    const modifiedAtFormatted = modifiedAt
+      ? this.utilsService.formatDateTimeISO(new Date(modifiedAt))
+      : '';
+
     return `${headerLabel}\n${createdAtLabel}: ${createdAtFormatted}\n${modifiedAtLabel}: ${modifiedAtFormatted}\n\n`;
   }
 
@@ -313,7 +330,9 @@ export class ClipboardService {
     const filenameLabel = this.translate.instant(
       'FEATURE.COPY_DATA.PHOTO.FILENAME',
     );
-    const filename = this.filePathService.getFilenameFromFilepath(photo.filepath);
+    const filename = this.filePathService.getFilenameFromFilepath(
+      photo.filepath,
+    );
 
     return `${headerLabel}\n${filenameLabel}: ${filename}\n\n`;
   }
