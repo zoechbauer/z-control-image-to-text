@@ -12,6 +12,7 @@ import { LocalStorageService } from './services/local-storage.service';
 import { createTranslateServiceMock } from './testing/translate-service.mock';
 import { CapacitorPlatformService } from './services/capacitor-platform.service';
 import { PhotoStorageService } from './services/photo-storage.service';
+import { ConnectivityService } from './services/connectivity.service';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -74,6 +75,12 @@ describe('AppComponent', () => {
               .and.resolveTo(undefined),
           },
         },
+        {
+          provide: ConnectivityService,
+          useValue: jasmine.createSpyObj('ConnectivityService', [
+            'startMonitoring',
+          ]),
+        },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
@@ -111,9 +118,13 @@ describe('AppComponent', () => {
           FirebaseFirestoreService,
         ) as jasmine.SpyObj<FirebaseFirestoreService>;
         const localStorageService = TestBed.inject(LocalStorageService) as any;
+        const connectivityService = TestBed.inject(
+          ConnectivityService,
+        ) as jasmine.SpyObj<ConnectivityService>;
 
         await component.initializeApp();
 
+        expect(connectivityService.startMonitoring).toHaveBeenCalled();
         expect(safeAreaInsetsService.setSafeAreaInsetsFix).toHaveBeenCalled();
         expect(systemBarsService.getCurrentIsDarkMode).toHaveBeenCalled();
         expect(systemBarsService.setBars).toHaveBeenCalled();

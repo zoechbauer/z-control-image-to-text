@@ -3,7 +3,7 @@ import { Capacitor } from '@capacitor/core';
 import type { WorkflowStep } from '../shared/enums';
 import { ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 import { AllMonthsOption, DisplayMode, Tab } from '../shared/enums';
 import { UserPhoto } from '../shared/app.interfaces';
@@ -45,6 +45,16 @@ export class UtilsService {
    * Observable for workflow step change events.
    */
   workflowChanged$ = this.workflowChangedSub.asObservable();
+  /**
+   * Emits when the offline status changes.
+   */
+  offlineChangedSub = new BehaviorSubject<boolean>(
+    !this.isOnline(),
+  );
+  /**
+   * Observable for offline status change events.
+   */
+  offlineChanged$ = this.offlineChangedSub.asObservable();
 
   private currentModal: HTMLIonModalElement | null = null;
 
@@ -92,6 +102,13 @@ export class UtilsService {
    */
   get isDesktop(): boolean {
     return !Capacitor.isNativePlatform();
+  }
+
+  /**
+   * Returns the current offline state snapshot.
+   */
+  get isOffline(): boolean {
+    return this.offlineChangedSub.value;
   }
 
   /**
@@ -151,6 +168,20 @@ export class UtilsService {
     if (element?.classList.contains('hide-ion-tab-bar')) {
       element?.classList.remove('hide-ion-tab-bar');
     }
+  }
+
+  /**
+   * Updates and emits the global offline state.
+   * Duplicate values are ignored to avoid unnecessary UI updates.
+   *
+   * @param isOffline Whether the app is currently offline.
+   */
+  setOfflineState(isOffline: boolean): void {
+    if (this.offlineChangedSub.value === isOffline) {
+      return;
+    }
+
+    this.offlineChangedSub.next(isOffline);
   }
 
   /**
@@ -399,5 +430,9 @@ export class UtilsService {
    */
   getCurrentMonth(): string {
     return this.formatDateTimeFirestoreSearchString(new Date());
+  }
+
+  private isOnline(): boolean {
+    return globalThis.navigator?.onLine ?? true;
   }
 }

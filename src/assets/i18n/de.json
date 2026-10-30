@@ -48,6 +48,7 @@
       "MAIN_SHORT": "Texterkennung",
       "SETTINGS": "Einstellungen "
     },
+    "NETWORK_OFFLINE": "Keine Internetverbindung!",
     "TOOLTIP": {
       "OPEN_FEEDBACK": "Feedback-Seite öffnen",
       "OPEN_HELP": "Hilfeseite öffnen",
@@ -185,6 +186,7 @@
       "SUCCESS_ALL_PHOTOS_DELETED": "Alle Fotos und zugehörigen Daten wurden erfolgreich gelöscht.",
       "SUCCESS_DATA_COPIED": "Die ausgewählten Daten wurden in die Zwischenablage kopiert.",
       "ERROR_COPYING_DATA": "Fehler beim Kopieren der Daten in die Zwischenablage. Die Daten wurden nicht kopiert.",
+      "ERROR_NO_COPY_DATA_SELECTED": "Es wurden keine Daten zum Kopieren ausgewählt.",
       "IMAGE_COPY_NOT_SUPPORTED_WEB": "Es können derzeit nur Bilder im PNG-Format in die Zwischenablage kopiert werden. Dieses Bild-Format wird nicht unterstützt.",
       "IMAGE_COPY_NOT_SUPPORTED_NATIVE": "Es können derzeit nur Bilder im PNG/JPEG-Format in die Zwischenablage kopiert werden. Dieses Bild-Format wird nicht unterstützt.",
       "SUCCESS_DATA_SHARED": "Die ausgewählten Daten wurden erfolgreich geteilt.",

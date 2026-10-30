@@ -1,0 +1,25 @@
+ion-title {
+  font-weight: bold;
+
+  .is-offline {
+    font-weight: bold;
+    color: rgb(154, 236, 91);
+    animation: blink 5s linear infinite;
+    font-size: .75em;
+
+    @keyframes blink {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.75;
+      }
+      70% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+  }
+}

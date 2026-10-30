@@ -6,6 +6,7 @@ import { CopyDataOptions, UserPhoto } from '../shared/app.interfaces';
 import { CopyDataOption } from '../shared/enums';
 import { FilePathService } from './file-path.service';
 import { Capacitor } from '@capacitor/core';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,7 @@ export class AlertService {
   private readonly alertController = inject(AlertController);
   private readonly translate = inject(TranslateService);
   private readonly filePathService = inject(FilePathService);
+  private readonly toastService = inject(ToastService);
 
   /**
    * Shows an alert indicating that storage permission is required to save a photo.
@@ -25,9 +27,15 @@ export class AlertService {
    */
   async showStoragePermissionError(): Promise<void> {
     const alert = await this.alertController.create({
-      header: this.translate.instant('APP.ALERT_SERVICE.STORAGE_PERMISSION.HEADER'),
-      subHeader: this.translate.instant('APP.ALERT_SERVICE.STORAGE_PERMISSION.SUBHEADER'),
-      message: this.translate.instant('APP.ALERT_SERVICE.STORAGE_PERMISSION.MESSAGE'),
+      header: this.translate.instant(
+        'APP.ALERT_SERVICE.STORAGE_PERMISSION.HEADER',
+      ),
+      subHeader: this.translate.instant(
+        'APP.ALERT_SERVICE.STORAGE_PERMISSION.SUBHEADER',
+      ),
+      message: this.translate.instant(
+        'APP.ALERT_SERVICE.STORAGE_PERMISSION.MESSAGE',
+      ),
       buttons: [
         {
           text: this.translate.instant('APP.ALERT_SERVICE.OK'),
@@ -48,12 +56,20 @@ export class AlertService {
     let header, subHeader, message;
     if (photo && photo !== 'all') {
       header = this.translate.instant('APP.ALERT_SERVICE.DELETE_PHOTO.HEADER');
-      subHeader = this.translate.instant('APP.ALERT_SERVICE.DELETE_PHOTO.SUBHEADER');
-      message = this.translate.instant('APP.ALERT_SERVICE.DELETE_PHOTO.MESSAGE');
+      subHeader = this.translate.instant(
+        'APP.ALERT_SERVICE.DELETE_PHOTO.SUBHEADER',
+      );
+      message = this.translate.instant(
+        'APP.ALERT_SERVICE.DELETE_PHOTO.MESSAGE',
+      );
     } else {
       header = this.translate.instant('APP.ALERT_SERVICE.DELETE_PHOTOS.HEADER');
-      subHeader = this.translate.instant('APP.ALERT_SERVICE.DELETE_PHOTOS.SUBHEADER');
-      message = this.translate.instant('APP.ALERT_SERVICE.DELETE_PHOTOS.MESSAGE');
+      subHeader = this.translate.instant(
+        'APP.ALERT_SERVICE.DELETE_PHOTOS.SUBHEADER',
+      );
+      message = this.translate.instant(
+        'APP.ALERT_SERVICE.DELETE_PHOTOS.MESSAGE',
+      );
     }
     return this.confirmDeleteAlert(header, subHeader, message);
   }
@@ -173,17 +189,25 @@ export class AlertService {
             ? this.translate.instant('APP.ALERT_SERVICE.COPY')
             : this.translate.instant('APP.ALERT_SERVICE.SHARE'),
           role: 'confirm',
-          handler: (data: string[]) => ({
-            copyPhoto: data.includes(CopyDataOption.Photo),
-            copyTitleDescription: data.includes(
-              CopyDataOption.TitleDescription,
-            ),
-            copyExtractedText: data.includes(CopyDataOption.ExtractedText),
-            copyTextStatistics: data.includes(CopyDataOption.TextStatistics),
-            copyCreatedModifiedTimestamps: data.includes(
-              CopyDataOption.CreatedModifiedTimestamps,
-            ),
-          }),
+          handler: (data: string[]) => {
+            if (!data.length) {
+              this.toastService.showToast(
+                this.translate.instant('FEATURE.TOAST.ERROR_NO_COPY_DATA_SELECTED'),
+              );
+              return false;
+            }
+            return {
+              copyPhoto: data.includes(CopyDataOption.Photo),
+              copyTitleDescription: data.includes(
+                CopyDataOption.TitleDescription,
+              ),
+              copyExtractedText: data.includes(CopyDataOption.ExtractedText),
+              copyTextStatistics: data.includes(CopyDataOption.TextStatistics),
+              copyCreatedModifiedTimestamps: data.includes(
+                CopyDataOption.CreatedModifiedTimestamps,
+              ),
+            };
+          },
         },
         {
           text: this.translate.instant('APP.ALERT_SERVICE.CANCEL'),

@@ -23,7 +23,7 @@
         <ion-button
           name="camera"
           fill="clear"
-          [disabled]="isLoading"
+          [disabled]="isLoading || utilsService.isOffline"
           (click)="makePhoto()"
           (keydown.enter)="makePhoto()"
           ><ion-icon name="camera-outline" slot="start"></ion-icon>
@@ -32,7 +32,7 @@
         <ion-button
           name="gallery"
           fill="clear"
-          [disabled]="isLoading"
+          [disabled]="isLoading || utilsService.isOffline"
           (click)="selectPhotoFromGallery()"
           (keydown.enter)="selectPhotoFromGallery()"
           ><ion-icon name="image-outline" slot="start"></ion-icon>
@@ -61,7 +61,7 @@
         <ion-button
           name="extract-text"
           fill="clear"
-          [disabled]="isLoading"
+          [disabled]="isLoading || utilsService.isOffline"
           (click)="extractTextFromPhoto()"
           (keydown.enter)="extractTextFromPhoto()"
           ><ion-icon name="list-outline" slot="start"></ion-icon>

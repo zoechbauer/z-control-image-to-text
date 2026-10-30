@@ -7,17 +7,20 @@ import { Capacitor } from '@capacitor/core';
 import { createTranslateServiceMock } from 'src/app/testing/translate-service.mock';
 import { CopyDataOption } from '../shared/enums';
 import { UserPhoto } from '../shared/app.interfaces';
+import { ToastService } from './toast.service';
 
 describe('AlertService', () => {
   let service: AlertService;
   let alertControllerSpy: jasmine.SpyObj<AlertController>;
   let translateServiceSpy: jasmine.SpyObj<TranslateService>;
+  let toastServiceSpy: jasmine.SpyObj<ToastService>;
   let alertSpy: any;
 
   beforeEach(() => {
     alertSpy = jasmine.createSpyObj('Alert', ['present', 'dismiss']);
     alertControllerSpy = jasmine.createSpyObj('AlertController', ['create']);
     translateServiceSpy = createTranslateServiceMock();
+    toastServiceSpy = jasmine.createSpyObj('ToastService', ['showToast']);
 
     TestBed.configureTestingModule({
       providers: [
@@ -27,6 +30,7 @@ describe('AlertService', () => {
           useValue: translateServiceSpy,
         },
         { provide: AlertController, useValue: alertControllerSpy },
+        { provide: ToastService, useValue: toastServiceSpy },
       ],
     });
 
@@ -263,7 +267,8 @@ describe('AlertService', () => {
           isNative: false,
           expectedDisabled: true,
           expectedChecked: false,
-          photoLabelErrorText: 'APP.ALERT_SERVICE.COPY_DATA.PHOTO_FORMAT_NOT_SUPPORTED_WEB',
+          photoLabelErrorText:
+            'APP.ALERT_SERVICE.COPY_DATA.PHOTO_FORMAT_NOT_SUPPORTED_WEB',
         },
         {
           testCase: '3',
@@ -271,7 +276,8 @@ describe('AlertService', () => {
           isNative: false,
           expectedDisabled: true,
           expectedChecked: false,
-          photoLabelErrorText: 'APP.ALERT_SERVICE.COPY_DATA.PHOTO_FORMAT_NOT_SUPPORTED_WEB',
+          photoLabelErrorText:
+            'APP.ALERT_SERVICE.COPY_DATA.PHOTO_FORMAT_NOT_SUPPORTED_WEB',
         },
         {
           testCase: '4',
@@ -279,7 +285,8 @@ describe('AlertService', () => {
           isNative: false,
           expectedDisabled: true,
           expectedChecked: false,
-          photoLabelErrorText: 'APP.ALERT_SERVICE.COPY_DATA.PHOTO_FORMAT_NOT_SUPPORTED_WEB',
+          photoLabelErrorText:
+            'APP.ALERT_SERVICE.COPY_DATA.PHOTO_FORMAT_NOT_SUPPORTED_WEB',
         },
         {
           testCase: '5',
@@ -311,7 +318,8 @@ describe('AlertService', () => {
           isNative: true,
           expectedDisabled: true,
           expectedChecked: false,
-          photoLabelErrorText: 'APP.ALERT_SERVICE.COPY_DATA.PHOTO_FORMAT_NOT_SUPPORTED_NATIVE',
+          photoLabelErrorText:
+            'APP.ALERT_SERVICE.COPY_DATA.PHOTO_FORMAT_NOT_SUPPORTED_NATIVE',
         },
       ];
 
@@ -353,6 +361,13 @@ describe('AlertService', () => {
       const cancelBtn = (createArgs.buttons as any[]).find(
         (b: any) => b.role === 'cancel',
       );
+
+      const confirmResultWithoutSelection = confirmBtn.handler([]);
+
+      // call confirm handler without any selected options and expect false
+      expect(confirmResultWithoutSelection)
+        .withContext('confirmResultWithoutSelection')
+        .toBeFalse();
 
       expect(confirmBtn).withContext('Confirm button').toBeDefined();
       expect(cancelBtn).withContext('Cancel button').toBeDefined();
@@ -420,6 +435,27 @@ describe('AlertService', () => {
         'APP.ALERT_SERVICE.COPY_DATA.MESSAGE_SHARE',
       );
       expect(createArgs.buttons[0].text).toBe('APP.ALERT_SERVICE.SHARE');
+    });
+
+    it('should show a toast when no copy data is selected', async () => {
+      spyOn(Capacitor, 'isNativePlatform').and.returnValue(false);
+      alertSpy.onDidDismiss = jasmine
+        .createSpy('onDidDismiss')
+        .and.returnValue(Promise.resolve({ data: [] }));
+      alertControllerSpy.create.and.resolveTo(alertSpy);
+
+      await service.showCopyAlert('c:\\path\\to\\file.png');
+
+      const createArgs = alertControllerSpy.create.calls.mostRecent()
+        .args[0] as any;
+      const copyBtn = createArgs.buttons.find(
+        (btn: any) => btn.role === 'confirm'
+      );
+      copyBtn.handler([]);
+
+      expect(toastServiceSpy.showToast).toHaveBeenCalledWith(
+        'FEATURE.TOAST.ERROR_NO_COPY_DATA_SELECTED'
+      );
     });
   });
 });

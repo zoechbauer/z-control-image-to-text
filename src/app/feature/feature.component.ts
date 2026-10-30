@@ -152,6 +152,11 @@ export class FeatureComponent implements OnInit, OnDestroy {
           );
         }
       }),
+      this.utilsService.offlineChanged$.subscribe((isOffline) => {
+        if (!isOffline && this.isLoading) {
+          this.isLoading = false;
+        }
+      }),
     );
   }
 
@@ -178,15 +183,23 @@ export class FeatureComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Make a photo using the device camera and
+   * Make a photo using the device camera if the device is online and
    * update the selected photo and workflow step accordingly.
    */
   async makePhoto() {
+    if (this.utilsService.isOffline) {
+      return;
+    }
+
     this.initFormControls();
 
     this.isLoading = true;
-    const selected = await this.photoService.makePhoto();
-    this.isLoading = false;
+    let selected = false;
+    try {
+      selected = await this.photoService.makePhoto();
+    } finally {
+      this.isLoading = false;
+    }
 
     if (selected) {
       this.workflowStep = this.workflowService.getNextWorkflowStep(
@@ -196,15 +209,23 @@ export class FeatureComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Select a photo from the device gallery and
+   * Select a photo from the device gallery if the device is online and
    * update the selected photo and workflow step accordingly.
    */
   async selectPhotoFromGallery() {
+    if (this.utilsService.isOffline) {
+      return;
+    }
+
     this.initFormControls();
 
     this.isLoading = true;
-    const selected = await this.photoService.selectPhoto();
-    this.isLoading = false;
+    let selected = false;
+    try {
+      selected = await this.photoService.selectPhoto();
+    } finally {
+      this.isLoading = false;
+    }
 
     if (selected) {
       this.workflowStep = this.workflowService.getNextWorkflowStep(
@@ -255,13 +276,18 @@ export class FeatureComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Extract text from the selected photo using OCR if the contingent is not exceeded
-   * and update the workflow step accordingly. The extracted text and statistics will
-   * be displayed in the UI, and a toast notification will be shown to inform the user
-   * about the quota reduction. The workflow step will be updated accordingly.
+   * Extract text from the selected photo using OCR if the device is online and 
+   * the contingent is not exceeded and update the workflow step accordingly. 
+   * The extracted text and statistics will be displayed in the UI, and a toast 
+   * notification will be shown to inform the user about the quota reduction. 
+   * The workflow step will be updated accordingly.
    * @returns A promise that resolves when the text extraction is complete.
    */
   async extractTextFromPhoto() {
+    if (this.utilsService.isOffline) {
+      return;
+    }
+
     this.isLoading = true;
 
     if (!this.selectedPhoto) {

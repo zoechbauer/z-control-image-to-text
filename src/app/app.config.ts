@@ -9,7 +9,7 @@ import {
   IonicRouteStrategy,
   provideIonicAngular,
 } from '@ionic/angular/standalone';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -30,6 +30,7 @@ import { routes } from './app-routes';
 import { ServicesModule } from './services.module';
 import { FirebaseCredentials } from './services/firebase-credentials';
 import { environment } from '@env/environment';
+import { networkErrorInterceptor } from './interceptors/network-error.interceptor';
 
 function isEmulatorEnabled(): boolean {
   return !!environment.app?.useFirebaseEmulator;
@@ -94,7 +95,7 @@ export const appConfig: ApplicationConfig = {
       // all ionic services are now available for injection
       mode: 'md',
     }),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([networkErrorInterceptor])),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     importProvidersFrom(ServicesModule),
     provideTranslateService({ fallbackLang: 'de' }),

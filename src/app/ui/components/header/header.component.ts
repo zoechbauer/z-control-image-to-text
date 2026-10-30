@@ -7,7 +7,7 @@ import {
   IonIcon,
   IonTitle,
 } from '@ionic/angular/standalone';
-import { NgIf } from '@angular/common';
+import { NgIf, AsyncPipe } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
@@ -31,6 +31,7 @@ import { WorkflowService } from 'src/app/services/workflow-service';
     IonTitle,
     NgIf,
     LogoComponent,
+    AsyncPipe,
   ],
 })
 export class HeaderComponent implements OnInit, OnDestroy {

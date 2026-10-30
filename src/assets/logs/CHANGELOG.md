@@ -16,6 +16,20 @@ This project uses a simplified major.minor versioning scheme:
 - Compress photos before saving to reduce storage usage.
 - Migrate camera usage to the new adapter service.
 
+## [1.8] – 2026-10-30
+
+### 🚀 Improvements
+
+- Added offline detection to disable time-critical actions and display a clear status indicator in the header when the app is offline, improving reliability and preventing failed operations.
+- Improved copy feedback by showing a clear notification when no items are selected, reducing confusion and preventing empty copy attempts.
+- Expanded the help page with guidance on offline behavior and how previously processed images remain available in the app history while disconnected.
+
+### 🔧 Internal
+
+- Added documentation for the offline connectivity handling flow, including the global connectivity listener, HTTP fallback handling, persistent header state, native platform connectivity behavior, and debounce strategy used to keep the app status reliable while offline.
+- Updated documentation mobile problem fixed guide to include steps for resolving Android device connectivity issues with the local development server.
+- Updated unit tests; test suite contains **818 specs with 99.5% statement coverage**.
+
 ## [1.7] – 2026-10-26
 
 ### 🚀 Improvements

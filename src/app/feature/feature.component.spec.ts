@@ -1,3 +1,4 @@
+import { Photo } from '@capacitor/camera';
 import { ClipboardService } from './../services/clipboard.service';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
@@ -70,13 +71,18 @@ describe('FeatureComponent', () => {
   let workflowServiceSpy: jasmine.SpyObj<WorkflowService>;
   let alertServiceSpy: jasmine.SpyObj<AlertService>;
   let clipboardServiceSpy: jasmine.SpyObj<ClipboardService>;
+  let offlineChangedSubject: BehaviorSubject<boolean>;
 
   beforeEach(async () => {
+    offlineChangedSubject = new BehaviorSubject<boolean>(false);
     utilsServiceSpy = jasmine.createSpyObj(
       'UtilsService',
       ['showOrHideIonTabBar', 'openPhotoInfoModal'],
       {
         backButtonClicked$: of(true),
+        offlineChanged$: offlineChangedSubject.asObservable(),
+        offlineChangedSub: offlineChangedSubject,
+        isOffline: false,
       },
     );
     modalControllerSpy = jasmine.createSpyObj('ModalController', ['dismiss']);
@@ -86,13 +92,13 @@ describe('FeatureComponent', () => {
     );
     toastServiceSpy = jasmine.createSpyObj('ToastService', ['showToast']);
     ocrServiceSpy = jasmine.createSpyObj('OcrService', ['secureRecognize']);
-    photoServiceSpy = jasmine.createSpyObj('PhotoService', [
-      'makePhoto',
-      'selectPhoto',
-    ],
-  {
-    photos,
-  });
+    photoServiceSpy = jasmine.createSpyObj(
+      'PhotoService',
+      ['makePhoto', 'selectPhoto'],
+      {
+        photos,
+      },
+    );
     imageCompressionServiceSpy = jasmine.createSpyObj(
       'ImageCompressionService',
       ['compress', 'buildVisionOcrRequestFromPhoto'],
@@ -424,6 +430,31 @@ describe('FeatureComponent', () => {
         );
       });
 
+      it('should skip buildVisionOcrRequestFromPhoto while offline', async () => {
+        Object.defineProperty(utilsServiceSpy, 'isOffline', {
+          value: true,
+          configurable: true,
+        });
+        component.isLoading = false;
+        component.selectedPhoto = { filepath: 'path/to/photo.jpeg' } as any;
+
+        imageCompressionServiceSpy.buildVisionOcrRequestFromPhoto.and.returnValue(
+          Promise.resolve({
+            requests: [
+              {
+                image: { content: 'compressedBase64String' },
+                features: [{ type: 'DOCUMENT_TEXT_DETECTION', maxResults: 1 }],
+              },
+            ],
+          }),
+        );
+
+        await component.extractTextFromPhoto();
+
+        expect(ocrServiceSpy.secureRecognize).not.toHaveBeenCalled();
+        expect(component.isLoading).toBeFalse();
+      });
+
       describe('clear loading indicator', () => {
         it('should clear isLoading indicator after extractTextFromPhoto is completed', async () => {
           component.isLoading = true;
@@ -499,6 +530,19 @@ describe('FeatureComponent', () => {
 
         expect(initFormControlsSpy).toHaveBeenCalled();
       });
+
+      it('should skip camera call while offline', async () => {
+        Object.defineProperty(utilsServiceSpy, 'isOffline', {
+          value: true,
+          configurable: true,
+        });
+        component.isLoading = false;
+
+        await component.makePhoto();
+
+        expect(photoServiceSpy.makePhoto).not.toHaveBeenCalled();
+        expect(component.isLoading).toBeFalse();
+      });
     });
 
     describe('selectPhotoFromGallery', () => {
@@ -536,6 +580,19 @@ describe('FeatureComponent', () => {
         await component.selectPhotoFromGallery();
 
         expect(initFormControlsSpy).toHaveBeenCalled();
+      });
+
+      it('should skip gallery call while offline', async () => {
+        Object.defineProperty(utilsServiceSpy, 'isOffline', {
+          value: true,
+          configurable: true,
+        });
+        component.isLoading = false;
+
+        await component.selectPhotoFromGallery();
+
+        expect(photoServiceSpy.selectPhoto).not.toHaveBeenCalled();
+        expect(component.isLoading).toBeFalse();
       });
     });
 
@@ -600,33 +657,66 @@ describe('FeatureComponent', () => {
     });
 
     describe('addInfo', async () => {
-      it('should call getNextWorkflowStep and savePhotoInfo with the updated info when saving', async () => {
-        component.selectedPhoto = {
-          photoInfo: { title: 'Some Title', description: 'Some Description' },
-        } as any;
-        component.workflowStep = WorkflowStep.AddPhotoInfo;
+      it('should call getNextWorkflowStep and savePhotoInfo with the added info when saving', async () => {
+        const testCases = [
+          {
+            caseNo: 1,
+            modalInfo: { title: 'Some Title', },
+            expectedPhotoInfo: {
+              title: 'Some Title',
+              description: '',
+            },
+          },
+          {
+            caseNo: 2,
+            modalInfo: {
+              title: 'Some Title',
+              description: 'Some Description',
+            },
+            expectedPhotoInfo: {
+              title: 'Some Title',
+              description: 'Some Description',
+            },
+          },
+          {
+            caseNo: 3,
+            modalInfo: {},
+            expectedPhotoInfo: {
+              title: '',
+              description: '',
+            },
+          },
+        ];
 
-        const savePhotoInfoSpy = spyOn(
-          component as any,
-          'savePhotoInfo',
-        ).and.returnValue(Promise.resolve(component.selectedPhoto));
-        utilsServiceSpy.openPhotoInfoModal.and.returnValue(
-          Promise.resolve({
-            photoInfo: { title: 'Some Title', description: 'Some Description' },
-          } as any),
-        );
+        const savePhotoInfoSpy = spyOn(component as any, 'savePhotoInfo');
 
-        const currentStep = component.workflowStep;
-        await component.addInfo();
+        for (const testCase of testCases) {
+          component.selectedPhoto = undefined;
+          component.workflowStep = WorkflowStep.AddPhotoInfo;
 
-        expect(savePhotoInfoSpy).toHaveBeenCalledWith(
-          component.selectedPhoto,
-          'Some Title',
-          'Some Description',
-        );
-        expect(workflowServiceSpy.getNextWorkflowStep).toHaveBeenCalledWith(
-          currentStep,
-        );
+          utilsServiceSpy.openPhotoInfoModal.and.returnValue(
+            Promise.resolve({
+              photoInfo: testCase.modalInfo,
+            } as any),
+          );
+
+          const currentStep = component.workflowStep;
+          
+          await component.addInfo();
+
+          expect(savePhotoInfoSpy)
+          .withContext(`TestCase ${testCase.caseNo} - Photo Info`)
+          .toHaveBeenCalledWith(
+            component.selectedPhoto,
+            testCase.expectedPhotoInfo.title,
+            testCase.expectedPhotoInfo.description,
+          );
+          expect(workflowServiceSpy.getNextWorkflowStep)
+          .withContext(`TestCase ${testCase.caseNo} - Workflow Step`)
+          .toHaveBeenCalledWith(
+            currentStep,
+          );
+        }
       });
 
       it('should call getNextWorkflowStep and not savePhotoInfo when cancelling', async () => {
@@ -655,32 +745,70 @@ describe('FeatureComponent', () => {
 
     describe('changeInfo', async () => {
       it('should call getNextWorkflowStep and savePhotoInfo with the updated info when saving', async () => {
-        component.selectedHistoryPhoto = {
-          photoInfo: { title: 'Some Title', description: 'Some Description' },
-        } as any;
-        component.workflowStep = WorkflowStep.UpdatePhotoInfo;
-
-        const savePhotoInfoSpy = spyOn(
-          component as any,
-          'savePhotoInfo',
-        ).and.returnValue(Promise.resolve(component.selectedHistoryPhoto));
-        utilsServiceSpy.openPhotoInfoModal.and.returnValue(
-          Promise.resolve({
+        const testCases = [
+          {
+            caseNo: 1,
             photoInfo: { title: 'Some Title', description: 'Some Description' },
-          } as any),
-        );
+            modalInfo: { title: 'Some Title', description: 'Some Description' },
+            expectedPhotoInfo: {
+              title: 'Some Title',
+              description: 'Some Description',
+            },
+          },
+          {
+            caseNo: 2,
+            photoInfo: { title: 'Some Title', description: 'Some Description' },
+            modalInfo: {
+              title: 'Changed Title',
+              description: 'Changed Description',
+            },
+            expectedPhotoInfo: {
+              title: 'Changed Title',
+              description: 'Changed Description',
+            },
+          },
+          {
+            caseNo: 3,
+            photoInfo: {},
+            modalInfo: {},
+            expectedPhotoInfo: {
+              title: '',
+              description: '',
+            },
+          },
+        ];
 
-        const currentStep = component.workflowStep;
-        await component.changeInfo();
+        const savePhotoInfoSpy = spyOn(component as any, 'savePhotoInfo');
 
-        expect(savePhotoInfoSpy).toHaveBeenCalledWith(
-          component.selectedHistoryPhoto,
-          'Some Title',
-          'Some Description',
-        );
-        expect(workflowServiceSpy.getNextWorkflowStep).toHaveBeenCalledWith(
-          currentStep,
-        );
+        for (const testCase of testCases) {
+          component.selectedHistoryPhoto = {
+            photoInfo: testCase.photoInfo,
+          } as any;
+          component.workflowStep = WorkflowStep.UpdatePhotoInfo;
+
+          savePhotoInfoSpy.and.returnValue(
+            Promise.resolve(component.selectedHistoryPhoto),
+          );
+          utilsServiceSpy.openPhotoInfoModal.and.returnValue(
+            Promise.resolve({
+              photoInfo: testCase.modalInfo,
+            } as any),
+          );
+
+          const currentStep = component.workflowStep;
+          await component.changeInfo();
+
+          expect(savePhotoInfoSpy)
+            .withContext(`TestCase ${testCase.caseNo} - Photo Info`)
+            .toHaveBeenCalledWith(
+              component.selectedHistoryPhoto,
+              testCase.expectedPhotoInfo.title,
+              testCase.expectedPhotoInfo.description,
+            );
+          expect(workflowServiceSpy.getNextWorkflowStep)
+            .withContext(`TestCase ${testCase.caseNo} - WF Step`)
+            .toHaveBeenCalledWith(currentStep);
+        }
       });
 
       it('should call getNextWorkflowStep and not savePhotoInfo when cancelling', async () => {
@@ -818,10 +946,6 @@ describe('FeatureComponent', () => {
       beforeEach(() => {
         // Make the PhotoStorageService spies behave like the real service based on the photos array.
         photoStorageServiceSpy.getNextPhoto.and.callFake((arg: UserPhoto) => {
-          console.info(
-            'photoStorageServiceSpy: getNextPhoto called with arg:',
-            arg,
-          );
           if (!arg) {
             return undefined;
           }
@@ -833,10 +957,6 @@ describe('FeatureComponent', () => {
 
         photoStorageServiceSpy.getPreviousPhoto.and.callFake(
           (arg: UserPhoto) => {
-            console.info(
-              'photoStorageServiceSpy: getPreviousPhoto called with arg:',
-              arg,
-            );
             if (!arg) {
               return undefined;
             }
@@ -1235,7 +1355,7 @@ describe('FeatureComponent', () => {
       });
 
       describe('setupSubscriptions', () => {
-        it('should subscribe to photoStorageService.photos$ and utilsService.backButtonClicked$', () => {
+        it('should subscribe to photo and connectivity related streams', () => {
           const photoStorageServiceSpyObj = photoStorageServiceSpy as any;
           const utilsServiceSpyObj = utilsServiceSpy as any;
 
@@ -1247,12 +1367,27 @@ describe('FeatureComponent', () => {
             utilsServiceSpyObj.backButtonClicked$,
             'subscribe',
           ).and.callThrough();
+          const subscribeSpyOfflineChanged = spyOn(
+            utilsServiceSpyObj.offlineChanged$,
+            'subscribe',
+          ).and.callThrough();
 
           (component as any).setupSubscriptions();
 
           expect(subscribeSpyPhotos).toHaveBeenCalled();
           expect(subscribeSpyBackButton).toHaveBeenCalled();
-          expect((component as any).subscriptions).toHaveSize(2);
+          expect(subscribeSpyOfflineChanged).toHaveBeenCalled();
+          expect((component as any).subscriptions).toHaveSize(3);
+        });
+
+        it('should clear loading indicator on switch from offline to online', () => {
+          component.workflowStep = WorkflowStep.SelectPhoto;
+          component.isLoading = true;
+
+          (component as any).setupSubscriptions();
+
+          offlineChangedSubject.next(false);
+          expect(component.isLoading).toBeFalse();
         });
       });
     });
@@ -1331,18 +1466,42 @@ describe('FeatureComponent', () => {
       let deleteDataButton: HTMLElement;
 
       function queryButtons() {
-        cameraButton = fixture.nativeElement.querySelector('ion-button[name="camera"]');
-        galleryButton = fixture.nativeElement.querySelector('ion-button[name="gallery"]');
-        historyButton = fixture.nativeElement.querySelector('ion-button[name="load-data"]');
-        extractTextButton = fixture.nativeElement.querySelector('ion-button[name="extract-text"]');
-        deletePhotoButton = fixture.nativeElement.querySelector('ion-button[name="delete-photo"]');
-        addInfoButton = fixture.nativeElement.querySelector('ion-button[name="add-info"]');
-        changeInfoButton = fixture.nativeElement.querySelector('ion-button[name="change-info"]');
-        deleteAllButton = fixture.nativeElement.querySelector('ion-button[name="delete-all"]');
-        previousImageButton = fixture.nativeElement.querySelector('ion-button[name="previous-image"]');
-        nextImageButton = fixture.nativeElement.querySelector('ion-button[name="next-image"]');
-        copyDataButton = fixture.nativeElement.querySelector('ion-button[name="copy-data"]');
-        deleteDataButton = fixture.nativeElement.querySelector('ion-button[name="delete-data"]');
+        cameraButton = fixture.nativeElement.querySelector(
+          'ion-button[name="camera"]',
+        );
+        galleryButton = fixture.nativeElement.querySelector(
+          'ion-button[name="gallery"]',
+        );
+        historyButton = fixture.nativeElement.querySelector(
+          'ion-button[name="load-data"]',
+        );
+        extractTextButton = fixture.nativeElement.querySelector(
+          'ion-button[name="extract-text"]',
+        );
+        deletePhotoButton = fixture.nativeElement.querySelector(
+          'ion-button[name="delete-photo"]',
+        );
+        addInfoButton = fixture.nativeElement.querySelector(
+          'ion-button[name="add-info"]',
+        );
+        changeInfoButton = fixture.nativeElement.querySelector(
+          'ion-button[name="change-info"]',
+        );
+        deleteAllButton = fixture.nativeElement.querySelector(
+          'ion-button[name="delete-all"]',
+        );
+        previousImageButton = fixture.nativeElement.querySelector(
+          'ion-button[name="previous-image"]',
+        );
+        nextImageButton = fixture.nativeElement.querySelector(
+          'ion-button[name="next-image"]',
+        );
+        copyDataButton = fixture.nativeElement.querySelector(
+          'ion-button[name="copy-data"]',
+        );
+        deleteDataButton = fixture.nativeElement.querySelector(
+          'ion-button[name="delete-data"]',
+        );
       }
 
       it('should display the correct buttons for WorkflowStep.SelectPhoto ', () => {
@@ -1359,7 +1518,9 @@ describe('FeatureComponent', () => {
         expect(addInfoButton).withContext('addInfoButton').toBeNull();
         expect(changeInfoButton).withContext('changeInfoButton').toBeNull();
         expect(deleteAllButton).withContext('deleteAllButton').toBeNull();
-        expect(previousImageButton).withContext('previousImageButton').toBeNull();
+        expect(previousImageButton)
+          .withContext('previousImageButton')
+          .toBeNull();
         expect(nextImageButton).withContext('nextImageButton').toBeNull();
         expect(copyDataButton).withContext('copyDataButton').toBeNull();
         expect(deleteDataButton).withContext('deleteDataButton').toBeNull();
@@ -1379,7 +1540,9 @@ describe('FeatureComponent', () => {
         expect(addInfoButton).withContext('addInfoButton').toBeNull();
         expect(changeInfoButton).withContext('changeInfoButton').toBeNull();
         expect(deleteAllButton).withContext('deleteAllButton').toBeNull();
-        expect(previousImageButton).withContext('previousImageButton').toBeNull();
+        expect(previousImageButton)
+          .withContext('previousImageButton')
+          .toBeNull();
         expect(nextImageButton).withContext('nextImageButton').toBeNull();
         expect(copyDataButton).withContext('copyDataButton').toBeNull();
         expect(deleteDataButton).withContext('deleteDataButton').toBeNull();
@@ -1399,7 +1562,9 @@ describe('FeatureComponent', () => {
         expect(deletePhotoButton).withContext('deletePhotoButton').toBeNull();
         expect(changeInfoButton).withContext('changeInfoButton').toBeNull();
         expect(deleteAllButton).withContext('deleteAllButton').toBeNull();
-        expect(previousImageButton).withContext('previousImageButton').toBeNull();
+        expect(previousImageButton)
+          .withContext('previousImageButton')
+          .toBeNull();
         expect(nextImageButton).withContext('nextImageButton').toBeNull();
         expect(copyDataButton).withContext('copyDataButton').toBeNull();
         expect(deleteDataButton).withContext('deleteDataButton').toBeNull();
@@ -1420,7 +1585,9 @@ describe('FeatureComponent', () => {
         expect(extractTextButton).withContext('extractTextButton').toBeNull();
         expect(deletePhotoButton).withContext('deletePhotoButton').toBeNull();
         expect(changeInfoButton).withContext('changeInfoButton').toBeNull();
-        expect(previousImageButton).withContext('previousImageButton').toBeNull();
+        expect(previousImageButton)
+          .withContext('previousImageButton')
+          .toBeNull();
         expect(nextImageButton).withContext('nextImageButton').toBeNull();
         expect(copyDataButton).withContext('copyDataButton').toBeNull();
         expect(deleteDataButton).withContext('deleteDataButton').toBeNull();
@@ -1440,7 +1607,9 @@ describe('FeatureComponent', () => {
         expect(extractTextButton).withContext('extractTextButton').toBeNull();
         expect(deletePhotoButton).withContext('deletePhotoButton').toBeNull();
         expect(changeInfoButton).withContext('changeInfoButton').toBeNull();
-        expect(previousImageButton).withContext('previousImageButton').toBeNull();
+        expect(previousImageButton)
+          .withContext('previousImageButton')
+          .toBeNull();
         expect(nextImageButton).withContext('nextImageButton').toBeNull();
         expect(copyDataButton).withContext('copyDataButton').toBeNull();
         expect(deleteDataButton).withContext('deleteDataButton').toBeNull();
@@ -1453,7 +1622,9 @@ describe('FeatureComponent', () => {
         fixture.detectChanges();
         queryButtons();
 
-        expect(previousImageButton).withContext('previousImageButton').toBeTruthy();
+        expect(previousImageButton)
+          .withContext('previousImageButton')
+          .toBeTruthy();
         expect(nextImageButton).withContext('nextImageButton').toBeTruthy();
         expect(changeInfoButton).withContext('changeInfoButton').toBeTruthy();
         expect(copyDataButton).withContext('copyDataButton').toBeTruthy();
@@ -1467,7 +1638,6 @@ describe('FeatureComponent', () => {
         expect(addInfoButton).withContext('addInfoButton').toBeNull();
         expect(deleteAllButton).withContext('deleteAllButton').toBeNull();
       });
-
     });
   });
 });

@@ -48,6 +48,7 @@
       "MAIN_SHORT": "Text Recognition",
       "SETTINGS": "Settings"
     },
+    "NETWORK_OFFLINE": "No network connection!",
     "TOOLTIP": {
       "OPEN_FEEDBACK": "Open feedback page",
       "OPEN_HELP": "Open help page",
@@ -185,6 +186,7 @@
       "SUCCESS_ALL_PHOTOS_DELETED": "All photos and associated data have been successfully deleted.",
       "SUCCESS_DATA_COPIED": "Selected data has been copied to the clipboard.",
       "ERROR_COPYING_DATA": "Error copying data to the clipboard. The data were not copied.",
+      "ERROR_NO_COPY_DATA_SELECTED": "No data selected for copying.",
       "IMAGE_COPY_NOT_SUPPORTED_WEB": "At this time, only images in PNG format can be copied to the clipboard. This image format is not supported.",
       "IMAGE_COPY_NOT_SUPPORTED_NATIVE": "At this time, only images in PNG/JPEG format can be copied to the clipboard. This image format is not supported.",
       "SUCCESS_DATA_SHARED": "Selected data has been shared successfully.",

@@ -5,7 +5,7 @@ import { HeaderComponent } from './header.component';
 import { TranslateService } from '@ngx-translate/core';
 import { UtilsService } from '@app/services/utils.service';
 import { Tab, WorkflowStep } from '@app/shared/enums';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { createTranslateServiceMock } from '@testing/translate-service.mock';
 
 describe('HeaderComponent', () => {
@@ -19,6 +19,7 @@ describe('HeaderComponent', () => {
   const logoClickedSub = new Subject<boolean>();
   const workflowChangedSub = new Subject<WorkflowStep>();
   const backButtonClickedSub = new Subject<void>();
+  const offlineChangedSub = new BehaviorSubject<boolean>(false);
   const _isSmallScreen = false;
   const utilsServiceMock = {
     get isSmallScreen() {
@@ -34,6 +35,7 @@ describe('HeaderComponent', () => {
     logoClicked$: logoClickedSub.asObservable(),
     workflowChangedSub,
     workflowChanged$: workflowChangedSub.asObservable(),
+    offlineChanged$: offlineChangedSub.asObservable(),
     backButtonClickedSub,
     backButtonClicked$: backButtonClickedSub.asObservable(),
   };
@@ -138,5 +140,14 @@ describe('HeaderComponent', () => {
     component.goBack(new Event('click'));
     
     expect(spy).toHaveBeenCalledWith(true);
+  });
+
+  it('should show offline status in the header when offlineChanged$ emits true', () => {
+    component.currentTab = Tab.MainFeature;
+    offlineChangedSub.next(true);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('HEADER.NETWORK_OFFLINE');
   });
 });

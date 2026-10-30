@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { Capacitor } from '@capacitor/core';
-import { ImageManipulator } from '@capacitor-community/image-manipulator';
 import { ImageManipulatorWeb } from '@capacitor-community/image-manipulator/dist/esm/web';
 
 import { ImageCompressionService } from './image-compression.service';
 import { FilePathService } from './file-path.service';
 import { FileConversionService } from './file-conversion.service';
+import { UserPhoto } from '../shared/app.interfaces';
 
 describe('ImageCompressionService', () => {
   let service: ImageCompressionService;
@@ -37,7 +37,7 @@ describe('ImageCompressionService', () => {
 
     fileConversionServiceSpy = jasmine.createSpyObj<FileConversionService>(
       'FileConversionService',
-      ['blobToBase64'],
+      ['blobToBase64', 'getImageDataUrl'],
     );
 
     TestBed.configureTestingModule({
@@ -225,7 +225,7 @@ describe('ImageCompressionService', () => {
       const photo = {
         filepath: 'file:///photo.jpg',
         webviewPath: 'http://localhost/_capacitor_file_/photo.jpg',
-      } as any;
+      } as unknown as UserPhoto;
       const expectedRequest = {
         requests: [
           {
@@ -549,6 +549,98 @@ describe('ImageCompressionService', () => {
         compressedBytes: 700,
         resized: true,
       });
+    });
+  });
+
+  describe('compressPhoto', () => {
+    let photo: UserPhoto;
+    let buildVisionOcrRequestFromPhotoSpy: jasmine.Spy;
+
+    beforeEach(() => {
+      photo = {
+        filepath: 'file:///photo.jpg',
+        webviewPath: 'http://localhost/_capacitor_file_/photo.jpg',
+      } as unknown as UserPhoto;
+
+      buildVisionOcrRequestFromPhotoSpy = spyOn(
+        service as any,
+        'buildVisionOcrRequestFromPhoto',
+      );
+    });
+
+    it('should return compressed photo where OCR request starts with prefix', async () => {
+      fileConversionServiceSpy.getImageDataUrl.and.resolveTo('DATA_URL');
+      buildVisionOcrRequestFromPhotoSpy.and.returnValue({
+        requests: [
+          {
+            image: {
+              content: 'OCR_REQUEST',
+            },
+          }
+        ]
+      });
+
+      const compressedPhoto = await (service as any).compressPhoto(photo);
+
+      expect(fileConversionServiceSpy.getImageDataUrl).toHaveBeenCalledWith(
+        photo,
+      );
+      expect(buildVisionOcrRequestFromPhotoSpy).toHaveBeenCalled();
+      expect(compressedPhoto).withContext('result').toEqual('data:image/jpeg;base64,OCR_REQUEST');
+    });
+
+    it('should return compressed photo where OCR request starts without prefix', async () => {
+      fileConversionServiceSpy.getImageDataUrl.and.resolveTo('DATA_URL');
+            buildVisionOcrRequestFromPhotoSpy.and.returnValue({
+        requests: [
+          {
+            image: {
+              content: 'data:image/jpeg;base64,OCR_REQUEST',
+            },
+          }
+        ]
+      });
+
+      const compressedPhoto = await (service as any).compressPhoto(photo);
+
+      expect(fileConversionServiceSpy.getImageDataUrl).toHaveBeenCalledWith(
+        photo,
+      );
+      expect(buildVisionOcrRequestFromPhotoSpy).toHaveBeenCalled();
+      expect(compressedPhoto).withContext('result').toEqual('data:image/jpeg;base64,OCR_REQUEST');
+    });
+
+    it('should handle empty OCR request', async () => {
+      fileConversionServiceSpy.getImageDataUrl.and.resolveTo('DATA_URL');
+      buildVisionOcrRequestFromPhotoSpy.and.returnValue({
+        requests: [
+          {
+            image: {
+              content: '',
+            },
+          }
+        ]
+      });
+
+      const compressedPhoto = await (service as any).compressPhoto(photo);
+
+      expect(fileConversionServiceSpy.getImageDataUrl).toHaveBeenCalledWith(
+        photo,
+      );
+      expect(buildVisionOcrRequestFromPhotoSpy).toHaveBeenCalled();
+      expect(compressedPhoto).withContext('result').toEqual('data:image/jpeg;base64,');
+    });
+
+    it('should log error and return null when no data url', async () => {
+      fileConversionServiceSpy.getImageDataUrl.and.resolveTo(undefined);
+
+      const compressedPhoto = await (service as any).compressPhoto(photo);
+
+      expect(fileConversionServiceSpy.getImageDataUrl).toHaveBeenCalledWith(
+        photo,
+      );
+      expect(buildVisionOcrRequestFromPhotoSpy).not.toHaveBeenCalled();
+      expect(compressedPhoto).withContext('result').toBeNull();
     });
   });
 });
